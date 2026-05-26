@@ -48,9 +48,11 @@ Construir una **app plantilla** mínima, rápida y bien estructurada, que sirva 
 
 ## 4. Decisiones pendientes
 
-Estas son preguntas abiertas que hay que resolver antes de construir. **No asumir respuestas.**
+> ✅ **Todas las decisiones de arquitectura resueltas.** Lista para arrancar Fase 1.
 
-1. **Identidad base de la plantilla**: el `BrandSettings` permite a cada tenant personalizar su marca, pero la plantilla recién instalada (antes de tener tenants) y los tenants que no personalicen heredan un look "por defecto". ¿Hay una identidad base definida (logo, paleta, tipografía) o se diseña neutra/genérica?
+Sub-decisiones operativas que pueden resolverse durante la implementación (no bloquean):
+
+- ¿Existe un logo/paleta oficial de LogiQ que se deba usar en las pantallas L9/L8, o se arranca con un placeholder textual y se actualiza después?
 
 ---
 
@@ -125,3 +127,4 @@ Estas son preguntas abiertas que hay que resolver antes de construir. **No asumi
 | 2026-05-25 | Alcance de niveles cross-tenant: **L9 global** (ve todos los tenants), **L8 agencia** (ve un subconjunto de tenants asignado por L9), **L0-L7 single-tenant** (solo ven su propio tenant). L9 asigna qué tenants gestiona cada L8. | Modelo agencia/reseller — permite operación tipo MSP donde L8 gestiona varios clientes pero no toda la plataforma |
 | 2026-05-25 | Módulos base de la plantilla: **Gestión de usuarios**, **Gestión de tenants** (consola L9/L8), **SystemConfig runtime** (Global Settings — instance-wide, controlado por L9), **BrandSettings por-tenant** (cada tenant edita su marca: logo, colores, nombre visible), **Logs/auditoría** | Definido por el usuario |
 | 2026-05-25 | i18n: **bilingüe es/en desde el día uno**. Frontend con `react-i18next`, backend con Django i18n (`.po`). Todos los textos pasan por funciones de traducción. Selector de idioma en topbar, preferencia almacenada por usuario. | Definido por el usuario — todas las apps que se generen desde la plantilla heredan multi-idioma sin trabajo extra |
+| 2026-05-25 | Identidad visual: **pantallas L9/L8 (consola tenants, global settings) llevan marca LogiQ siempre**. **Pantallas del tenant (operación diaria) heredan de su `BrandSettings`**. | Definido por el usuario — separa el producto LogiQ del app que el tenant consume |
