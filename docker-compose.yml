@@ -1,0 +1,48 @@
+# docker-compose.yml — servicios para desarrollo local.
+#
+# El backend NO esta aqui a proposito: corre con `python manage.py runserver`
+# para hot reload mas rapido. Para correr el backend dockerizado en produccion,
+# usa backend/Dockerfile (lo usa Railway).
+#
+# Uso:
+#   docker-compose up -d         arranca Postgres y Redis en background
+#   docker-compose ps            verifica que ambos estan healthy
+#   docker-compose down          detiene los servicios (los datos persisten)
+#   docker-compose down -v       detiene y borra volumenes (resetea DB)
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: plantilla-postgres
+    environment:
+      POSTGRES_USER: plantilla
+      POSTGRES_PASSWORD: plantilla
+      POSTGRES_DB: plantilla
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U plantilla"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: plantilla-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
