@@ -45,8 +45,8 @@ THIRD_PARTY_APPS = [
 # apps tendran FK a Tenant).
 LOCAL_APPS: list[str] = [
     'apps.tenants',
+    'apps.accounts',
     # 'apps.core',           se agrega en commit 5
-    # 'apps.accounts',       se agrega en commit 3
     # 'apps.brand',          se agrega en commit 10
     # 'apps.system_config',  se agrega en commit 9
     # 'apps.audit',          se agrega en commit 11
@@ -109,9 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# AUTH_USER_MODEL = 'accounts.User'
-#   ^^ se activa en Fase 1, commit 3 cuando se cree el modelo custom.
-#   No correr `migrate` hasta entonces (cambiar User despues de migrar es doloroso).
+AUTH_USER_MODEL = 'accounts.User'
 
 # --- i18n --------------------------------------------------------------------
 
