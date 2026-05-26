@@ -10,6 +10,9 @@ python manage.py migrate --noinput
 echo "==> Compiling translation messages..."
 python manage.py compilemessages || echo "   (no .po files yet, skipping)"
 
+echo "==> Ensuring initial admin (if INITIAL_ADMIN_* env vars set)..."
+python manage.py ensure_initial_admin || echo "   (skipped)"
+
 echo "==> Collecting static files..."
 python manage.py collectstatic --noinput --clear
 
