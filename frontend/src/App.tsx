@@ -1,71 +1,62 @@
 /**
- * App raiz minima.
+ * App — router principal con rutas tenant-scope y platform-scope.
  *
- * Demo de Tailwind + i18n + Auth + Theme con los toggles UI reales.
- * Router y rutas en commits 22+.
+ * Patrones:
+ * - Cada page se carga lazy via React.lazy() para code-splitting.
+ * - Layout routes: RootLayout (tenant) y PlatformLayout (consola L9/L8)
+ *   envuelven sus rutas hijas con AppShell + providers correctos.
+ * - Suspense fallback global con un placeholder mientras carga el chunk.
+ * - Cualquier ruta nueva debe agregarse a PREFETCH_MAP en SidebarItem.tsx.
  */
-import { useTranslation } from 'react-i18next';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import { LanguageToggle } from '@/components/ui/LanguageToggle';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
-import { useAuth } from '@/lib/auth';
+import { PlatformLayout, RootLayout } from '@/components/layout';
 
-function App() {
-  const { t } = useTranslation();
-  const { loading, user, tenant, logout } = useAuth();
+const Login = lazy(() => import('@/pages/Login'));
+const Home = lazy(() => import('@/pages/Home'));
+const UsuariosPage = lazy(() => import('@/pages/usuarios/UsuariosPage'));
+const AuditoriaPage = lazy(() => import('@/pages/auditoria/AuditoriaPage'));
+const ConfiguracionPage = lazy(() => import('@/pages/configuracion/ConfiguracionPage'));
+const TenantsPage = lazy(() => import('@/pages/platform/TenantsPage'));
+const AgencyAccessPage = lazy(() => import('@/pages/platform/AgencyAccessPage'));
+const GlobalSettingsPage = lazy(() => import('@/pages/platform/GlobalSettingsPage'));
 
+function PageFallback(): React.ReactElement {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-page text-text-primary p-8">
-      <div className="max-w-md w-full text-center space-y-6">
-        <div className="absolute top-4 right-4 flex gap-2">
-          <LanguageToggle />
-          <ThemeToggle />
-        </div>
-
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold tracking-tight">{t('app.name')}</h1>
-          <p className="text-sm opacity-60">{t('app.tagline')}</p>
-        </div>
-
-        <div className="bg-card border border-border rounded-2xl shadow-sm p-6 space-y-3 text-left">
-          <h2 className="font-semibold">Sesion</h2>
-          {loading ? (
-            <p className="text-sm opacity-60">{t('common.loading')}…</p>
-          ) : user ? (
-            <div className="text-sm space-y-1">
-              <p>
-                <span className="opacity-60">Usuario:</span> {user.full_name} ({user.email})
-              </p>
-              <p>
-                <span className="opacity-60">Nivel:</span> L{user.level}
-              </p>
-              <p>
-                <span className="opacity-60">Tenant:</span>{' '}
-                {tenant ? `${tenant.name} (${tenant.slug})` : '— platform mode —'}
-              </p>
-              <p>
-                <span className="opacity-60">Permisos:</span> {user.permissions.length}
-              </p>
-              <button
-                type="button"
-                onClick={logout}
-                className="mt-3 text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-elevated transition"
-              >
-                {t('auth.logout')}
-              </button>
-            </div>
-          ) : (
-            <p className="text-sm opacity-60">
-              Sin sesion. El Login real viene en commit 22.
-            </p>
-          )}
-        </div>
-
-        <p className="text-xs opacity-40">
-          Toggles arriba a la derecha: idioma + tema (persisten en localStorage).
-        </p>
-      </div>
+    <div className="flex items-center justify-center py-12">
+      <span className="text-sm opacity-50">…</span>
     </div>
+  );
+}
+
+function App(): React.ReactElement {
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<PageFallback />}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+
+          {/* Tenant scope */}
+          <Route element={<RootLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/usuarios" element={<UsuariosPage />} />
+            <Route path="/auditoria" element={<AuditoriaPage />} />
+            <Route path="/configuracion" element={<ConfiguracionPage />} />
+          </Route>
+
+          {/* Platform scope (L9/L8) */}
+          <Route element={<PlatformLayout />}>
+            <Route path="/platform" element={<Navigate to="/platform/tenants" replace />} />
+            <Route path="/platform/tenants" element={<TenantsPage />} />
+            <Route path="/platform/agency-access" element={<AgencyAccessPage />} />
+            <Route path="/platform/global-settings" element={<GlobalSettingsPage />} />
+          </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
   );
 }
 
