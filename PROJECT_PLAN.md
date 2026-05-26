@@ -50,7 +50,13 @@ Construir una **app plantilla** mínima, rápida y bien estructurada, que sirva 
 
 > ✅ **Todas las decisiones de arquitectura y de marca resueltas.** Lista para arrancar Fase 1.
 
-Identidad visual documentada en [`BRAND.md`](./BRAND.md). Logos en `Logos/` (se mueven a `frontend/public/brand/logiq/` en Fase 2).
+Documentos de referencia:
+- [`CLAUDE.md`](./CLAUDE.md) — convenciones, stack y workflow.
+- [`BRAND.md`](./BRAND.md) — identidad visual default de LogiQ.
+- [`SKELETON_GUIDE.md`](./SKELETON_GUIDE.md) — guía técnica completa del esqueleto (estructura de carpetas, modelos, endpoints, plan de implementación commit-por-commit).
+- [`docs/legacy/SKELETON_PROMPT_PROPOSAL_TerraDeFlora.md`](./docs/legacy/SKELETON_PROMPT_PROPOSAL_TerraDeFlora.md) — referencia histórica (Terra de Flora, FastAPI).
+
+Logos en `Logos/` (se mueven a `frontend/public/brand/logiq/` en Fase 2).
 
 ---
 
