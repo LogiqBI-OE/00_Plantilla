@@ -50,15 +50,16 @@ Construir una **app plantilla** mínima, rápida y bien estructurada, que sirva 
 
 Estas son preguntas abiertas que hay que resolver antes de construir. **No asumir respuestas.**
 
-1. **Multi-tenancy**: ¿la plantilla soporta múltiples organizaciones/clientes en una sola instancia, o cada app es de un solo "tenant"?
-2. **Módulos base**: ¿qué tiene la plantilla "de fábrica" además de auth y shell? Posibles:
+1. **Módulos base**: ¿qué tiene la plantilla "de fábrica" además de auth, multi-tenancy y shell? Posibles:
    - Gestión de usuarios
    - Panel de configuración del sistema (toggles runtime)
    - Logs/auditoría
    - Notificaciones (WhatsApp/email vía Celery)
    - Dashboard inicial
-3. **Estilo visual**: ¿hay una identidad/paleta ya definida o se decide al inicio de cada app?
-4. **i18n**: ¿la plantilla nace bilingüe (es/en) o monolingüe?
+2. **Estilo visual**: ¿hay una identidad/paleta ya definida o se decide al inicio de cada app?
+3. **i18n**: ¿la plantilla nace bilingüe (es/en) o monolingüe?
+4. **Alcance de la matriz de permisos**: ¿es global a la app o por-tenant? (es decir: ¿cada tenant puede tener su propia configuración de qué puede hacer cada nivel L0-L9, o la matriz es una sola para toda la instancia?)
+5. **Super-admin cross-tenant**: ¿existe un rol (por ejemplo L9) que ve y administra todos los tenants, o cada tenant es totalmente aislado y un L9 solo es admin de su propio tenant?
 
 ---
 
@@ -127,3 +128,5 @@ Estas son preguntas abiertas que hay que resolver antes de construir. **No asumi
 | 2026-05-25 | Idioma: español neutro en todo | Definido por el usuario |
 | 2026-05-25 | Autenticación: jerárquica L0-L9 con matriz de permisos editable | Definido por el usuario |
 | 2026-05-25 | Deploy: Railway | Definido por el usuario |
+| 2026-05-25 | Multi-tenancy: la plantilla la soporta nativamente | Definido por el usuario |
+| 2026-05-25 | Login adaptativo: si solo hay 1 tenant activo no se pide en login; si hay 2+, sí se pide | UX progresiva — no pagar costo cuando no se usa |
