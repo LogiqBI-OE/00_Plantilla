@@ -15,7 +15,7 @@ Repo: `LogiqBI-OE/00_Plantilla` — https://github.com/LogiqBI-OE/00_Plantilla.g
 ## Convenciones críticas (no las cambies sin preguntar)
 
 - **Priorizar eficiencia** de responsividad y acceso a datos.
-- **Todo conectado** evitar a medida de lo posible los datos y textos hardcodeados.
+- **Todo conectado** evitar en la medida de lo posible los datos y textos hardcodeados.
 - **Sin cache** de datos en frontend. Todo en vivo del backend.
 - **`fmtMoney` de `lib/format.ts`** (locale `en-US`) — única función de dinero. No inventes otras.
 - **Polling** vía `usePolling(callback, ms)` — pausa con visibility.
@@ -29,10 +29,11 @@ Repo: `LogiqBI-OE/00_Plantilla` — https://github.com/LogiqBI-OE/00_Plantilla.g
 
 ## Workflow de commits
 
-- **Identidad de git**: al **iniciar cualquier repo nuevo**, preguntale al usuario a nombre de quién deben hacerse los commits (nombre + email). Nunca asumir lo del config global de la máquina — esa cuenta puede ser corporativa y el repo personal. Configurar con `git config --local user.name` y `user.email` (scope del repo, no global).
-- Commits chicos, mensajes con scope: `feat(cotizacion): ...`, `fix(login): ...`, `refactor(...)`, `perf(...)`, `chore(...)`.
+- **Identidad de git**: al **iniciar cualquier repo nuevo**, pregúntale al usuario a nombre de quién deben hacerse los commits (nombre + email). Nunca asumir lo del config global de la máquina — esa cuenta puede ser corporativa y el repo personal. Configurar con `git config --local user.name` y `user.email` (scope del repo, no global).
+- **Idioma**: hablar siempre en **español neutro** (usar "tú", no "vos"). No usar modismos regionales (ni rioplatenses ni mexicanos) en código, comentarios ni respuestas al usuario.
+- Commits pequeños, mensajes con scope: `feat(cotizacion): ...`, `fix(login): ...`, `refactor(...)`, `perf(...)`, `chore(...)`.
 - Coautor en cada commit: `Co-Authored-By: Claude <noreply@anthropic.com>`.
-- Verificá build local antes de pushar cambios grandes: `cd frontend && npx tsc -b`.
+- Verifica el build local antes de hacer push de cambios grandes: `cd frontend && npx tsc -b`.
 
 ### Fase desarrollo (pre-operativo)
 
@@ -41,8 +42,8 @@ Repo: `LogiqBI-OE/00_Plantilla` — https://github.com/LogiqBI-OE/00_Plantilla.g
 
 ### Fase operativa (post-go-live)
 - `main` = producción. **No** se pushea directo.
-- `develop` = integración. Acá va el trabajo del día a día.
-- Features/fixes salen de `develop` y vuelven a `develop` (ramas cortas `feat/...`, `fix/...` o commits directos a `develop` si seguís siendo el único dev).
+- `develop` = integración. Aquí va el trabajo del día a día.
+- Features/fixes salen de `develop` y vuelven a `develop` (ramas cortas `feat/...`, `fix/...` o commits directos a `develop` si sigues siendo el único dev).
 - Para desplegar: merge `develop` → `main` (fast-forward o con tag de versión).
 - Hotfix urgente: rama desde `main`, merge a `main` **y** a `develop`.
 
