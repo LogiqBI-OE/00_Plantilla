@@ -1,0 +1,68 @@
+{
+  "app": {
+    "name": "LogiQ",
+    "tagline": "Plantilla esqueleto"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Borrar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "loading": "Cargando",
+    "empty": "Sin datos",
+    "yes": "Sí",
+    "no": "No",
+    "actions": "Acciones",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "close": "Cerrar"
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenido",
+      "subtitle": "Inicia sesión para continuar",
+      "email": "Correo electrónico",
+      "username": "Usuario",
+      "identifier": "Correo o usuario",
+      "password": "Contraseña",
+      "tenant_selector": "Espacio de trabajo",
+      "submit": "Entrar al {{alcance}}",
+      "submit_generic": "Iniciar sesión",
+      "forgot_password": "¿Olvidaste tu contraseña?",
+      "remember_me": "Recuérdame",
+      "invalid_credentials": "Credenciales inválidas",
+      "user_inactive": "Tu usuario está inactivo"
+    },
+    "logout": "Cerrar sesión",
+    "session_expired": "Tu sesión expiró. Inicia sesión de nuevo."
+  },
+  "theme": {
+    "toggle": "Cambiar tema",
+    "light": "Claro",
+    "dark": "Oscuro"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español",
+    "en": "English"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Intenta de nuevo.",
+    "network": "Error de conexión. Verifica tu internet.",
+    "unauthorized": "Tu sesión expiró. Inicia sesión de nuevo.",
+    "forbidden": "No tienes permisos para esta acción.",
+    "not_found": "No se encontró lo que buscas.",
+    "validation": "Hay errores en el formulario."
+  },
+  "scaffold": {
+    "status": "Estado del scaffold",
+    "vite_react_ts": "Vite + React + TypeScript estricto",
+    "tailwind_tokens": "Tailwind CSS v3 con tokens CSS-vars",
+    "router_i18n": "react-router-dom + i18next instalados",
+    "providers_pending": "Providers, layouts y rutas: pendiente",
+    "toggle_button": "Cambiar tema claro / oscuro"
+  }
+}

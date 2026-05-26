@@ -1,0 +1,68 @@
+{
+  "app": {
+    "name": "LogiQ",
+    "tagline": "Skeleton template"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "loading": "Loading",
+    "empty": "No data",
+    "yes": "Yes",
+    "no": "No",
+    "actions": "Actions",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome",
+      "subtitle": "Sign in to continue",
+      "email": "Email",
+      "username": "Username",
+      "identifier": "Email or username",
+      "password": "Password",
+      "tenant_selector": "Workspace",
+      "submit": "Enter the {{alcance}}",
+      "submit_generic": "Sign in",
+      "forgot_password": "Forgot your password?",
+      "remember_me": "Remember me",
+      "invalid_credentials": "Invalid credentials",
+      "user_inactive": "Your user is inactive"
+    },
+    "logout": "Sign out",
+    "session_expired": "Your session expired. Sign in again."
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "language": {
+    "label": "Language",
+    "es": "Español",
+    "en": "English"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Connection error. Check your internet.",
+    "unauthorized": "Your session expired. Sign in again.",
+    "forbidden": "You don't have permission for this action.",
+    "not_found": "We couldn't find what you're looking for.",
+    "validation": "There are errors in the form."
+  },
+  "scaffold": {
+    "status": "Scaffold status",
+    "vite_react_ts": "Vite + React + strict TypeScript",
+    "tailwind_tokens": "Tailwind CSS v3 with CSS-var tokens",
+    "router_i18n": "react-router-dom + i18next installed",
+    "providers_pending": "Providers, layouts and routes: pending",
+    "toggle_button": "Toggle light / dark theme"
+  }
+}
