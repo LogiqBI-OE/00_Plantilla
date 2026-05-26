@@ -2,7 +2,6 @@
 URL config principal.
 
 Los grupos de endpoints de cada app se agregan en sus respectivos commits:
-    path('api/tenants/', include('apps.tenants.urls')),        # commit 7
     path('api/brand/', include('apps.brand.urls')),            # commit 10
     path('api/system-config/', include('apps.system_config.urls')),  # commit 9
     path('api/audit/', include('apps.audit.urls')),            # commit 11
@@ -22,4 +21,5 @@ urlpatterns = [
     path('health/', health, name='health'),
     path('api/auth/', include('apps.accounts.urls')),
     path('api/users/', include('apps.accounts.urls_users')),
+    path('api/tenants/', include('apps.tenants.urls')),
 ]
