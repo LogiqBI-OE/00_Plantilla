@@ -99,8 +99,17 @@ interface RequestOptions {
   signal?: AbortSignal;
 }
 
+/**
+ * Base URL del backend.
+ * - Dev: vacio -> rutas relativas que Vite proxea a localhost:8000.
+ * - Prod: import.meta.env.VITE_API_URL (set en Railway frontend).
+ * Vite lee la env var al build, no en runtime — cada cambio requiere
+ * un nuevo deploy.
+ */
+const API_BASE: string = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
+
 function buildUrl(path: string, params?: RequestOptions['params']): string {
-  let url = path.startsWith('http') ? path : path;
+  let url = path.startsWith('http') ? path : `${API_BASE}${path}`;
   if (!params) return url;
   const entries = Object.entries(params as Record<string, QueryValue>);
   const qs = entries
