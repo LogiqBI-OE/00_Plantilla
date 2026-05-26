@@ -1,0 +1,72 @@
+/*
+ * Estilos base de la plantilla.
+ *
+ * Tailwind v3 directives + CSS custom properties con los tokens default
+ * de BRAND.md.
+ *
+ * Comportamiento de temas:
+ * - Los valores fijos (Login, Sidebar) viven en :root directamente.
+ * - Los valores temables (light/dark) viven en .theme-light / .theme-dark
+ *   y los inyecta BrandProvider via <style id="brand-themes"> en runtime
+ *   (commit 19) — los defaults aqui sirven hasta que ese provider monte.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Fijos: Login (no cambian con tema) */
+  --brand-hero-bg: #0a1428;
+  --brand-hero-accent: #d4b996;
+
+  /* Fijos: Sidebar (no cambian con tema) */
+  --sidebar-bg: #161513;
+  --sidebar-active-text: #0a84ff;
+  --sidebar-section-title: #787570;
+  --sidebar-text: #f5f4f1;
+  --sidebar-disabled-text: #52504c;
+}
+
+/* Tema Light (default) */
+.theme-light,
+:root {
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-elevated: #f1f5f9;
+  --border: #e2e8f0;
+  --accent: #007aff;
+  --text-primary: #0f172a;
+  --info: #0369a1;
+  --warning: #b45309;
+  --danger: #dc2626;
+}
+
+/* Tema Dark */
+.theme-dark {
+  --bg-page: #1a1916;
+  --bg-card: #23211d;
+  --bg-elevated: #2d2a26;
+  --border: #2d2a26;
+  --accent: #0a84ff;
+  --text-primary: #f5f4f1;
+  --info: #7dd3fc;
+  --warning: #fcd34d;
+  --danger: #fca5a5;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
