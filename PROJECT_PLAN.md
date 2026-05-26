@@ -50,14 +50,8 @@ Construir una **app plantilla** mínima, rápida y bien estructurada, que sirva 
 
 Estas son preguntas abiertas que hay que resolver antes de construir. **No asumir respuestas.**
 
-1. **Módulos base**: ¿qué tiene la plantilla "de fábrica" además de auth, multi-tenancy y shell? Posibles:
-   - Gestión de usuarios
-   - Panel de configuración del sistema (toggles runtime)
-   - Logs/auditoría
-   - Notificaciones (WhatsApp/email vía Celery)
-   - Dashboard inicial
-2. **Estilo visual**: ¿hay una identidad/paleta ya definida o se decide al inicio de cada app?
-3. **i18n**: ¿la plantilla nace bilingüe (es/en) o monolingüe?
+1. **i18n**: ¿la plantilla nace bilingüe (es/en) o monolingüe?
+2. **Identidad base de la plantilla**: el `BrandSettings` permite a cada tenant personalizar su marca, pero la plantilla recién instalada (antes de tener tenants) y los tenants que no personalicen heredan un look "por defecto". ¿Hay una identidad base definida (logo, paleta, tipografía) o se diseña neutra/genérica?
 
 ---
 
@@ -130,3 +124,4 @@ Estas son preguntas abiertas que hay que resolver antes de construir. **No asumi
 | 2026-05-25 | Login adaptativo: si solo hay 1 tenant activo no se pide en login; si hay 2+, sí se pide | UX progresiva — no pagar costo cuando no se usa |
 | 2026-05-25 | Matriz de permisos: **global** (una sola para toda la instancia), **con overrides por usuario** (un usuario específico puede tener permisos custom además de los de su nivel) | Definido por el usuario — flexibilidad sin complicar el modelo por-tenant |
 | 2026-05-25 | Alcance de niveles cross-tenant: **L9 global** (ve todos los tenants), **L8 agencia** (ve un subconjunto de tenants asignado por L9), **L0-L7 single-tenant** (solo ven su propio tenant). L9 asigna qué tenants gestiona cada L8. | Modelo agencia/reseller — permite operación tipo MSP donde L8 gestiona varios clientes pero no toda la plataforma |
+| 2026-05-25 | Módulos base de la plantilla: **Gestión de usuarios**, **Gestión de tenants** (consola L9/L8), **SystemConfig runtime** (Global Settings — instance-wide, controlado por L9), **BrandSettings por-tenant** (cada tenant edita su marca: logo, colores, nombre visible), **Logs/auditoría** | Definido por el usuario |
