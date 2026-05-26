@@ -24,6 +24,18 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env('DJANGO_DEBUG')
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
 
+# Railway expone automaticamente RAILWAY_PUBLIC_DOMAIN con el dominio del
+# servicio. Lo agregamos a ALLOWED_HOSTS para no tener que mantenerlo a mano.
+RAILWAY_PUBLIC_DOMAIN = env('RAILWAY_PUBLIC_DOMAIN', default='')
+if RAILWAY_PUBLIC_DOMAIN:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
+
+# CSRF_TRUSTED_ORIGINS para que el Django admin (y forms con CSRF) acepten
+# requests desde el dominio publico via HTTPS.
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
+if RAILWAY_PUBLIC_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RAILWAY_PUBLIC_DOMAIN}')
+
 # --- Apps --------------------------------------------------------------------
 
 DJANGO_APPS = [

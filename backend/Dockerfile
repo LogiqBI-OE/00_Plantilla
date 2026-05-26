@@ -17,6 +17,9 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+RUN chmod +x /app/entrypoint.sh
+
+# Railway expone PORT como env var. El entrypoint la usa con fallback a 8000.
 EXPOSE 8000
 
-CMD ["gunicorn", "plantilla.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+CMD ["/app/entrypoint.sh"]

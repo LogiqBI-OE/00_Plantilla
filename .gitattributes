@@ -1,0 +1,7 @@
+# Forzar LF en scripts shell (Windows + git autocrlf rompe shebangs).
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Dockerfiles tambien deben usar LF.
+Dockerfile text eol=lf
+*.dockerfile text eol=lf
