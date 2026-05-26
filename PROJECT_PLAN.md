@@ -50,21 +50,15 @@ Construir una **app plantilla** mínima, rápida y bien estructurada, que sirva 
 
 Estas son preguntas abiertas que hay que resolver antes de construir. **No asumir respuestas.**
 
-1. **Autenticación**: ¿qué tipo? Opciones:
-   - JWT simple (login/logout, sin roles)
-   - Roles fijos (admin/usuario)
-   - Roles jerárquicos editables (L0-L9 con matriz de permisos)
-   - Otro
-2. **Multi-tenancy**: ¿la plantilla soporta múltiples organizaciones/clientes en una sola instancia, o cada app es de un solo "tenant"?
-3. **Deploy**: ¿dónde se va a desplegar? Opciones: Railway, Render, Fly.io, VPS propio, otro. Esto define los archivos de configuración que necesita la plantilla (Dockerfile, railway.json, etc.).
-4. **Módulos base**: ¿qué tiene la plantilla "de fábrica" además de auth y shell? Posibles:
+1. **Multi-tenancy**: ¿la plantilla soporta múltiples organizaciones/clientes en una sola instancia, o cada app es de un solo "tenant"?
+2. **Módulos base**: ¿qué tiene la plantilla "de fábrica" además de auth y shell? Posibles:
    - Gestión de usuarios
    - Panel de configuración del sistema (toggles runtime)
    - Logs/auditoría
    - Notificaciones (WhatsApp/email vía Celery)
    - Dashboard inicial
-5. **Estilo visual**: ¿hay una identidad/paleta ya definida o se decide al inicio de cada app?
-6. **i18n**: ¿la plantilla nace bilingüe (es/en) o monolingüe?
+3. **Estilo visual**: ¿hay una identidad/paleta ya definida o se decide al inicio de cada app?
+4. **i18n**: ¿la plantilla nace bilingüe (es/en) o monolingüe?
 
 ---
 
@@ -131,3 +125,5 @@ Estas son preguntas abiertas que hay que resolver antes de construir. **No asumi
 | 2026-05-25 | Repo: `LogiqBI-OE/00_Plantilla`, rama única `main`, push directo en fase desarrollo | Definido por el usuario |
 | 2026-05-25 | Identidad git local: `LogiQ OE <orla.elizondos@gmail.com>` (scope repo) | Separar cuenta personal del global corporativo de la máquina |
 | 2026-05-25 | Idioma: español neutro en todo | Definido por el usuario |
+| 2026-05-25 | Autenticación: jerárquica L0-L9 con matriz de permisos editable | Definido por el usuario |
+| 2026-05-25 | Deploy: Railway | Definido por el usuario |
