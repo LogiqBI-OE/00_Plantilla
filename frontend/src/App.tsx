@@ -1,35 +1,27 @@
 /**
  * App raiz minima.
  *
- * Demuestra Tailwind + i18next + AuthProvider + toggle de tema manual.
- * El router y rutas reales (Login, Layouts, paginas) vienen en commits 22+.
- *
- * Mientras tanto, esta vista demuestra que la sesion se rehidrata
- * correctamente: si tienes un token valido en localStorage y el backend
- * esta arriba, vas a ver tu email + nivel + tenant.
+ * Demo de Tailwind + i18n + Auth + Theme con los toggles UI reales.
+ * Router y rutas en commits 22+.
  */
 import { useTranslation } from 'react-i18next';
 
-import { useAuth } from './lib/auth';
+import { LanguageToggle } from '@/components/ui/LanguageToggle';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { useAuth } from '@/lib/auth';
 
 function App() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { loading, user, tenant, logout } = useAuth();
-
-  const toggleTheme = () => {
-    const html = document.documentElement;
-    html.classList.toggle('theme-dark');
-    html.classList.toggle('theme-light');
-  };
-
-  const toggleLanguage = () => {
-    const next = i18n.language.startsWith('en') ? 'es' : 'en';
-    void i18n.changeLanguage(next);
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-page text-text-primary p-8">
       <div className="max-w-md w-full text-center space-y-6">
+        <div className="absolute top-4 right-4 flex gap-2">
+          <LanguageToggle />
+          <ThemeToggle />
+        </div>
+
         <div className="space-y-2">
           <h1 className="text-4xl font-bold tracking-tight">{t('app.name')}</h1>
           <p className="text-sm opacity-60">{t('app.tagline')}</p>
@@ -69,22 +61,9 @@ function App() {
           )}
         </div>
 
-        <div className="flex gap-2 justify-center">
-          <button
-            type="button"
-            className="px-4 py-2 rounded-lg bg-accent text-white font-medium hover:opacity-90 transition"
-            onClick={toggleTheme}
-          >
-            {t('scaffold.toggle_button')}
-          </button>
-          <button
-            type="button"
-            className="px-4 py-2 rounded-lg border border-border font-medium hover:bg-elevated transition"
-            onClick={toggleLanguage}
-          >
-            {i18n.language.startsWith('en') ? 'ES' : 'EN'}
-          </button>
-        </div>
+        <p className="text-xs opacity-40">
+          Toggles arriba a la derecha: idioma + tema (persisten en localStorage).
+        </p>
       </div>
     </div>
   );
