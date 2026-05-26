@@ -48,11 +48,9 @@ Construir una **app plantilla** mínima, rápida y bien estructurada, que sirva 
 
 ## 4. Decisiones pendientes
 
-> ✅ **Todas las decisiones de arquitectura resueltas.** Lista para arrancar Fase 1.
+> ✅ **Todas las decisiones de arquitectura y de marca resueltas.** Lista para arrancar Fase 1.
 
-Sub-decisiones operativas que pueden resolverse durante la implementación (no bloquean):
-
-- ¿Existe un logo/paleta oficial de LogiQ que se deba usar en las pantallas L9/L8, o se arranca con un placeholder textual y se actualiza después?
+Identidad visual documentada en [`BRAND.md`](./BRAND.md). Logos en `Logos/` (se mueven a `frontend/public/brand/logiq/` en Fase 2).
 
 ---
 
@@ -128,3 +126,4 @@ Sub-decisiones operativas que pueden resolverse durante la implementación (no b
 | 2026-05-25 | Módulos base de la plantilla: **Gestión de usuarios**, **Gestión de tenants** (consola L9/L8), **SystemConfig runtime** (Global Settings — instance-wide, controlado por L9), **BrandSettings por-tenant** (cada tenant edita su marca: logo, colores, nombre visible), **Logs/auditoría** | Definido por el usuario |
 | 2026-05-25 | i18n: **bilingüe es/en desde el día uno**. Frontend con `react-i18next`, backend con Django i18n (`.po`). Todos los textos pasan por funciones de traducción. Selector de idioma en topbar, preferencia almacenada por usuario. | Definido por el usuario — todas las apps que se generen desde la plantilla heredan multi-idioma sin trabajo extra |
 | 2026-05-25 | Identidad visual: **pantallas L9/L8 (consola tenants, global settings) llevan marca LogiQ siempre**. **Pantallas del tenant (operación diaria) heredan de su `BrandSettings`**. | Definido por el usuario — separa el producto LogiQ del app que el tenant consume |
+| 2026-05-25 | Paleta LogiQ documentada en [`BRAND.md`](./BRAND.md): scopes Login y Sidebar fijos; Light/Dark con CSS variables. Acento azul Apple (#007AFF / #0A84FF). Logos en PNG 2813×1125 (completo) y ~640×640 (favicon), en versiones negro/blanco con transparencia. | Definido por el usuario |
