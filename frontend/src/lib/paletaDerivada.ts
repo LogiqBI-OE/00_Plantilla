@@ -188,6 +188,42 @@ function expandirTema(p: Record<string, string>, isDark: boolean): Record<string
   };
 }
 
+/**
+ * Defaults LogiQ — usados como fallback cuando un tenant no tiene paleta
+ * configurada o cuando se hace reset. Sincronizado con BRAND.md.
+ */
+export const PALETA_DEFAULT: PaletaPrincipales = {
+  fixed: {
+    'brand-hero-bg': '#0A1428',
+    'brand-hero-accent': '#D4B996',
+    'sidebar-bg': '#161513',
+    'sidebar-active-text': '#0A84FF',
+    'sidebar-section-title': '#787570',
+    'sidebar-text': '#F5F4F1',
+    'sidebar-disabled-text': '#52504C',
+  },
+  light: {
+    'bg-page': '#F8FAFC',
+    'bg-card': '#FFFFFF',
+    'border': '#E2E8F0',
+    'accent': '#007AFF',
+    'text-primary': '#0F172A',
+    'info': '#0369A1',
+    'warning': '#B45309',
+    'danger': '#DC2626',
+  },
+  dark: {
+    'bg-page': '#1A1916',
+    'bg-card': '#23211D',
+    'border': '#2D2A26',
+    'accent': '#0A84FF',
+    'text-primary': '#F5F4F1',
+    'info': '#7DD3FC',
+    'warning': '#FCD34D',
+    'danger': '#FCA5A5',
+  },
+};
+
 /** Expansion completa de la paleta: principales + ~70 derivados. */
 export function expandirPaletaCompleta(p: PaletaPrincipales): PaletaExpandida {
   return {
