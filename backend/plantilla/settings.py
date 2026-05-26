@@ -60,7 +60,7 @@ LOCAL_APPS: list[str] = [
     'apps.tenants',
     'apps.accounts',
     'apps.system_config',
-    # 'apps.brand',          se agrega en commit 10
+    'apps.brand',
     # 'apps.audit',          se agrega en commit 11
 ]
 

@@ -2,8 +2,6 @@
 URL config principal.
 
 Los grupos de endpoints de cada app se agregan en sus respectivos commits:
-    path('api/brand/', include('apps.brand.urls')),            # commit 10
-    path('api/system-config/', include('apps.system_config.urls')),  # commit 9
     path('api/audit/', include('apps.audit.urls')),            # commit 11
 """
 from django.contrib import admin
@@ -24,4 +22,6 @@ urlpatterns = [
     path('api/levels/', include('apps.accounts.urls_levels')),
     path('api/tenants/', include('apps.tenants.urls')),
     path('api/system-config/', include('apps.system_config.urls')),
+    path('api/brand/', include('apps.brand.urls')),
+    path('api/global-brand/', include('apps.brand.urls_global')),
 ]
