@@ -11,7 +11,6 @@ Ver SKELETON_GUIDE.md seccion "Multi-tenancy y niveles" para el flujo completo.
 """
 from django.contrib.auth.models import update_last_login
 from django.db.models import Q
-from rest_framework import status
 from rest_framework.exceptions import (
     AuthenticationFailed,
     NotFound,
@@ -180,20 +179,20 @@ class MeView(APIView):
     """
     GET /api/auth/me
 
-    Returns el usuario actual + tenant actual leido desde el JWT.
+    Returns el usuario actual + tenant actual.
+
+    `request.tenant` lo setea `TenantJWTAuthentication` desde el claim
+    del JWT y ya validado contra el nivel del usuario.
     """
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
-        tenant_slug = request.auth.get('tenant_slug') if request.auth else None
-        tenant = (
-            Tenant.objects.filter(slug=tenant_slug, is_active=True).first()
-            if tenant_slug else None
-        )
         return Response({
-            'user': UserWithPermissionsSerializer(user).data,
-            'tenant': TenantBriefSerializer(tenant).data if tenant else None,
+            'user': UserWithPermissionsSerializer(request.user).data,
+            'tenant': (
+                TenantBriefSerializer(request.tenant).data
+                if request.tenant else None
+            ),
         })
 
 

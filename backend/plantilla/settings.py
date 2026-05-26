@@ -44,9 +44,9 @@ THIRD_PARTY_APPS = [
 # Apps locales (orden = orden de migracion; tenants primero porque otras
 # apps tendran FK a Tenant).
 LOCAL_APPS: list[str] = [
+    'apps.core',
     'apps.tenants',
     'apps.accounts',
-    # 'apps.core',           se agrega en commit 5
     # 'apps.brand',          se agrega en commit 10
     # 'apps.system_config',  se agrega en commit 9
     # 'apps.audit',          se agrega en commit 11
@@ -135,7 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'apps.core.authentication.TenantJWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
