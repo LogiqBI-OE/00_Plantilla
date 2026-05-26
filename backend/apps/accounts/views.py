@@ -26,6 +26,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.core.permissions import RequireLevel
+from apps.system_config.defaults import get_value as get_config
 
 from .models import User, UserPermissionOverride
 from .serializers import (
@@ -33,9 +34,6 @@ from .serializers import (
     UserDetailSerializer,
     UserUpdateSerializer,
 )
-
-# TODO commit 9: reemplazar por lookup de SystemConfig.objects.get(key='standard_password').
-DEFAULT_STANDARD_PASSWORD = 'ChangeMe123!'
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -181,8 +179,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 'No puedes resetear contrasena de usuarios de tu mismo o mayor nivel.'
             )
 
-        # TODO commit 9: leer de SystemConfig.
-        standard = DEFAULT_STANDARD_PASSWORD
+        standard = get_config('standard_password')
         target.set_password(standard)
         target.save(update_fields=['password'])
 

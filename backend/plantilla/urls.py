@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/users/', include('apps.accounts.urls_users')),
     path('api/levels/', include('apps.accounts.urls_levels')),
     path('api/tenants/', include('apps.tenants.urls')),
+    path('api/system-config/', include('apps.system_config.urls')),
 ]
