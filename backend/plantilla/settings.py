@@ -41,14 +41,16 @@ THIRD_PARTY_APPS = [
     'corsheaders',
 ]
 
-# Apps locales se agregan en commits posteriores:
-#   'apps.core',
-#   'apps.tenants',
-#   'apps.accounts',
-#   'apps.brand',
-#   'apps.system_config',
-#   'apps.audit',
-LOCAL_APPS: list[str] = []
+# Apps locales (orden = orden de migracion; tenants primero porque otras
+# apps tendran FK a Tenant).
+LOCAL_APPS: list[str] = [
+    'apps.tenants',
+    # 'apps.core',           se agrega en commit 5
+    # 'apps.accounts',       se agrega en commit 3
+    # 'apps.brand',          se agrega en commit 10
+    # 'apps.system_config',  se agrega en commit 9
+    # 'apps.audit',          se agrega en commit 11
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
