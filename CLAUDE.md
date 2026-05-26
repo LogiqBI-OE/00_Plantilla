@@ -29,6 +29,7 @@ Repo: `LogiqBI-OE/00_Plantilla` — https://github.com/LogiqBI-OE/00_Plantilla.g
 
 ## Workflow de commits
 
+- **Identidad de git**: al **iniciar cualquier repo nuevo**, preguntale al usuario a nombre de quién deben hacerse los commits (nombre + email). Nunca asumir lo del config global de la máquina — esa cuenta puede ser corporativa y el repo personal. Configurar con `git config --local user.name` y `user.email` (scope del repo, no global).
 - Commits chicos, mensajes con scope: `feat(cotizacion): ...`, `fix(login): ...`, `refactor(...)`, `perf(...)`, `chore(...)`.
 - Coautor en cada commit: `Co-Authored-By: Claude <noreply@anthropic.com>`.
 - Verificá build local antes de pushar cambios grandes: `cd frontend && npx tsc -b`.
