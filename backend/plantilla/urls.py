@@ -21,5 +21,6 @@ urlpatterns = [
     path('health/', health, name='health'),
     path('api/auth/', include('apps.accounts.urls')),
     path('api/users/', include('apps.accounts.urls_users')),
+    path('api/levels/', include('apps.accounts.urls_levels')),
     path('api/tenants/', include('apps.tenants.urls')),
 ]
