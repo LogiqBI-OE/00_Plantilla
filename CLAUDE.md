@@ -12,6 +12,19 @@ Stack:
 - **Tareas asíncronas**: Celery + Redis — envío de WhatsApps, correos y trabajos en segundo plano.
 Repo: `LogiqBI-OE/00_Plantilla` — https://github.com/LogiqBI-OE/00_Plantilla.git (rama única `main`, push = deploy).
 
+## Regla de oro: no asumir, siempre avisar
+
+**Antes de tomar cualquier decisión que el usuario no haya confirmado explícitamente, preguntar.** Esto cubre, sin ser exhaustivo:
+
+- Defaults técnicos cuando hay tradeoffs (UUID vs integer, sync vs async, etc.).
+- Identidades de git, cuentas de servicios, emails.
+- Posponer tareas ("lo dejamos para después", "no hace falta ahora") — eso es decisión del usuario, no mía.
+- Crear/borrar/pausar servicios en plataformas externas (Railway, GitHub).
+- Recomendar "Opción A vs B" y elegir una sin esperar respuesta.
+- Cualquier cosa que altere su entorno (PATH global, archivos fuera del repo, tokens persistentes).
+
+Cuando detecte que algo "habría que hacer eventualmente" (por ejemplo: crear servicio Frontend en Railway, instalar herramienta global, configurar variable de entorno), **avisar al usuario en ese mismo momento** con la decisión que enfrentará, no posponer mentalmente.
+
 ## Convenciones críticas (no las cambies sin preguntar)
 
 - **Priorizar eficiencia** de responsividad y acceso a datos.
