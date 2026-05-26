@@ -58,8 +58,7 @@ Estas son preguntas abiertas que hay que resolver antes de construir. **No asumi
    - Dashboard inicial
 2. **Estilo visual**: ¿hay una identidad/paleta ya definida o se decide al inicio de cada app?
 3. **i18n**: ¿la plantilla nace bilingüe (es/en) o monolingüe?
-4. **Alcance de la matriz de permisos**: ¿es global a la app o por-tenant? (es decir: ¿cada tenant puede tener su propia configuración de qué puede hacer cada nivel L0-L9, o la matriz es una sola para toda la instancia?)
-5. **Super-admin cross-tenant**: ¿existe un rol (por ejemplo L9) que ve y administra todos los tenants, o cada tenant es totalmente aislado y un L9 solo es admin de su propio tenant?
+4. **Super-admin cross-tenant**: ¿existe un rol (por ejemplo L9) que ve y administra todos los tenants, o cada tenant es totalmente aislado y un L9 solo es admin de su propio tenant?
 
 ---
 
@@ -130,3 +129,4 @@ Estas son preguntas abiertas que hay que resolver antes de construir. **No asumi
 | 2026-05-25 | Deploy: Railway | Definido por el usuario |
 | 2026-05-25 | Multi-tenancy: la plantilla la soporta nativamente | Definido por el usuario |
 | 2026-05-25 | Login adaptativo: si solo hay 1 tenant activo no se pide en login; si hay 2+, sí se pide | UX progresiva — no pagar costo cuando no se usa |
+| 2026-05-25 | Matriz de permisos: **global** (una sola para toda la instancia), **con overrides por usuario** (un usuario específico puede tener permisos custom además de los de su nivel) | Definido por el usuario — flexibilidad sin complicar el modelo por-tenant |
