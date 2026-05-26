@@ -25,6 +25,7 @@ from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from apps.audit.services import log_action
 from apps.core.permissions import RequireLevel
 from apps.system_config.defaults import get_value as get_config
 
@@ -109,6 +110,11 @@ class UserViewSet(viewsets.ModelViewSet):
                     '(sin tenant activo).'
                 )
             serializer.save(tenant=None)
+            log_action(
+                actor=request.user, tenant=None, action='user.created',
+                target=serializer.instance,
+                metadata={'email': serializer.instance.email, 'level': target_level},
+            )
             return
 
         # L0-L7: deben pertenecer al tenant del request.
@@ -117,6 +123,11 @@ class UserViewSet(viewsets.ModelViewSet):
                 'Para crear usuarios L0-L7, primero entra a un tenant especifico.'
             )
         serializer.save(tenant=request.tenant)
+        log_action(
+            actor=request.user, tenant=request.tenant, action='user.created',
+            target=serializer.instance,
+            metadata={'email': serializer.instance.email, 'level': target_level},
+        )
 
     def perform_update(self, serializer):
         instance = self.get_object()
@@ -156,6 +167,11 @@ class UserViewSet(viewsets.ModelViewSet):
                 'No puedes borrar usuarios de tu mismo o mayor nivel.'
             )
 
+        log_action(
+            actor=request.user, tenant=instance.tenant, action='user.deleted',
+            target=instance,
+            metadata={'email': instance.email, 'level': instance.level},
+        )
         instance.delete()
 
     # --- Acciones custom --------------------------------------------------
@@ -182,6 +198,11 @@ class UserViewSet(viewsets.ModelViewSet):
         standard = get_config('standard_password')
         target.set_password(standard)
         target.save(update_fields=['password'])
+
+        log_action(
+            actor=request.user, tenant=target.tenant, action='user.password_reset',
+            target=target, metadata={'email': target.email},
+        )
 
         return Response({
             'detail': 'Contrasena reseteada.',

@@ -61,7 +61,7 @@ LOCAL_APPS: list[str] = [
     'apps.accounts',
     'apps.system_config',
     'apps.brand',
-    # 'apps.audit',          se agrega en commit 11
+    'apps.audit',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
