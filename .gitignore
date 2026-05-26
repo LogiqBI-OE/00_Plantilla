@@ -40,6 +40,7 @@ venv/
 *.sqlite3-journal
 staticfiles/
 media/
+*.mo
 
 # Testing / coverage
 coverage/
