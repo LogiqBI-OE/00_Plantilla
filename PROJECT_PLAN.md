@@ -33,16 +33,14 @@ Construir una **app plantilla** mínima, rápida y bien estructurada, que sirva 
 - `.gitignore` cubriendo Python, Node, builds y archivos de editor
 - Regla de idioma: español neutro en todo (código, comentarios, conversación)
 
+### Hecho (cont.)
+- ✅ Backend Django completo: 13 commits de Fase 1 (Tenant, accounts, core auth, users CRUD, tenants CRUD + agency-access, levels + matriz seed, system_config, brand + global brand, audit, i18n estructura, /readiness).
+- ✅ Frontend Vite + React + TS: 16 commits de Fase 2 (scaffold, i18n, API client, AuthProvider, BrandProvider con OKLab, TenantProvider, ThemeProvider, UI primitives, InfoIcon + TailwindColorPicker via Portal, UserMenu, AppShell + Sidebar + Topbar + Layout routes, Login full, UsuariosPage CRUD, ConfiguracionPage con Brand editor completo (BrandName + Paleta + Logos + Carrusel + LoginPreview), platform pages Tenants/AgencyAccess/GlobalSettings, AuditoriaPage).
+- ✅ Deploy Railway: Backend + Postgres + Frontend con env vars configuradas, VITE_API_URL para cross-origin, CORS_ALLOWED_ORIGINS multi-host.
+- ✅ Documentos: CLAUDE.md, BRAND.md, SKELETON_GUIDE.md, README.md.
+
 ### Pendiente
-- Definir alcance del esqueleto mínimo (qué módulos entran en la v0.1)
-- Crear estructura de carpetas `backend/` y `frontend/`
-- Inicializar proyecto Django
-- Inicializar proyecto Vite + React + Tailwind
-- Configurar Postgres local (docker-compose probablemente)
-- Configurar Celery + Redis
-- Decidir esquema de autenticación
-- Decidir destino de deploy y configurarlo
-- Documentar `README.md` con instrucciones para clonar y arrancar
+- Skill `Crear-app` (Fase 11): script que clona la plantilla, renombra y adapta a una app nueva.
 
 ---
 
