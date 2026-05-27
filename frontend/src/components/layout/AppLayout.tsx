@@ -1,11 +1,16 @@
 /**
- * RootLayout — layout protegido para rutas tenant-scope.
+ * AppLayout — layout unificado para todos los usuarios autenticados.
  *
- * Auth gate: si no hay sesion -> redirige a /login. Si hay sesion pero el
- * user es L0-L7 sin tenant valido -> tambien al login.
+ * Reemplaza a RootLayout y PlatformLayout (que estaban separados).
+ * El sidebar adapta su contenido segun el nivel del user + si hay tenant
+ * activo. Asi L9/L8 ven plataforma + vista de tenant en una sola pantalla.
  *
- * Anida los providers que SI dependen de tenant (Brand scope='tenant',
- * Tenant context).
+ * Auth gate:
+ *   - Sin sesion -> /login.
+ *   - L0-L7 sin tenant -> /login (probablemente token stale).
+ *   - L8/L9 sin tenant -> OK, modo platform.
+ *
+ * BrandProvider scope dinamico: 'tenant' si hay tenant activo, 'platform' si no.
  */
 import { Navigate, Outlet } from 'react-router-dom';
 
@@ -16,7 +21,7 @@ import { TenantProvider } from '@/lib/tenant';
 
 import { AppShell } from './AppShell';
 
-export function RootLayout(): React.ReactElement {
+export function AppLayout(): React.ReactElement {
   const { loading, user, tenant } = useAuth();
 
   if (loading) {
@@ -27,16 +32,16 @@ export function RootLayout(): React.ReactElement {
     );
   }
   if (!user) return <Navigate to="/login" replace />;
-  // L0-L7 sin tenant valido -> al login (probablemente token stale)
+  // L0-L7 deben tener tenant. Si lo perdieron, token stale -> re-login.
   if (user.level < 8 && !tenant) return <Navigate to="/login" replace />;
-  // L9/L8 sin tenant -> deberian estar en /platform/* no aqui
-  if (!tenant) return <Navigate to="/platform" replace />;
+
+  const brandScope: 'tenant' | 'platform' = tenant ? 'tenant' : 'platform';
 
   return (
-    <BrandProvider scope="tenant">
+    <BrandProvider scope={brandScope}>
       <TenantProvider>
         <PageTitleProvider>
-          <AppShell variant="tenant">
+          <AppShell>
             <Outlet />
           </AppShell>
         </PageTitleProvider>

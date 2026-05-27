@@ -3,7 +3,10 @@
  *
  * El prefetch dispara el import() del chunk de la page cuando el cursor
  * pasa encima del item. Cuando el usuario hace click, el chunk ya esta
- * en caché del browser y la transicion es instantanea.
+ * en cache del browser y la transicion es instantanea.
+ *
+ * Soporta estado disabled (gris, no clickeable) para items que requieren
+ * un tenant activo cuando no lo hay.
  */
 import { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -27,22 +30,27 @@ const PREFETCH_MAP: Record<string, () => Promise<unknown>> = {
 interface SidebarItemProps {
   item: NavItem;
   label: string;
+  disabled?: boolean;
 }
 
-export function SidebarItem({ item, label }: SidebarItemProps): React.ReactElement {
+export function SidebarItem({ item, label, disabled }: SidebarItemProps): React.ReactElement {
   const prefetch = useCallback(() => {
+    if (disabled) return;
     const importFn = PREFETCH_MAP[item.to];
     if (importFn) void importFn().catch(() => undefined);
-  }, [item.to]);
+  }, [item.to, disabled]);
 
-  if (item.comingSoon) {
+  const Icon = item.icon;
+  const iconNode = Icon ? <Icon size={16} strokeWidth={1.5} className="shrink-0" /> : null;
+
+  if (item.comingSoon || disabled) {
     return (
       <span
         className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm cursor-not-allowed"
         style={{ color: 'var(--sidebar-disabled-text)' }}
-        title="Proximamente"
+        title={disabled ? 'Selecciona un tenant primero' : 'Proximamente'}
       >
-        {item.icon && <span className="text-base shrink-0">{item.icon}</span>}
+        {iconNode}
         <span className="truncate">{label}</span>
       </span>
     );
@@ -65,7 +73,7 @@ export function SidebarItem({ item, label }: SidebarItemProps): React.ReactEleme
         background: isActive ? 'var(--sidebar-active-bg)' : 'transparent',
       })}
     >
-      {item.icon && <span className="text-base shrink-0">{item.icon}</span>}
+      {iconNode}
       <span className="truncate">{label}</span>
     </NavLink>
   );

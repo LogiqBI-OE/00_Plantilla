@@ -13,7 +13,6 @@ export { SkeletonBox, SkeletonCards, SkeletonTable } from './Skeleton';
 export { Tabs } from './Tabs';
 export type { TabItem } from './Tabs';
 export { TailwindColorPicker } from './TailwindColorPicker';
-export { TenantSwitcher } from './TenantSwitcher';
 export { TextField } from './TextField';
 export { ThemeToggle } from './ThemeToggle';
 export { UserMenu } from './UserMenu';

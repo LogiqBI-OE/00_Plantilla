@@ -1,33 +1,46 @@
 /**
- * Sidebar — navegacion lateral fija.
+ * Sidebar — navegacion lateral unificada para todos los niveles.
  *
- * Aplica los CSS vars del scope sidebar (no cambian con tema dark/light).
- * Renderiza secciones filtradas por el nivel y permisos del usuario.
+ * Estructura:
+ *   - Header: logo + marca/alcance (segun brand activo).
+ *   - VISTA DE TENANT: selector de tenant + items (disabled si no hay tenant).
+ *     Incluye sub-headers internos (ej. "Configuracion") definidos en navConfig.
+ *   - PLATAFORMA: solo visible para L8/L9. Tenants, agency-access, global-settings.
+ *   - Footer: version + Powered by LogiQ BI.
+ *
+ * Los CSS vars del scope sidebar NO cambian con el tema dark/light.
  */
 import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@/lib/auth';
 import { useBrand } from '@/lib/brand';
 
-import { filterNavForUser, type NavSection } from './navConfig';
+import {
+  NAV_SECTION_PLATFORM,
+  NAV_SECTION_TENANT_VIEW,
+  filterSection,
+} from './navConfig';
 import { SidebarItem } from './SidebarItem';
+import { SidebarTenantSelector } from './SidebarTenantSelector';
 
-interface SidebarProps {
-  sections: NavSection[];
-  variant?: 'tenant' | 'platform';
-}
-
-export function Sidebar({ sections, variant = 'tenant' }: SidebarProps): React.ReactElement | null {
+export function Sidebar(): React.ReactElement | null {
   const { i18n } = useTranslation();
-  const { user } = useAuth();
+  const { user, tenant } = useAuth();
   const { brand } = useBrand();
   const lang = i18n.language.startsWith('en') ? 'en' : 'es';
 
   if (!user) return null;
-  const visibleSections = filterNavForUser(sections, user);
+
+  const hasTenant = !!tenant;
+  const showPlatform = user.level >= 8;
+
+  // Filtrar items por gate
+  const tenantSection = filterSection(NAV_SECTION_TENANT_VIEW, user);
+  const platformSection = filterSection(NAV_SECTION_PLATFORM, user);
 
   const logoSrc = brand?.logo_sidebar || '/brand/logiq/logo-white.png';
-  const marca = brand?.marca ?? (variant === 'platform' ? 'LogiQ' : 'App');
+  const marca = brand?.marca ?? 'LogiQ';
+  const alcance = brand?.alcance ?? '';
 
   return (
     <aside
@@ -38,36 +51,90 @@ export function Sidebar({ sections, variant = 'tenant' }: SidebarProps): React.R
         borderRight: '1px solid var(--sidebar-border)',
       }}
     >
-      <div className="px-4 py-4 flex items-center gap-2.5 border-b" style={{ borderColor: 'var(--sidebar-border)' }}>
+      {/* Header */}
+      <div
+        className="px-4 py-4 flex items-center gap-2.5 border-b"
+        style={{ borderColor: 'var(--sidebar-border)' }}
+      >
         <img
           src={logoSrc}
           alt={marca}
-          className="w-8 h-8 object-contain"
+          className="w-8 h-8 object-contain shrink-0"
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).style.display = 'none';
           }}
         />
         <div className="min-w-0">
           <div className="font-semibold text-sm truncate">{marca}</div>
-          {variant === 'platform' && (
-            <div className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--sidebar-section-title)' }}>
-              Plataforma
+          {alcance && (
+            <div
+              className="text-[10px] uppercase tracking-wider truncate"
+              style={{ color: 'var(--sidebar-section-title)' }}
+            >
+              {alcance}
             </div>
           )}
         </div>
       </div>
 
-      <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-4">
-        {visibleSections.map((section) => (
-          <div key={section.key}>
+      <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-5">
+        {/* Vista de tenant */}
+        <div className="space-y-1.5">
+          <div
+            className="px-3 text-[10px] uppercase tracking-wider font-semibold"
+            style={{ color: 'var(--sidebar-section-title)' }}
+          >
+            {lang === 'es' ? tenantSection.title_es : tenantSection.title_en}
+          </div>
+
+          <div className="px-2 pt-1">
+            <SidebarTenantSelector />
+          </div>
+
+          <div className="space-y-0.5 pt-2">
+            {tenantSection.items.map((item, idx) => {
+              const subHeader = lang === 'es' ? item.subHeader_es : item.subHeader_en;
+              const requiresTenant = item.requiresTenant && !hasTenant;
+              const label = lang === 'es' ? item.label_es : item.label_en;
+              return (
+                <div key={item.key}>
+                  {subHeader && (
+                    <div
+                      className="px-3 pt-3 pb-1 text-[10px] uppercase tracking-wider font-semibold"
+                      style={{ color: 'var(--sidebar-section-title)' }}
+                    >
+                      {subHeader}
+                    </div>
+                  )}
+                  <SidebarItem
+                    item={item}
+                    label={label}
+                    disabled={requiresTenant}
+                  />
+                  {/* gap visual entre Inicio y la sub-seccion Configuracion */}
+                  {idx === 0 && (
+                    <div
+                      className="my-2 mx-3 border-t"
+                      style={{ borderColor: 'var(--sidebar-border)' }}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Plataforma (solo L8/L9) */}
+        {showPlatform && platformSection.items.length > 0 && (
+          <div className="space-y-1.5">
             <div
-              className="px-3 py-1 text-[10px] uppercase tracking-wider font-semibold"
+              className="px-3 text-[10px] uppercase tracking-wider font-semibold"
               style={{ color: 'var(--sidebar-section-title)' }}
             >
-              {lang === 'es' ? section.title_es : section.title_en}
+              {lang === 'es' ? platformSection.title_es : platformSection.title_en}
             </div>
             <div className="space-y-0.5">
-              {section.items.map((item) => (
+              {platformSection.items.map((item) => (
                 <SidebarItem
                   key={item.key}
                   item={item}
@@ -76,14 +143,19 @@ export function Sidebar({ sections, variant = 'tenant' }: SidebarProps): React.R
               ))}
             </div>
           </div>
-        ))}
+        )}
       </nav>
 
+      {/* Footer */}
       <div
-        className="px-4 py-2 text-[10px] border-t"
-        style={{ borderColor: 'var(--sidebar-border)', color: 'var(--sidebar-section-title)' }}
+        className="px-4 py-3 border-t text-[10px] space-y-0.5"
+        style={{
+          borderColor: 'var(--sidebar-border)',
+          color: 'var(--sidebar-section-title)',
+        }}
       >
-        v0.1.0
+        <div>v0.1.0</div>
+        <div className="opacity-70">Powered by LogiQ BI</div>
       </div>
     </aside>
   );
