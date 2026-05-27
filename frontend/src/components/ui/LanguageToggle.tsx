@@ -1,13 +1,20 @@
 /**
- * LanguageToggle — cycla entre los idiomas soportados.
+ * LanguageToggle — boton que cicla idiomas.
  *
- * Cuando hay usuario logueado, idealmente esto deberia tambien hacer PATCH
- * a /api/users/me/ para persistir la preferencia en el backend — pero eso
- * lo agregamos cuando exista el endpoint de me update (futuro).
+ * Muestra la bandera del idioma actual (no del proximo). Click cicla
+ * al siguiente idioma soportado.
+ *
+ * Si quieres cambiar las banderas (ej. 🇪🇸 en vez de 🇲🇽 para ES), edita
+ * el mapa FLAGS abajo.
  */
 import { useTranslation } from 'react-i18next';
 
 import { SUPPORTED_LANGUAGES, type Language } from '@/i18n';
+
+const FLAGS: Record<Language, string> = {
+  es: '🇲🇽',
+  en: '🇺🇸',
+};
 
 export function LanguageToggle(): React.ReactElement {
   const { i18n, t } = useTranslation();
@@ -22,9 +29,10 @@ export function LanguageToggle(): React.ReactElement {
       onClick={() => void i18n.changeLanguage(next)}
       title={t('language.label')}
       aria-label={t('language.label')}
-      className="px-2 py-1 rounded-lg border border-border hover:bg-elevated transition text-xs uppercase font-medium tracking-wide"
+      className="w-9 h-9 inline-flex items-center justify-center rounded-lg border border-border hover:bg-elevated transition text-base leading-none"
     >
-      {current}
+      <span aria-hidden="true">{FLAGS[current]}</span>
+      <span className="sr-only">{t(`language.${current}`)}</span>
     </button>
   );
 }
