@@ -7,16 +7,18 @@
  */
 import { useCallback, useEffect, useState } from 'react';
 
-import { Card, EmptyState, Tabs, type TabItem } from '@/components/ui';
+import { Tabs, type TabItem } from '@/components/ui';
 import { levelsApi } from '@/lib/api';
 import type { LevelsResponse } from '@/lib/api';
 import { usePageTitle } from '@/lib/pageTitle';
 
 import { NivelesTab } from './sections/NivelesTab';
 import { PermisosTab } from './sections/PermisosTab';
+import { GeneralesTab } from './sections/GeneralesTab';
 import { BrandTab } from './sections/BrandTab';
+import { LicenciaTab } from './sections/LicenciaTab';
 
-type TabKey = 'niveles' | 'permisos' | 'brand' | 'licencia';
+type TabKey = 'niveles' | 'permisos' | 'generales' | 'brand' | 'licencia';
 
 export default function ConfiguracionPage(): React.ReactElement {
   usePageTitle('Configuracion');
@@ -42,12 +44,21 @@ export default function ConfiguracionPage(): React.ReactElement {
   const tabs: TabItem[] = [
     { key: 'niveles', label: 'Niveles' },
     { key: 'permisos', label: 'Permisos' },
+    { key: 'generales', label: 'Generales' },
     { key: 'brand', label: 'Marca' },
     { key: 'licencia', label: 'Licencia' },
   ];
 
   return (
     <div className="space-y-5">
+      {/* Header de pagina */}
+      <div>
+        <h2 className="text-2xl font-bold">Configuracion</h2>
+        <p className="text-sm opacity-60 mt-1">
+          Niveles, permisos, parametros generales y licencia del sistema.
+        </p>
+      </div>
+
       <Tabs items={tabs} active={active} onChange={(k) => setActive(k as TabKey)} />
 
       <div>
@@ -57,16 +68,9 @@ export default function ConfiguracionPage(): React.ReactElement {
         {active === 'permisos' && (
           <PermisosTab data={levelsData} loading={loading} onReload={reloadLevels} />
         )}
+        {active === 'generales' && <GeneralesTab />}
         {active === 'brand' && <BrandTab />}
-        {active === 'licencia' && (
-          <Card>
-            <EmptyState
-              icon="📜"
-              title="Licencia"
-              description="Placeholder. Configurable cuando se conecte a un sistema de billing."
-            />
-          </Card>
-        )}
+        {active === 'licencia' && <LicenciaTab />}
       </div>
     </div>
   );
