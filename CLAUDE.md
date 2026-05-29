@@ -43,6 +43,22 @@ Cuando detecte que algo "habría que hacer eventualmente" (por ejemplo: crear se
 - **Backend sin N+1**: precarga lookups en batch (`MaterialInfoCache`,
   `RecetaCostCache`, `_badges_for_all` son ejemplos).
 - **Iconos**: `lucide-react`, estilo outline `strokeWidth={1.5}`. No emojis.
+- **Banderas**: SVG inline, **nunca emoji** (los emoji de bandera no
+  renderizan en Windows — muestran el código de región, ej. "US"). Ver
+  `LanguageToggle.tsx`.
+- **Settings (IA)**: la config del **sistema** (Niveles, Permisos,
+  Generales/SystemConfig, Licencia) vive en **"Configuración global"**
+  (`GlobalSettingsPage`, L9 plataforma) como tabs dentro de **un solo `Card`**
+  (canvas unificado: tabs arriba + contenido abajo, estilo TdF). La config
+  del **tenant** (Marca/branding, etc.) va en página aparte. El branding NO
+  va en settings globales.
+- **Tabs dentro de canvas**: los componentes de cada tab **no** se envuelven
+  en su propio `Card` — el canvas padre provee el panel. Así los tabs y el
+  contenido comparten un único panel redondeado.
+- **Páginas anchas**: el `<main>` de `AppShell` da el gutter parejo (`px`);
+  las páginas usan todo el ancho (sin `max-w` que deje hueco a la derecha).
+  Responsivo: `px-4 sm:px-6`, tabs con `overflow-x-auto`, tablas con
+  wrapper `overflow-x-auto` + `min-w`.
 - **Layout único `AppLayout`**: un solo layout para todos los niveles. El
   `Sidebar` adapta su contenido (L8/L9 ven sección Plataforma + Vista de
   Tenant; L0-L7 solo Vista de Tenant). `BrandProvider` scope dinámico:

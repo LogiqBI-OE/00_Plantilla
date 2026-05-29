@@ -4,7 +4,7 @@
 
 ---
 
-## 0. Dónde retomar (memoria de sesión — actualizado 2026-05-29)
+## 0. Dónde retomar (memoria de sesión — actualizado 2026-05-29, sesión 2)
 
 **Estado general**: La plantilla está **completa y desplegada en Railway**.
 Backend (Django) + Frontend (React) + Postgres corriendo. Login funcional
@@ -14,24 +14,52 @@ end-to-end con el usuario `orlando@logiqbi.com` (L9).
 - Frontend: `https://logiq-plantilla.up.railway.app`
 - Backend: `https://plantilla-backend.up.railway.app`
 
-**Lo último que se hizo** (sesión 2026-05-29):
-- Sidebar unificado (un solo `AppLayout`): Vista de Tenant arriba +
-  Plataforma abajo. Selector de tenant inline. Iconos Lucide. Footer
-  "Powered by LogiQ BI".
-- Toggles del topbar: bandera en idioma (🇲🇽/🇺🇸) + Sun/Moon Lucide,
-  ambos cuadrados 36×36.
+**Referencia visual**: Terra de Flora (`https://terradeflora.up.railway.app`)
+es una app derivada de esta plantilla pero **más avanzada visualmente**. El
+usuario la usa como referencia de diseño a replicar/backportar.
+
+**Lo último que se hizo** (sesión 2026-05-29 #2) — TODO PUSHEADO salvo lo indicado:
+- **Banderas SVG** en LanguageToggle (los emoji 🇲🇽/🇺🇸 NO renderizan en
+  Windows → SVG inline MX/US). Commit `02cb8ca`. ✅ pusheado.
+- **Topbar estilo TdF**: botones circulares (rounded-full), Help + Bell
+  placeholders, avatar md + nombre arriba/rol debajo (label del nivel de
+  /api/levels/) + chevron. Commit `5ab4efd`. ✅ pusheado.
+- **Sidebar estilo TdF**: definidas `--sidebar-active-bg` y `--sidebar-border`
+  (faltaban: el item activo no tenía fondo y los bordes no se veían), marca
+  más prominente, logo más grande, más aire en items, badge PRONTO para
+  items `comingSoon`. Commit `5aa69e6`. ✅ pusheado.
+- **Configuración global look TdF** (header + panel + Descartar). Commit
+  `2a81c46`. ✅ pusheado.
+- **Canvas full-width + responsividad** (sin max-w, gutter parejo, tabs con
+  scroll horizontal en móvil, tabla con overflow). Commit `aaeafd6`. ✅ pusheado.
+- **Reorganización IA de settings + canvas unificado de tabs** (ver decisión
+  abajo). Commits `238bb31` + `33e7835`. ⚠️ **LOCALES, SIN PUSH** — pendiente
+  de review/aprobación del usuario antes de deployar.
 
 **Pendiente inmediato (donde se cortó la conversación)**:
-- El usuario mostró un **screenshot de referencia del topbar** que quería
-  replicar: botones circulares (rounded-full) sin borde, agregar iconos
-  **Help (?)** y **Bell (notificaciones)**, avatar circular más grande con
-  **nombre + rol debajo** (ej. "Rogelio / System Admin"). Quedó pendiente
-  confirmar cuánto de ese estilo replicar. **Retomar aquí.**
+1. **Push pendiente**: los commits `238bb31` + `33e7835` (settings con tabs
+   Niveles/Permisos/Generales/Licencia en "Configuración global" dentro de
+   un Card único estilo TdF) están **commiteados localmente pero NO pusheados**.
+   El usuario estaba revisándolo en local (dev server contra backend prod).
+   **Confirmar que le gustó y hacer `git push origin main`.**
+2. **Fase 2 — flag `tenant_mode` (single | multi)** — NO iniciada. Decidido:
+   single por defecto, enfoque "N=1, ocultar UI" (una sola base multi-tenant;
+   single = 1 tenant fijo con selector/plataforma ocultos). Cascadas:
+   - Sidebar: ocultar selector de tenant + sección PLATAFORMA en single.
+   - Branding adaptativo: global (L9, aplica a toda la app) en single /
+     por-tenant + LogiQ plataforma en multi.
+   - Tab Licencia: card única (single) vs lista de tenants con su licencia (multi).
+   - El flag vive como SystemConfig key, expuesto en `/api/system-config/runtime/`,
+     leído por un provider único (fuente de verdad).
+3. **Modelo `License` por-tenant en backend** (status, type, valid_until,
+   max_users) — hoy el tab Licencia es UI-only (no persiste). Migración Django.
+4. **Página "Configuración" (tenant)** quedó reducida a Marca/branding;
+   definir el resto de config de tenant.
 
 **Pendientes de fondo**:
-- Validar la skill `crear-app` creando 1-2 apps reales.
-- Configurar Watch Paths en Railway (`backend/**` y `frontend/**`) para
-  evitar re-deploys cruzados.
+- Validar la skill `crear-app` creando 1-2 apps reales (la skill `Crear-app`
+  debería preguntar/setear `tenant_mode` al clonar).
+- Configurar Watch Paths en Railway (`backend/**` y `frontend/**`).
 - Cambiar la contraseña de `orlando@logiqbi.com` (pasó por chat/env vars).
 - Traducciones .po del backend (estructura lista, contenido pendiente).
 
@@ -164,3 +192,7 @@ Logos en `Logos/` (se mueven a `frontend/public/brand/logiq/` en Fase 2).
 | 2026-05-25 | i18n: **bilingüe es/en desde el día uno**. Frontend con `react-i18next`, backend con Django i18n (`.po`). Todos los textos pasan por funciones de traducción. Selector de idioma en topbar, preferencia almacenada por usuario. | Definido por el usuario — todas las apps que se generen desde la plantilla heredan multi-idioma sin trabajo extra |
 | 2026-05-25 | Identidad visual: **pantallas L9/L8 (consola tenants, global settings) llevan marca LogiQ siempre**. **Pantallas del tenant (operación diaria) heredan de su `BrandSettings`**. | Definido por el usuario — separa el producto LogiQ del app que el tenant consume |
 | 2026-05-25 | Paleta LogiQ documentada en [`BRAND.md`](./BRAND.md): scopes Login y Sidebar fijos; Light/Dark con CSS variables. Acento azul Apple (#007AFF / #0A84FF). Logos en PNG 2813×1125 (completo) y ~640×640 (favicon), en versiones negro/blanco con transparencia. | Definido por el usuario |
+| 2026-05-29 | **Banderas como SVG inline, nunca emoji**: los emoji de bandera no renderizan en Windows (muestran el código de región, ej. "US"). | Bug visible en producción |
+| 2026-05-29 | **IA de settings**: la config del SISTEMA (Niveles, Permisos, Generales/SystemConfig, Licencia) vive en **"Configuración global"** (L9 plataforma) como tabs dentro de un **Card único** (canvas unificado estilo TdF: tabs arriba + contenido abajo). La config del **TENANT** (Marca/branding, etc.) va en página aparte ("Configuración"). Branding NO va en los settings globales. | Definido por el usuario ("este tipo de configuración es la global, después vemos la del tenant") |
+| 2026-05-29 | **Flag `tenant_mode` (single \| multi)**, **single por defecto**, enfoque **"N=1, ocultar UI"**: una sola base multi-tenant; en single hay 1 tenant fijo y se ocultan selector de tenant + sección Plataforma. El modo cambia branding (global vs por-tenant) y la vista de Licencia (card única vs lista de tenants). | Definido por el usuario — la mayoría de apps clonadas son una sola empresa; evita bifurcar el código |
+| 2026-05-29 | **Tab components no se auto-envuelven en `Card`**: el canvas padre provee el panel único. | Para lograr el "canvas unificado con tabs adentro" estilo TdF |
