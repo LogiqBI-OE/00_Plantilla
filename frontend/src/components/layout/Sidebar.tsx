@@ -59,13 +59,13 @@ export function Sidebar(): React.ReactElement | null {
         <img
           src={logoSrc}
           alt={marca}
-          className="w-8 h-8 object-contain shrink-0"
+          className="w-10 h-10 object-contain shrink-0"
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).style.display = 'none';
           }}
         />
         <div className="min-w-0">
-          <div className="font-semibold text-sm truncate">{marca}</div>
+          <div className="font-semibold text-base truncate">{marca}</div>
           {alcance && (
             <div
               className="text-[10px] uppercase tracking-wider truncate"

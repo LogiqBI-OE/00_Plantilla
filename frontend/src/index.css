@@ -23,9 +23,11 @@
   /* Fijos: Sidebar (no cambian con tema) */
   --sidebar-bg: #161513;
   --sidebar-active-text: #0a84ff;
+  --sidebar-active-bg: rgba(10, 132, 255, 0.14);
   --sidebar-section-title: #787570;
   --sidebar-text: #f5f4f1;
   --sidebar-disabled-text: #52504c;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
 }
 
 /* Tema Light (default) */

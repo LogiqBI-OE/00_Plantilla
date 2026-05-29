@@ -18,7 +18,10 @@
     "back": "Volver",
     "next": "Siguiente",
     "previous": "Anterior",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "soon": "PRONTO",
+    "coming_soon": "Próximamente",
+    "select_tenant_first": "Selecciona un tenant primero"
   },
   "auth": {
     "login": {

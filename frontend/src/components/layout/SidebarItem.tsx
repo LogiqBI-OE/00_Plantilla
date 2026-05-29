@@ -9,6 +9,7 @@
  * un tenant activo cuando no lo hay.
  */
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import type { NavItem } from './navConfig';
@@ -34,6 +35,7 @@ interface SidebarItemProps {
 }
 
 export function SidebarItem({ item, label, disabled }: SidebarItemProps): React.ReactElement {
+  const { t } = useTranslation();
   const prefetch = useCallback(() => {
     if (disabled) return;
     const importFn = PREFETCH_MAP[item.to];
@@ -46,12 +48,23 @@ export function SidebarItem({ item, label, disabled }: SidebarItemProps): React.
   if (item.comingSoon || disabled) {
     return (
       <span
-        className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm cursor-not-allowed"
+        className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm cursor-not-allowed"
         style={{ color: 'var(--sidebar-disabled-text)' }}
-        title={disabled ? 'Selecciona un tenant primero' : 'Proximamente'}
+        title={disabled ? t('common.select_tenant_first') : t('common.coming_soon')}
       >
         {iconNode}
         <span className="truncate">{label}</span>
+        {item.comingSoon && (
+          <span
+            className="ml-auto text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded"
+            style={{
+              color: 'var(--sidebar-section-title)',
+              background: 'rgba(255, 255, 255, 0.06)',
+            }}
+          >
+            {t('common.soon')}
+          </span>
+        )}
       </span>
     );
   }
@@ -64,7 +77,7 @@ export function SidebarItem({ item, label, disabled }: SidebarItemProps): React.
       end={item.to === '/'}
       className={({ isActive }) =>
         [
-          'flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm transition',
+          'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition',
           isActive ? '' : 'hover:bg-white/5',
         ].join(' ')
       }
