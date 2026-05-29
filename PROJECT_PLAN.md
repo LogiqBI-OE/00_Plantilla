@@ -4,6 +4,39 @@
 
 ---
 
+## 0. Dónde retomar (memoria de sesión — actualizado 2026-05-29)
+
+**Estado general**: La plantilla está **completa y desplegada en Railway**.
+Backend (Django) + Frontend (React) + Postgres corriendo. Login funcional
+end-to-end con el usuario `orlando@logiqbi.com` (L9).
+
+**URLs producción**:
+- Frontend: `https://logiq-plantilla.up.railway.app`
+- Backend: `https://plantilla-backend.up.railway.app`
+
+**Lo último que se hizo** (sesión 2026-05-29):
+- Sidebar unificado (un solo `AppLayout`): Vista de Tenant arriba +
+  Plataforma abajo. Selector de tenant inline. Iconos Lucide. Footer
+  "Powered by LogiQ BI".
+- Toggles del topbar: bandera en idioma (🇲🇽/🇺🇸) + Sun/Moon Lucide,
+  ambos cuadrados 36×36.
+
+**Pendiente inmediato (donde se cortó la conversación)**:
+- El usuario mostró un **screenshot de referencia del topbar** que quería
+  replicar: botones circulares (rounded-full) sin borde, agregar iconos
+  **Help (?)** y **Bell (notificaciones)**, avatar circular más grande con
+  **nombre + rol debajo** (ej. "Rogelio / System Admin"). Quedó pendiente
+  confirmar cuánto de ese estilo replicar. **Retomar aquí.**
+
+**Pendientes de fondo**:
+- Validar la skill `crear-app` creando 1-2 apps reales.
+- Configurar Watch Paths en Railway (`backend/**` y `frontend/**`) para
+  evitar re-deploys cruzados.
+- Cambiar la contraseña de `orlando@logiqbi.com` (pasó por chat/env vars).
+- Traducciones .po del backend (estructura lista, contenido pendiente).
+
+---
+
 ## 1. Visión
 
 Construir una **app plantilla** mínima, rápida y bien estructurada, que sirva como base para crear muchas aplicaciones futuras. Cuando esté lista y probada, se convertirá en una **skill `Crear-app`** que clone esta plantilla y la adapte al dominio específico de cada nueva app.

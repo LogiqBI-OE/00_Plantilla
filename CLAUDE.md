@@ -5,12 +5,15 @@
 > roadmap y pendientes. Si te preguntan "¿qué llevamos?" o "¿qué sigue?",
 > sintetiza desde ese documento. **Actualízalo cuando completes algo grande.**
 
-Stack:
-- **Backend**: Django + Django REST Framework — base de datos, seguridad, roles de usuario y API.
-- **Base de datos**: PostgreSQL — almacenamiento seguro de datos del dominio.
-- **Frontend**: React + Vite + TypeScript + Tailwind — interfaz visual moderna.
+Stack (versiones reales instaladas):
+- **Backend**: Django 5.2 + Django REST Framework + `djangorestframework-simplejwt` — auth JWT con tenant claim.
+- **Base de datos**: PostgreSQL (prod en Railway; SQLite solo para dev rápido local).
+- **Frontend**: React 19 + Vite 8 + TypeScript 6 (strict) + Tailwind v3.4 + `react-i18next`.
+- **Iconos**: `lucide-react` (outline, `strokeWidth={1.5}`, `size={16}`). NO emojis en UI (se ven inconsistentes en Windows).
 - **Tareas asíncronas**: Celery + Redis — envío de WhatsApps, correos y trabajos en segundo plano.
 Repo: `LogiqBI-OE/00_Plantilla` — https://github.com/LogiqBI-OE/00_Plantilla.git (rama única `main`, push = deploy).
+
+> Nota: el SKELETON_GUIDE.md dice "React 18" pero Vite scaffoldeó React 19. Va con 19.
 
 ## Regla de oro: no asumir, siempre avisar
 
@@ -39,6 +42,34 @@ Cuando detecte que algo "habría que hacer eventualmente" (por ejemplo: crear se
 - **Skeleton loaders** (no "Cargando..." plain).
 - **Backend sin N+1**: precarga lookups en batch (`MaterialInfoCache`,
   `RecetaCostCache`, `_badges_for_all` son ejemplos).
+- **Iconos**: `lucide-react`, estilo outline `strokeWidth={1.5}`. No emojis.
+- **Layout único `AppLayout`**: un solo layout para todos los niveles. El
+  `Sidebar` adapta su contenido (L8/L9 ven sección Plataforma + Vista de
+  Tenant; L0-L7 solo Vista de Tenant). `BrandProvider` scope dinámico:
+  `tenant` si hay tenant activo, `platform` si no.
+- **Multi-tenancy en modelos de dominio**: heredar de `apps.core.models.TenantScopedModel`
+  y usar `MyModel.objects.for_request(request)` en las views (filtra por tenant).
+- **Permisos en views**: `RequireLevel(N)` o `HasPermission(code)` (factories en `apps.core.permissions`).
+
+## Deploy en Railway (lecciones aprendidas)
+
+- **Tres servicios**: Backend (root `backend/`, Dockerfile), Frontend (root `frontend/`,
+  Vite autodetect), Postgres add-on. Redis add-on cuando se use Celery.
+- **`VITE_API_URL`**: se lee en BUILD-TIME, no runtime. Si la cambias, hay que
+  re-deployar el frontend. Sin ella, el frontend pega rutas relativas contra su
+  propio dominio (404). Valor: la URL pública del backend.
+- **`CORS_ALLOWED_ORIGINS`**: UNA sola variable, valores separados por coma sin
+  espacios (`env.list` de django-environ la parsea). Debe incluir el dominio del
+  frontend + `http://localhost:5173`.
+- **`DJANGO_SECRET_KEY` + `DJANGO_DEBUG=False`** obligatorias en el backend.
+  `RAILWAY_PUBLIC_DOMAIN` se inyecta solo y se agrega a `ALLOWED_HOSTS`/`CSRF_TRUSTED_ORIGINS`.
+- **Bootstrap del admin inicial**: `python manage.py ensure_initial_admin` lee
+  `INITIAL_ADMIN_*` env vars y crea un L9 si no existe. Corre en `entrypoint.sh`.
+  Borrar las env vars después del primer login (la contraseña queda hasheada en DB).
+- **Watch Paths**: por default Railway re-deploya ambos servicios en cada push.
+  Para evitar re-builds inútiles, setear Watch Path `backend/**` y `frontend/**`
+  en cada servicio (pendiente — el usuario lo hace en el panel).
+- **El push a GitHub a veces falla por red** (timeout puerto 443). Reintentar.
 
 ## Workflow de commits
 
