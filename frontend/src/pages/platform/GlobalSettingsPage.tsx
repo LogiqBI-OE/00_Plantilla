@@ -10,6 +10,8 @@
  */
 import { useCallback, useEffect, useState } from 'react';
 
+import { BadgeCheck, Layers, ShieldCheck, SlidersHorizontal } from 'lucide-react';
+
 import { Card, Tabs, type TabItem } from '@/components/ui';
 import { levelsApi } from '@/lib/api';
 import type { LevelsResponse } from '@/lib/api';
@@ -42,10 +44,10 @@ export default function GlobalSettingsPage(): React.ReactElement {
   }, [reloadLevels]);
 
   const tabs: TabItem[] = [
-    { key: 'niveles', label: 'Niveles' },
-    { key: 'permisos', label: 'Permisos' },
-    { key: 'generales', label: 'Generales' },
-    { key: 'licencia', label: 'Licencia' },
+    { key: 'niveles', label: 'Niveles', icon: Layers },
+    { key: 'permisos', label: 'Permisos', icon: ShieldCheck },
+    { key: 'generales', label: 'Generales', icon: SlidersHorizontal },
+    { key: 'licencia', label: 'Licencia', icon: BadgeCheck },
   ];
 
   return (
@@ -64,7 +66,7 @@ export default function GlobalSettingsPage(): React.ReactElement {
           items={tabs}
           active={active}
           onChange={(k) => setActive(k as TabKey)}
-          className="px-4 pt-1"
+          className="px-2"
         />
         <div className="p-5">
           {active === 'niveles' && (
