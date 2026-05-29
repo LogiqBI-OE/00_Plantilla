@@ -55,19 +55,40 @@ export default function GlobalSettingsPage(): React.ReactElement {
   const dirty = Object.keys(edits).length > 0;
 
   return (
-    <div className="space-y-4 max-w-3xl">
-      <div className="flex items-center justify-between">
-        <p className="text-sm opacity-60">{items.length} claves</p>
-        <Button onClick={handleSave} disabled={!dirty} loading={saving}>
-          Guardar cambios
-        </Button>
+    <div className="space-y-5 max-w-3xl">
+      {/* Header de pagina */}
+      <div>
+        <h2 className="text-2xl font-bold">Configuracion global</h2>
+        <p className="text-sm opacity-60 mt-1">
+          Solo nivel 9. Parametros que controlan el comportamiento del sistema.
+        </p>
       </div>
 
-      {Array.from(sections.entries()).map(([sectionName, sectionItems]) => (
-        <Card key={sectionName} className="space-y-3">
-          <h3 className="font-semibold text-sm uppercase tracking-wider opacity-70">
+      {/* Panel unico */}
+      <Card className="space-y-6">
+        {/* Header del panel: heading + acciones */}
+        <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
+          <div>
+            <h3 className="font-semibold text-sm">Parametros del sistema</h3>
+            <p className="text-xs opacity-60 mt-0.5">
+              {items.length} claves de configuracion runtime.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <Button variant="secondary" onClick={() => setEdits({})} disabled={!dirty}>
+              Descartar
+            </Button>
+            <Button onClick={handleSave} disabled={!dirty} loading={saving}>
+              Guardar cambios
+            </Button>
+          </div>
+        </div>
+
+        {Array.from(sections.entries()).map(([sectionName, sectionItems]) => (
+        <div key={sectionName} className="space-y-3">
+          <h4 className="font-semibold text-xs uppercase tracking-wider opacity-70">
             {sectionName}
-          </h3>
+          </h4>
           {sectionItems.map((item) => {
             const value = edits[item.key] ?? item.value;
             const isDirty = item.key in edits;
@@ -112,8 +133,9 @@ export default function GlobalSettingsPage(): React.ReactElement {
               </div>
             );
           })}
-        </Card>
-      ))}
+        </div>
+        ))}
+      </Card>
     </div>
   );
 }
