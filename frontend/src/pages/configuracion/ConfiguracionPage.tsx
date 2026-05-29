@@ -47,7 +47,7 @@ export default function ConfiguracionPage(): React.ReactElement {
   ];
 
   return (
-    <div className="max-w-6xl space-y-5">
+    <div className="space-y-5">
       <Tabs items={tabs} active={active} onChange={(k) => setActive(k as TabKey)} />
 
       <div>

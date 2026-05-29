@@ -40,8 +40,8 @@ export function NivelesTab({ data, loading, onReload }: NivelesTabProps): React.
   if (!data) return <></>;
 
   return (
-    <Card padding="none">
-      <table className="w-full text-sm">
+    <Card padding="none" className="overflow-x-auto">
+      <table className="w-full text-sm min-w-[640px]">
         <thead className="bg-elevated text-xs uppercase tracking-wider opacity-70">
           <tr>
             <th className="text-left px-4 py-2.5 font-medium w-16">#</th>

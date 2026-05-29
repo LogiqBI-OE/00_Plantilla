@@ -16,7 +16,7 @@ interface TabsProps {
 
 export function Tabs({ items, active, onChange, className = '' }: TabsProps): React.ReactElement {
   return (
-    <div className={`flex items-center gap-1 border-b border-border ${className}`}>
+    <div className={`flex items-center gap-1 border-b border-border overflow-x-auto ${className}`}>
       {items.map((item) => {
         const isActive = item.key === active;
         return (
@@ -26,7 +26,7 @@ export function Tabs({ items, active, onChange, className = '' }: TabsProps): Re
             onClick={() => !item.disabled && onChange(item.key)}
             disabled={item.disabled}
             className={[
-              'px-3 py-2 text-sm font-medium border-b-2 transition -mb-px',
+              'px-3 py-2 text-sm font-medium border-b-2 transition -mb-px shrink-0 whitespace-nowrap',
               isActive
                 ? 'text-accent border-accent'
                 : 'opacity-60 border-transparent hover:opacity-100',
