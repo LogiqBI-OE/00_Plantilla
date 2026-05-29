@@ -49,6 +49,12 @@
     "es": "Español",
     "en": "English"
   },
+  "help": {
+    "label": "Help"
+  },
+  "notifications": {
+    "label": "Notifications"
+  },
   "errors": {
     "generic": "Something went wrong. Please try again.",
     "network": "Connection error. Check your internet.",

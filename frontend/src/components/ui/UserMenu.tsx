@@ -1,11 +1,16 @@
 /**
  * UserMenu — dropdown del usuario en el topbar.
  *
- * Muestra avatar + nombre + dropdown con: nivel, tenant, logout.
+ * Muestra avatar circular + nombre arriba y rol (label del nivel) debajo,
+ * con chevron. El label del nivel se trae de /api/levels/ (cualquier
+ * usuario autenticado puede leerlo). Click abre dropdown con: nivel,
+ * tenant, permisos, logout.
  */
+import { ChevronDown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { levelsApi } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
 
 import { Avatar } from './Avatar';
@@ -14,6 +19,7 @@ export function UserMenu(): React.ReactElement | null {
   const { t } = useTranslation();
   const { user, tenant, logout } = useAuth();
   const [open, setOpen] = useState(false);
+  const [roleLabel, setRoleLabel] = useState<string | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,6 +33,19 @@ export function UserMenu(): React.ReactElement | null {
     return () => document.removeEventListener('mousedown', onDown);
   }, [open]);
 
+  useEffect(() => {
+    if (!user) return;
+    let alive = true;
+    void levelsApi.list().then((res) => {
+      if (!alive) return;
+      const match = res.levels.find((l) => l.level === user.level);
+      setRoleLabel(match?.label ?? `L${user.level}`);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [user]);
+
   if (!user) return null;
 
   return (
@@ -34,11 +53,14 @@ export function UserMenu(): React.ReactElement | null {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-elevated transition"
+        className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-full hover:bg-elevated transition"
       >
-        <Avatar name={user.full_name} size="sm" />
-        <span className="text-sm font-medium hidden md:block">{user.first_name}</span>
-        <span className="opacity-50 text-xs">▾</span>
+        <Avatar name={user.full_name} size="md" />
+        <span className="hidden md:flex flex-col items-start leading-tight">
+          <span className="text-sm font-medium">{user.first_name}</span>
+          <span className="text-xs opacity-60">{roleLabel ?? `L${user.level}`}</span>
+        </span>
+        <ChevronDown size={16} strokeWidth={1.5} className="opacity-50" />
       </button>
 
       {open && (
@@ -53,6 +75,7 @@ export function UserMenu(): React.ReactElement | null {
           <div className="px-4 py-2 border-b border-border text-xs space-y-0.5">
             <div>
               <span className="opacity-50">Nivel:</span> L{user.level}
+              {roleLabel ? ` · ${roleLabel}` : ''}
             </div>
             <div>
               <span className="opacity-50">Tenant:</span>{' '}

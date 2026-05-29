@@ -49,6 +49,12 @@
     "es": "Español",
     "en": "English"
   },
+  "help": {
+    "label": "Ayuda"
+  },
+  "notifications": {
+    "label": "Notificaciones"
+  },
   "errors": {
     "generic": "Algo salió mal. Intenta de nuevo.",
     "network": "Error de conexión. Verifica tu internet.",

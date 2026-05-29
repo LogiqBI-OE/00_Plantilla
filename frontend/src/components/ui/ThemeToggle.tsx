@@ -21,7 +21,7 @@ export function ThemeToggle(): React.ReactElement {
       onClick={toggle}
       title={t('theme.toggle')}
       aria-label={t('theme.toggle')}
-      className="w-9 h-9 inline-flex items-center justify-center rounded-lg border border-border hover:bg-elevated transition"
+      className="w-9 h-9 inline-flex items-center justify-center rounded-full hover:bg-elevated transition"
     >
       {theme === 'light' ? (
         <Sun size={16} strokeWidth={1.5} />

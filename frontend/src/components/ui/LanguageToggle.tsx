@@ -64,7 +64,7 @@ export function LanguageToggle(): React.ReactElement {
       onClick={() => void i18n.changeLanguage(next)}
       title={t('language.label')}
       aria-label={t('language.label')}
-      className="w-9 h-9 inline-flex items-center justify-center rounded-lg border border-border hover:bg-elevated transition"
+      className="w-9 h-9 inline-flex items-center justify-center rounded-full hover:bg-elevated transition"
     >
       <Flag />
       <span className="sr-only">{t(`language.${current}`)}</span>
