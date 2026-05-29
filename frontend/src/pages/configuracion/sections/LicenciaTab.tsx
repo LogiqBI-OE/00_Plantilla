@@ -7,8 +7,6 @@
  */
 import { useState } from 'react';
 
-import { Card } from '@/components/ui';
-
 const SELECT_CLASS =
   'w-full max-w-sm rounded-lg bg-card border border-border px-3 py-2 text-sm';
 const INPUT_CLASS =
@@ -21,7 +19,7 @@ export function LicenciaTab(): React.ReactElement {
   const [maxUsers, setMaxUsers] = useState('50');
 
   return (
-    <Card className="space-y-6">
+    <div className="space-y-6">
       <div className="border-b border-border pb-4">
         <h3 className="font-semibold text-sm">Licencia</h3>
         <p className="text-xs opacity-60 mt-0.5">
@@ -82,6 +80,6 @@ export function LicenciaTab(): React.ReactElement {
           />
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

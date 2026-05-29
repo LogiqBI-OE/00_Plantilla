@@ -1,7 +1,7 @@
 /** NivelesTab — tabla con label/description/is_reserved editables (L9). */
 import { useState } from 'react';
 
-import { Badge, Button, Card, SkeletonTable, TextField } from '@/components/ui';
+import { Badge, Button, SkeletonTable, TextField } from '@/components/ui';
 import { levelsApi } from '@/lib/api';
 import type { LevelsResponse } from '@/lib/api';
 
@@ -40,7 +40,7 @@ export function NivelesTab({ data, loading, onReload }: NivelesTabProps): React.
   if (!data) return <></>;
 
   return (
-    <Card padding="none" className="overflow-x-auto">
+    <div className="overflow-x-auto">
       <table className="w-full text-sm min-w-[640px]">
         <thead className="bg-elevated text-xs uppercase tracking-wider opacity-70">
           <tr>
@@ -94,6 +94,6 @@ export function NivelesTab({ data, loading, onReload }: NivelesTabProps): React.
           })}
         </tbody>
       </table>
-    </Card>
+    </div>
   );
 }

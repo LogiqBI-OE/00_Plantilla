@@ -1,7 +1,7 @@
 /** PermisosTab — matriz nivel x permiso (checkbox grid). L9 only. */
 import { useEffect, useState } from 'react';
 
-import { Badge, Button, Card, SkeletonTable } from '@/components/ui';
+import { Badge, Button, SkeletonTable } from '@/components/ui';
 import { levelsApi } from '@/lib/api';
 import type { LevelsResponse, MatrixEntry } from '@/lib/api';
 
@@ -62,7 +62,7 @@ export function PermisosTab({ data, loading, onReload }: PermisosTabProps): Reac
   const visibleLevels = data.levels.filter((lv) => !lv.is_reserved);
 
   return (
-    <Card padding="sm">
+    <div>
       <div className="flex justify-end mb-3">
         <Button loading={saving} onClick={handleSave}>
           Guardar matriz
@@ -101,6 +101,6 @@ export function PermisosTab({ data, loading, onReload }: PermisosTabProps): Reac
           </tbody>
         </table>
       </div>
-    </Card>
+    </div>
   );
 }

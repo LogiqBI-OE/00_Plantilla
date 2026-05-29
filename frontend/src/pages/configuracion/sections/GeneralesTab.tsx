@@ -7,7 +7,7 @@
  */
 import { useCallback, useEffect, useState } from 'react';
 
-import { Button, Card, EmptyState, SkeletonBox, TextField } from '@/components/ui';
+import { Button, EmptyState, SkeletonBox, TextField } from '@/components/ui';
 import { systemConfigApi } from '@/lib/api';
 import type { SystemConfigItem } from '@/lib/api';
 
@@ -58,7 +58,7 @@ export function GeneralesTab(): React.ReactElement {
   const dirty = Object.keys(edits).length > 0;
 
   return (
-    <Card className="space-y-6">
+    <div className="space-y-6">
       {/* Header del panel: heading + acciones */}
       <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
         <div>
@@ -128,6 +128,6 @@ export function GeneralesTab(): React.ReactElement {
           })}
         </div>
       ))}
-    </Card>
+    </div>
   );
 }
