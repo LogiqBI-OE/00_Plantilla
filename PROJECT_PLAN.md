@@ -18,31 +18,22 @@ end-to-end con el usuario `orlando@logiqbi.com` (L9).
 es una app derivada de esta plantilla pero **más avanzada visualmente**. El
 usuario la usa como referencia de diseño a replicar/backportar.
 
-**Lo último que se hizo** (sesión 2026-05-29 #2) — TODO PUSHEADO salvo lo indicado:
-- **Banderas SVG** en LanguageToggle (los emoji 🇲🇽/🇺🇸 NO renderizan en
-  Windows → SVG inline MX/US). Commit `02cb8ca`. ✅ pusheado.
-- **Topbar estilo TdF**: botones circulares (rounded-full), Help + Bell
-  placeholders, avatar md + nombre arriba/rol debajo (label del nivel de
-  /api/levels/) + chevron. Commit `5ab4efd`. ✅ pusheado.
-- **Sidebar estilo TdF**: definidas `--sidebar-active-bg` y `--sidebar-border`
-  (faltaban: el item activo no tenía fondo y los bordes no se veían), marca
-  más prominente, logo más grande, más aire en items, badge PRONTO para
-  items `comingSoon`. Commit `5aa69e6`. ✅ pusheado.
-- **Configuración global look TdF** (header + panel + Descartar). Commit
-  `2a81c46`. ✅ pusheado.
-- **Canvas full-width + responsividad** (sin max-w, gutter parejo, tabs con
-  scroll horizontal en móvil, tabla con overflow). Commit `aaeafd6`. ✅ pusheado.
-- **Reorganización IA de settings + canvas unificado de tabs** (ver decisión
-  abajo). Commits `238bb31` + `33e7835`. ⚠️ **LOCALES, SIN PUSH** — pendiente
-  de review/aprobación del usuario antes de deployar.
+**Lo último que se hizo** (sesión 2026-05-29 #2) — **TODO PUSHEADO** (hasta commit `2751959` + commit de docs):
+- **Banderas SVG** en LanguageToggle (los emoji 🇲🇽/🇺🇸 NO renderizan en Windows). `02cb8ca`.
+- **Topbar estilo TdF**: botones circulares, Help + Bell placeholders, avatar + nombre/rol + chevron. `5ab4efd`.
+- **Sidebar estilo TdF**: `--sidebar-active-bg`/`--sidebar-border` (faltaban), marca/logo/espaciado, badge PRONTO. `5aa69e6`.
+- **Configuración global look TdF** + **canvas full-width responsivo**. `2a81c46`, `aaeafd6`.
+- **IA de settings + canvas unificado de tabs**: los tabs Niveles/Permisos/Generales/Licencia viven en
+  **"Configuración global"** (L9 plataforma) dentro de UN Card. `238bb31`, `33e7835`.
+- **Tabs como barra de navegación limpia + iconos** (Layers/ShieldCheck/SlidersHorizontal/BadgeCheck) +
+  fix del scrollbar vertical fantasma (`overflow-y-hidden`). `e3fdb2b`.
+- **`SectionHeader` reusable** (título + descripción + Descartar/Guardar) en Niveles/Permisos/Generales/Licencia.
+- **Tablas con marco estilo data-table**: Niveles y Permisos con `rounded-xl border overflow-hidden`,
+  header band `bg-table-header` (token nuevo, light/dark) + `border-b`, filas con hover, **sin iconos** en
+  headers. `TextField variant="ghost"` para celdas editables. Niveles con guardado **batch**. `2751959`.
 
-**Pendiente inmediato (donde se cortó la conversación)**:
-1. **Push pendiente**: los commits `238bb31` + `33e7835` (settings con tabs
-   Niveles/Permisos/Generales/Licencia en "Configuración global" dentro de
-   un Card único estilo TdF) están **commiteados localmente pero NO pusheados**.
-   El usuario estaba revisándolo en local (dev server contra backend prod).
-   **Confirmar que le gustó y hacer `git push origin main`.**
-2. **Fase 2 — flag `tenant_mode` (single | multi)** — NO iniciada. Decidido:
+**Pendiente inmediato (próxima sesión)**:
+1. **Fase 2 — flag `tenant_mode` (single | multi)** — NO iniciada. Decidido:
    single por defecto, enfoque "N=1, ocultar UI" (una sola base multi-tenant;
    single = 1 tenant fijo con selector/plataforma ocultos). Cascadas:
    - Sidebar: ocultar selector de tenant + sección PLATAFORMA en single.
@@ -51,10 +42,15 @@ usuario la usa como referencia de diseño a replicar/backportar.
    - Tab Licencia: card única (single) vs lista de tenants con su licencia (multi).
    - El flag vive como SystemConfig key, expuesto en `/api/system-config/runtime/`,
      leído por un provider único (fuente de verdad).
-3. **Modelo `License` por-tenant en backend** (status, type, valid_until,
+2. **Modelo `License` por-tenant en backend** (status, type, valid_until,
    max_users) — hoy el tab Licencia es UI-only (no persiste). Migración Django.
-4. **Página "Configuración" (tenant)** quedó reducida a Marca/branding;
+3. **Página "Configuración" (tenant)** quedó reducida a Marca/branding;
    definir el resto de config de tenant.
+4. **Componente `DataTable` reutilizable** (estándar para tablas de datos
+   grandes: checkbox de selección, headers con sort, drag-and-drop, paginación).
+   Hoy Niveles/Permisos usan el estilo base de tabla (marco + header band, ver
+   CLAUDE.md) sin esos extras porque no aplican a listas fijas. Encapsular cuando
+   se hagan tablas grandes (usuarios, tenants, auditoría).
 
 **Pendientes de fondo**:
 - Validar la skill `crear-app` creando 1-2 apps reales (la skill `Crear-app`

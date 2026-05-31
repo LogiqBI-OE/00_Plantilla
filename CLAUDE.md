@@ -59,6 +59,16 @@ Cuando detecte que algo "habría que hacer eventualmente" (por ejemplo: crear se
   las páginas usan todo el ancho (sin `max-w` que deje hueco a la derecha).
   Responsivo: `px-4 sm:px-6`, tabs con `overflow-x-auto`, tablas con
   wrapper `overflow-x-auto` + `min-w`.
+- **SectionHeader**: cada panel/tab usa `<SectionHeader>` (título + descripción
+  a la izquierda, Descartar/Guardar a la derecha) para ser consistente. Los
+  tabs **no** se auto-envuelven en `Card` (lo da el canvas padre).
+- **Tablas (estándar)**: marco propio `rounded-xl border border-border
+  overflow-hidden` con `overflow-x-auto` adentro; header con banda
+  `bg-table-header` (token, claro pero distinto del card) + `border-b`, sin
+  iconos; filas `border-b border-border last:border-0 hover:bg-elevated/40`
+  con buen `py`; celdas editables = `TextField variant="ghost"`.
+  Pendiente: encapsular en un componente `DataTable` reusable (selección,
+  sort, drag-and-drop, paginación) para tablas de datos grandes.
 - **Layout único `AppLayout`**: un solo layout para todos los niveles. El
   `Sidebar` adapta su contenido (L8/L9 ven sección Plataforma + Vista de
   Tenant; L0-L7 solo Vista de Tenant). `BrandProvider` scope dinámico:
