@@ -9,6 +9,7 @@ export { IconButton } from './IconButton';
 export { InfoIcon } from './InfoIcon';
 export { LanguageToggle } from './LanguageToggle';
 export { Modal } from './Modal';
+export { SectionHeader } from './SectionHeader';
 export { SkeletonBox, SkeletonCards, SkeletonTable } from './Skeleton';
 export { Tabs } from './Tabs';
 export type { TabItem } from './Tabs';

@@ -9,6 +9,7 @@ export default {
         page: 'var(--bg-page)',
         card: 'var(--bg-card)',
         elevated: 'var(--bg-elevated)',
+        'table-header': 'var(--bg-table-header)',
         border: 'var(--border)',
         accent: 'var(--accent)',
         'text-primary': 'var(--text-primary)',

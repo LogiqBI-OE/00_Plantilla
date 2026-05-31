@@ -36,6 +36,7 @@
   --bg-page: #f8fafc;
   --bg-card: #ffffff;
   --bg-elevated: #f1f5f9;
+  --bg-table-header: #eef1f6;
   --border: #e2e8f0;
   --accent: #007aff;
   --text-primary: #0f172a;
@@ -49,6 +50,7 @@
   --bg-page: #1a1916;
   --bg-card: #23211d;
   --bg-elevated: #2d2a26;
+  --bg-table-header: #312e29;
   --border: #2d2a26;
   --accent: #0a84ff;
   --text-primary: #f5f4f1;

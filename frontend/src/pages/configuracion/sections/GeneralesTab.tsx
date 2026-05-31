@@ -7,7 +7,7 @@
  */
 import { useCallback, useEffect, useState } from 'react';
 
-import { Button, EmptyState, SkeletonBox, TextField } from '@/components/ui';
+import { EmptyState, SectionHeader, SkeletonBox, TextField } from '@/components/ui';
 import { systemConfigApi } from '@/lib/api';
 import type { SystemConfigItem } from '@/lib/api';
 
@@ -59,23 +59,14 @@ export function GeneralesTab(): React.ReactElement {
 
   return (
     <div className="space-y-6">
-      {/* Header del panel: heading + acciones */}
-      <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
-        <div>
-          <h3 className="font-semibold text-sm">Parametros del sistema</h3>
-          <p className="text-xs opacity-60 mt-0.5">
-            {items.length} claves de configuracion runtime.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <Button variant="secondary" onClick={() => setEdits({})} disabled={!dirty}>
-            Descartar
-          </Button>
-          <Button onClick={handleSave} disabled={!dirty} loading={saving}>
-            Guardar cambios
-          </Button>
-        </div>
-      </div>
+      <SectionHeader
+        title="Parametros del sistema"
+        description={`${items.length} claves de configuracion runtime.`}
+        dirty={dirty}
+        saving={saving}
+        onDiscard={() => setEdits({})}
+        onSave={handleSave}
+      />
 
       {Array.from(sections.entries()).map(([sectionName, sectionItems]) => (
         <div key={sectionName} className="space-y-3">

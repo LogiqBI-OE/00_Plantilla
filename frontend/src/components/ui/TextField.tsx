@@ -6,6 +6,8 @@ interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'si
   error?: string;
   hint?: ReactNode;
   size?: 'sm' | 'md' | 'lg';
+  /** 'ghost' = sin caja (transparente), borde/ring solo al enfocar. Para celdas de tabla. */
+  variant?: 'default' | 'ghost';
 }
 
 const SIZE_CLASSES = {
@@ -19,11 +21,17 @@ export function TextField({
   error,
   hint,
   size = 'md',
+  variant = 'default',
   id,
   className = '',
   ...rest
 }: TextFieldProps): React.ReactElement {
   const inputId = id ?? rest.name ?? undefined;
+  const variantClass = error
+    ? 'bg-card border-danger focus:ring-2 focus:ring-danger/30'
+    : variant === 'ghost'
+      ? 'bg-transparent border-transparent hover:bg-elevated/60 focus:bg-card focus:ring-2 focus:ring-accent/30 focus:border-accent'
+      : 'bg-card border-border focus:ring-2 focus:ring-accent/30 focus:border-accent';
   return (
     <div className="space-y-1">
       {label && (
@@ -34,8 +42,8 @@ export function TextField({
       <input
         id={inputId}
         className={[
-          'w-full rounded-lg bg-card border outline-none transition',
-          error ? 'border-danger focus:ring-2 focus:ring-danger/30' : 'border-border focus:ring-2 focus:ring-accent/30 focus:border-accent',
+          'w-full rounded-lg border outline-none transition',
+          variantClass,
           SIZE_CLASSES[size],
           className,
         ].join(' ')}
