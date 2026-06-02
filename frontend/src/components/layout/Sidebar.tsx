@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@/lib/auth';
 import { useBrand } from '@/lib/brand';
+import { useRuntimeConfig } from '@/lib/runtimeConfig';
 
 import {
   NAV_SECTION_PLATFORM,
@@ -27,6 +28,7 @@ export function Sidebar(): React.ReactElement | null {
   const { i18n } = useTranslation();
   const { user, tenant } = useAuth();
   const { brand } = useBrand();
+  const { multitenantEnabled } = useRuntimeConfig();
   const lang = i18n.language.startsWith('en') ? 'en' : 'es';
 
   if (!user) return null;
@@ -34,11 +36,20 @@ export function Sidebar(): React.ReactElement | null {
   const hasTenant = !!tenant;
   const showPlatform = user.level >= 8;
 
-  // Filtrar items por gate
-  const tenantSection = filterSection(NAV_SECTION_TENANT_VIEW, user);
-  const platformSection = filterSection(NAV_SECTION_PLATFORM, user);
+  // Filtrar items por gate. En modo single (multi-tenant apagado) tambien
+  // ocultamos los items que solo aplican a multi-tenant (Tenants, agencia).
+  const passesMultitenant = (it: { requiresMultitenant?: boolean }) =>
+    multitenantEnabled || !it.requiresMultitenant;
+  const tenantSection = {
+    ...filterSection(NAV_SECTION_TENANT_VIEW, user),
+    items: filterSection(NAV_SECTION_TENANT_VIEW, user).items.filter(passesMultitenant),
+  };
+  const platformSection = {
+    ...filterSection(NAV_SECTION_PLATFORM, user),
+    items: filterSection(NAV_SECTION_PLATFORM, user).items.filter(passesMultitenant),
+  };
 
-  const logoSrc = brand?.logo_sidebar || '/brand/logiq/logo-white.png';
+  const logoSrc = brand?.logo_sidebar || '/brand/logiq/favicon-white.png';
   const marca = brand?.marca ?? 'LogiQ';
   const alcance = brand?.alcance ?? '';
 
@@ -87,14 +98,17 @@ export function Sidebar(): React.ReactElement | null {
             {lang === 'es' ? tenantSection.title_es : tenantSection.title_en}
           </div>
 
-          <div className="px-2 pt-1">
-            <SidebarTenantSelector />
-          </div>
+          {multitenantEnabled && (
+            <div className="px-2 pt-1">
+              <SidebarTenantSelector />
+            </div>
+          )}
 
           <div className="space-y-0.5 pt-2">
             {tenantSection.items.map((item, idx) => {
               const subHeader = lang === 'es' ? item.subHeader_es : item.subHeader_en;
-              const requiresTenant = item.requiresTenant && !hasTenant;
+              // En single mode no hay selector: los items NO se exigen tenant.
+              const requiresTenant = multitenantEnabled && item.requiresTenant && !hasTenant;
               const label = lang === 'es' ? item.label_es : item.label_en;
               return (
                 <div key={item.key}>

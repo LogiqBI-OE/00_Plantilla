@@ -34,6 +34,8 @@ export interface NavItem {
   gate?: (user: User) => boolean;
   /** Solo accesible cuando hay tenant activo. Si no, se renderiza disabled. */
   requiresTenant?: boolean;
+  /** Solo visible cuando el modo multi-tenant esta activo. */
+  requiresMultitenant?: boolean;
 }
 
 export interface NavSection {
@@ -85,8 +87,8 @@ export const NAV_SECTION_TENANT_VIEW: NavSection = {
     },
     {
       key: 'configuracion',
-      label_es: 'Configuracion',
-      label_en: 'Settings',
+      label_es: 'Brand',
+      label_en: 'Brand',
       to: '/configuracion',
       icon: Settings,
       gate: minLevel(7),
@@ -109,6 +111,7 @@ export const NAV_SECTION_PLATFORM: NavSection = {
       to: '/platform/tenants',
       icon: Building2,
       gate: minLevel(8),
+      requiresMultitenant: true,
     },
     {
       key: 'agency-access',
@@ -117,6 +120,7 @@ export const NAV_SECTION_PLATFORM: NavSection = {
       to: '/platform/agency-access',
       icon: Key,
       gate: minLevel(9),
+      requiresMultitenant: true,
     },
     {
       key: 'global-settings',

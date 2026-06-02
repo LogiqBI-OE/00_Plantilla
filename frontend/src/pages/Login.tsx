@@ -90,7 +90,7 @@ export default function Login(): React.ReactElement {
 
   const marca = brand?.marca ?? 'LogiQ';
   const alcance = brand?.alcance ?? 'Workspace';
-  const logoLogin = brand?.logo_login ?? '/brand/logiq/logo-black.png';
+  const logoLogin = brand?.logo_login ?? '/brand/logiq/logo-white.png';
   const fotos = brand?.carrusel_fotos ?? [];
   const segundos = brand?.carrusel_segundos ?? 4.5;
 

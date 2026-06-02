@@ -10,14 +10,14 @@ import { BrandTab } from './sections/BrandTab';
 import { usePageTitle } from '@/lib/pageTitle';
 
 export default function ConfiguracionPage(): React.ReactElement {
-  usePageTitle('Configuracion');
+  usePageTitle('Brand');
 
   return (
     <div className="space-y-5">
       {/* Header de pagina */}
       <div>
-        <h2 className="text-2xl font-bold">Configuracion</h2>
-        <p className="text-sm opacity-60 mt-1">Configuracion del tenant.</p>
+        <h2 className="text-2xl font-bold">Brand</h2>
+        <p className="text-sm opacity-60 mt-1">Marca del tenant: nombre, colores, logos y carrusel.</p>
       </div>
 
       <BrandTab />
