@@ -47,7 +47,7 @@ export default function GlobalSettingsPage(): React.ReactElement {
     { key: 'niveles', label: 'Niveles', icon: Layers },
     { key: 'permisos', label: 'Permisos', icon: ShieldCheck },
     { key: 'generales', label: 'Generales', icon: SlidersHorizontal },
-    { key: 'licencia', label: 'Licencia', icon: BadgeCheck },
+    { key: 'licencia', label: 'Licencias y tenants', icon: BadgeCheck },
   ];
 
   return (

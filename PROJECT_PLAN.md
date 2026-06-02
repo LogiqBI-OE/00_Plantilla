@@ -4,11 +4,57 @@
 
 ---
 
-## 0. Dónde retomar (memoria de sesión — actualizado 2026-05-29, sesión 2)
+## 0. Dónde retomar (memoria de sesión — actualizado 2026-06-02, sesión 3)
 
 **Estado general**: La plantilla está **completa y desplegada en Railway**.
 Backend (Django) + Frontend (React) + Postgres corriendo. Login funcional
 end-to-end con el usuario `orlando@logiqbi.com` (L9).
+
+**Lo último que se hizo (sesión 2026-06-02 #3 — LOCAL, sin pushear todavía):**
+- **Flag `tenant_mode` / `multitenant_enabled` (Fase 2)** — IMPLEMENTADO end-to-end:
+  - Backend: nueva key `multitenant_enabled` (SystemConfig, default `false` = single),
+    expuesta en `/api/system-config/runtime/`. Campo `managed` en `ConfigKey` para
+    ocultarla del editor genérico "Generales". Helper `multitenant_enabled()`.
+  - **Modo single (N=1)**: tenant fijo `logiq`/`LogiQ` autocreado (`get_default_tenant()`
+    en `apps/tenants/models.py`). La capa de auth (`TenantJWTAuthentication`) resuelve
+    `request.tenant` SIEMPRE al tenant por defecto cuando el flag está apagado, sin
+    importar el claim del JWT (no hace falta re-loguear). `LoginView._resolve_tenant`
+    igual. Así L9 entra sin seleccionar tenant y toda la app (brand, usuarios, auditoría)
+    opera dentro de ese tenant.
+  - Frontend: provider `lib/runtimeConfig.tsx` (`useRuntimeConfig().multitenantEnabled`
+    + `reload`), montado en `AppLayout`. Sidebar oculta selector de tenant + items
+    `requiresMultitenant` (Tenants, Accesos de agencia) en single; deja Configuración
+    global. Guard `RequireMultitenant` en las rutas `/platform/tenants` y `/agency-access`.
+  - Pestaña "Licencia" renombrada a **"Licencias y tenants"** con el **switch** de
+    multi-tenant arriba (persiste y refresca runtime en vivo).
+- **Branding estándar**: fallback login → `logo-white.png`, sidebar → `favicon-white.png`.
+- **Página/nav "Configuración" (tenant) renombrada a "Brand"** (solo contiene el editor
+  de marca; en single edita la marca del tenant fijo LogiQ: nombre, colores, logos, carrusel).
+- **Sub-navegación interna por botones** (estilo pills, como Brand) en las pestañas de
+  Configuración global que apilaban contenido: **Generales** (Accesos/Rendimiento/Localización,
+  con badge ● por sección con cambios) y **Licencias y tenants** (sub-tabs Tenant/Licencia).
+  Evita el scroll hacia abajo.
+- **Licencia como tabla horizontal**: una fila por tenant (Tenant · Estatus · Tipo ·
+  Vigente hasta · Máx. usuarios), estilo data-table. Aún UI-only.
+- **Licensing — PASO 1 (modelos, sin enforcement todavía)**: ver decisión abajo. Creados
+  `core.AbstractLicense` (status/type/valid_until/max_users + `is_currently_active()`),
+  `tenants.TenantLicense` (1:1 tenant), `accounts.Agency` + `accounts.AgencyLicense` (1:1 agency),
+  `User.agency` FK. Migraciones `accounts.0003` + `tenants.0002` aplicadas. Verificado en shell.
+- Verificado: `manage.py check` OK, `tsc -b` OK, login single devuelve tenant LogiQ,
+  `/api/brand/` 200, toggle ON/OFF refleja en runtime.
+- **Pendiente de esta sesión**: revisar en navegador, y **pushear** (aún no se hizo).
+
+**Licensing — pasos siguientes (pendiente #2 ampliado)**:
+- Paso 2: refactor `AgencyTenantAccess` (hoy User↔Tenant) → **Agency↔Tenant**.
+- Paso 3: **enforcement** en login/auth. Regla: **L9 nunca se bloquea**; **L8** bloqueado
+  según licencia de **su agencia**; **L0–L7** según licencia de **su tenant**. `max_users`
+  se valida al **crear** usuario (no expulsa existentes).
+- Paso 4: conectar la tabla de Licencia (UI) a los modelos reales (tenants y agencias).
+
+> **Nota entorno local (sesión 3)**: se creó venv en `backend/.venv` (Python 3.14) e
+> instalaron requirements. DB local SQLite nueva (`backend/db.sqlite3`) con usuario L9
+> `orlando@logiqbi.com` / username `orlando` / pass `logiqcrm` (solo local). No está
+> conectada al Postgres de Railway.
 
 **URLs producción**:
 - Frontend: `https://logiq-plantilla.up.railway.app`
@@ -18,7 +64,11 @@ end-to-end con el usuario `orlando@logiqbi.com` (L9).
 es una app derivada de esta plantilla pero **más avanzada visualmente**. El
 usuario la usa como referencia de diseño a replicar/backportar.
 
-**Lo último que se hizo** (sesión 2026-05-29 #2) — **TODO PUSHEADO** (hasta commit `2751959` + commit de docs):
+---
+
+### Estado previo (sesión 2026-05-29 #2)
+
+**Lo que se hizo** (sesión 2026-05-29 #2) — **TODO PUSHEADO** (hasta commit `2751959` + commit de docs):
 - **Banderas SVG** en LanguageToggle (los emoji 🇲🇽/🇺🇸 NO renderizan en Windows). `02cb8ca`.
 - **Topbar estilo TdF**: botones circulares, Help + Bell placeholders, avatar + nombre/rol + chevron. `5ab4efd`.
 - **Sidebar estilo TdF**: `--sidebar-active-bg`/`--sidebar-border` (faltaban), marca/logo/espaciado, badge PRONTO. `5aa69e6`.
@@ -192,3 +242,7 @@ Logos en `Logos/` (se mueven a `frontend/public/brand/logiq/` en Fase 2).
 | 2026-05-29 | **IA de settings**: la config del SISTEMA (Niveles, Permisos, Generales/SystemConfig, Licencia) vive en **"Configuración global"** (L9 plataforma) como tabs dentro de un **Card único** (canvas unificado estilo TdF: tabs arriba + contenido abajo). La config del **TENANT** (Marca/branding, etc.) va en página aparte ("Configuración"). Branding NO va en los settings globales. | Definido por el usuario ("este tipo de configuración es la global, después vemos la del tenant") |
 | 2026-05-29 | **Flag `tenant_mode` (single \| multi)**, **single por defecto**, enfoque **"N=1, ocultar UI"**: una sola base multi-tenant; en single hay 1 tenant fijo y se ocultan selector de tenant + sección Plataforma. El modo cambia branding (global vs por-tenant) y la vista de Licencia (card única vs lista de tenants). | Definido por el usuario — la mayoría de apps clonadas son una sola empresa; evita bifurcar el código |
 | 2026-05-29 | **Tab components no se auto-envuelven en `Card`**: el canvas padre provee el panel único. | Para lograr el "canvas unificado con tabs adentro" estilo TdF |
+| 2026-06-02 | **Single mode = tenant fijo `logiq`/`LogiQ` (N=1)**: la capa de auth resuelve `request.tenant` siempre al tenant por defecto cuando `multitenant_enabled=false`, sin importar el JWT. L9 opera dentro del tenant sin seleccionarlo; la marca del tenant aplica a toda la app. | Implementación concreta del enfoque "N=1, ocultar UI"; evita re-login al cambiar el flag |
+| 2026-06-02 | **Branding default**: logo de login = `logo-white.png`, logo de sidebar = `favicon-white.png`. | Definido por el usuario |
+| 2026-06-02 | **Página de marca del tenant se llama "Brand"** (antes "Configuración"); solo contiene el editor de marca. | Definido por el usuario |
+| 2026-06-02 | **Licensing 3-capas con exención de L9**: `Agency` es entidad propia con su licencia (opción 1, los L8 pertenecen a una agencia). Bloqueo: **L9 nunca**; **L8** según licencia de su agencia; **L0–L7** según licencia de su tenant. `max_users` se valida al crear usuario. | Definido por el usuario — modelo reseller/MSP escalable; el super-admin siempre puede entrar a arreglar la licencia |
