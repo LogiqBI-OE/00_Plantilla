@@ -24,7 +24,8 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from apps.accounts.models import AgencyTenantAccess
-from apps.tenants.models import Tenant
+from apps.system_config.defaults import multitenant_enabled
+from apps.tenants.models import Tenant, get_default_tenant
 
 
 class TenantJWTAuthentication(JWTAuthentication):
@@ -36,6 +37,16 @@ class TenantJWTAuthentication(JWTAuthentication):
             return None
 
         user, validated_token = result
+
+        # Modo single (multi-tenant apagado): un unico tenant fijo para todos,
+        # sin importar el claim del JWT. Asi no hay que re-loguear al cambiar el
+        # flag y L9 opera dentro del tenant sin seleccionarlo.
+        if not multitenant_enabled():
+            tenant = get_default_tenant()
+            request.tenant = tenant
+            request.tenant_slug = tenant.slug
+            return user, validated_token
+
         tenant_slug = validated_token.get('tenant_slug')
         tenant: Tenant | None = None
 

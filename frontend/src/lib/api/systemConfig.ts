@@ -10,6 +10,8 @@ export interface SystemConfigItem {
   section: string;
   input_type: 'text' | 'password' | 'number' | 'boolean' | 'select';
   options: string[];
+  /** Si true, la edita una UI dedicada y no aparece en el editor "Generales". */
+  managed: boolean;
 }
 
 export const systemConfigApi = {

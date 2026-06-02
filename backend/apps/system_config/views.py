@@ -36,6 +36,7 @@ def _serialize_all() -> list[dict]:
             'section': ck.section,
             'input_type': ck.input_type,
             'options': list(ck.options),
+            'managed': ck.managed,
         })
     return out
 

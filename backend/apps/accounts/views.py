@@ -27,7 +27,7 @@ from rest_framework.response import Response
 
 from apps.audit.services import log_action
 from apps.core.permissions import RequireLevel
-from apps.system_config.defaults import get_value as get_config
+from apps.system_config.defaults import get_value as get_config, multitenant_enabled
 
 from .models import User, UserPermissionOverride
 from .serializers import (
@@ -46,7 +46,12 @@ class UserViewSet(viewsets.ModelViewSet):
         request = self.request
         self_user = request.user
 
-        if request.tenant is None:
+        if not multitenant_enabled():
+            # Modo single: una sola workspace. Se ven todos los usuarios con
+            # nivel <= el propio, incluido el L9 super-admin (tenant=None) y los
+            # usuarios L0-L7 del tenant fijo.
+            qs = User.objects.filter(level__lte=self_user.level)
+        elif request.tenant is None:
             # Modo platform (solo L9 sin tenant activo): cross-tenant admins.
             if self_user.level < 9:
                 return User.objects.none()
@@ -101,10 +106,11 @@ class UserViewSet(viewsets.ModelViewSet):
             )
 
         if target_level >= 8:
-            # Crear admins cross-tenant: solo L9 desde modo platform.
+            # Crear admins cross-tenant: solo L9.
             if request.user.level < 9:
                 raise PermissionDenied('Solo L9 puede crear usuarios L8 o L9.')
-            if request.tenant is not None:
+            # En multi se exige modo platform; en single no hay ese modo.
+            if multitenant_enabled() and request.tenant is not None:
                 raise PermissionDenied(
                     'Para crear L8/L9, primero pasa a modo platform '
                     '(sin tenant activo).'

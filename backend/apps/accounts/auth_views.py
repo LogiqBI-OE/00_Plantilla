@@ -23,7 +23,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from apps.tenants.models import Tenant
+from apps.system_config.defaults import multitenant_enabled
+from apps.tenants.models import Tenant, get_default_tenant
 
 from .models import AgencyTenantAccess, User
 from .serializers import (
@@ -129,6 +130,10 @@ class LoginView(APIView):
 
     @staticmethod
     def _resolve_tenant(user: User, tenant_slug: str | None) -> Tenant | None:
+        # Modo single: todos operan dentro del tenant fijo, sin seleccion.
+        if not multitenant_enabled():
+            return get_default_tenant()
+
         if user.level == 9:
             # L9 sin slug -> modo platform (tenant=None). Con slug -> entrar a ese tenant.
             if not tenant_slug:

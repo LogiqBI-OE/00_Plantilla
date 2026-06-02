@@ -17,6 +17,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { BrandProvider } from '@/lib/brand';
 import { useAuth } from '@/lib/auth';
 import { PageTitleProvider } from '@/lib/pageTitle';
+import { RuntimeConfigProvider } from '@/lib/runtimeConfig';
 import { TenantProvider } from '@/lib/tenant';
 
 import { AppShell } from './AppShell';
@@ -39,13 +40,15 @@ export function AppLayout(): React.ReactElement {
 
   return (
     <BrandProvider scope={brandScope}>
-      <TenantProvider>
-        <PageTitleProvider>
-          <AppShell>
-            <Outlet />
-          </AppShell>
-        </PageTitleProvider>
-      </TenantProvider>
+      <RuntimeConfigProvider>
+        <TenantProvider>
+          <PageTitleProvider>
+            <AppShell>
+              <Outlet />
+            </AppShell>
+          </PageTitleProvider>
+        </TenantProvider>
+      </RuntimeConfigProvider>
     </BrandProvider>
   );
 }

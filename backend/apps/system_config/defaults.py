@@ -22,9 +22,21 @@ class ConfigKey:
     section: str
     input_type: str = 'text'
     options: tuple[str, ...] = ()
+    # managed=True: la edita una UI dedicada (ej. la pestaña Licencias y
+    # tenants), por eso NO aparece en el editor generico de "Generales".
+    managed: bool = False
 
 
 SYSTEM_CONFIG_KEYS: list[ConfigKey] = [
+    ConfigKey(
+        key='multitenant_enabled',
+        default='false',
+        label='Modo multi-tenant',
+        description='Si esta activo, se habilitan las funciones de tenant (selector de tenant, paginas Tenants y Accesos de agencia). Apagado = la app opera como un solo tenant.',
+        section='Tenants',
+        input_type='boolean',
+        managed=True,
+    ),
     ConfigKey(
         key='standard_password',
         default='ChangeMe123!',
@@ -94,8 +106,14 @@ def get_value(key: str) -> str:
         return fallback
 
 
+def multitenant_enabled() -> bool:
+    """True si el modo multi-tenant esta activo. Default: single (False)."""
+    return get_value('multitenant_enabled') == 'true'
+
+
 # Public subset: claves seguras de exponer sin auth (no contrasenas).
 PUBLIC_RUNTIME_KEYS = {
+    'multitenant_enabled',
     'keep_warm_ping_enabled',
     'keep_warm_ping_interval_minutes',
 }

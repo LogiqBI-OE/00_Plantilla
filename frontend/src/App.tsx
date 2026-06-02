@@ -12,6 +12,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { AppLayout } from '@/components/layout';
+import { RequireMultitenant } from '@/lib/runtimeConfig';
 
 const Login = lazy(() => import('@/pages/Login'));
 const Home = lazy(() => import('@/pages/Home'));
@@ -49,8 +50,22 @@ function App(): React.ReactElement {
               path="/platform"
               element={<Navigate to="/platform/tenants" replace />}
             />
-            <Route path="/platform/tenants" element={<TenantsPage />} />
-            <Route path="/platform/agency-access" element={<AgencyAccessPage />} />
+            <Route
+              path="/platform/tenants"
+              element={
+                <RequireMultitenant>
+                  <TenantsPage />
+                </RequireMultitenant>
+              }
+            />
+            <Route
+              path="/platform/agency-access"
+              element={
+                <RequireMultitenant>
+                  <AgencyAccessPage />
+                </RequireMultitenant>
+              }
+            />
             <Route path="/platform/global-settings" element={<GlobalSettingsPage />} />
           </Route>
 
