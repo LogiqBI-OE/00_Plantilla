@@ -4,7 +4,35 @@
 
 ---
 
-## 0. Dónde retomar (memoria de sesión — actualizado 2026-06-02, sesión 3)
+## 0. Dónde retomar (memoria de sesión — actualizado 2026-06-03, sesión 4)
+
+**Sesión 2026-06-03 #4 — LOCAL, falta pushear la parte posterior al commit `7d019d5`:**
+- **Tipo de tenant**: `Tenant.type` = `system` | `agency` | `cliente` (default `cliente`).
+  El tenant `logiq` es `system`. El selector de login **excluye los tenant `system`**
+  (no cuentan ni aparecen). Migración `tenants.0003_tenant_type`.
+- **Seed por migración** (`accounts.0004`): tenant **LogiQ** (system) + L9 **orlando** y
+  **rogelio** (pass `logiqcrm`). Idempotente. ⚠️ La contraseña queda en el repo (migración) —
+  cambiarla en cualquier despliegue real.
+- **Selector de login mejorado**: con 2+ tenants cliente, preselecciona la primera opción
+  (sin "--") y muestra el **grupo/tipo** (`TENANT_TYPE_LABEL`) en vez del slug. Igual en el
+  selector del sidebar.
+- **Login rediseñado al estándar Terra de Flora** (`Login.tsx`): header `— MARCA` (color hero)
+  + alcance en pill dorada; labels en mayúsculas + asterisco; inputs estilo TdF; **toggle de
+  ojo** en contraseña (funcional); fila **Recuérdame** + **¿Olvidaste tu contraseña?**;
+  **¿Necesitas ayuda? Contacta a soporte**; **Powered by** anclado abajo-izquierda; hero
+  derecho con **logo grande** + alcance en **color accent** (dorado) + **degradado de
+  profundidad**; backdrop de marca cuando no hay fotos de carrusel.
+  - **No cableado aún** (visual): Recuérdame (no cambia persistencia del token),
+    ¿Olvidaste tu contraseña? y Contacta a soporte (sin flujo/canal).
+
+> **Decisión PENDIENTE que bloquea licensing**: modelo de agencia A/B (ver Log). El usuario
+> eligió "opción 1" (Agency entidad propia) pero luego definió `Tenant.type` con valor
+> `agency` — hay que reconciliar: **A)** una agencia ES un tenant `type=agency` (deshacer
+> `Agency`/`AgencyLicense` del paso 1) vs **B)** mantener `Agency` como tabla aparte.
+
+---
+
+### Estado previo (sesión 2026-06-02 #3)
 
 **Estado general**: La plantilla está **completa y desplegada en Railway**.
 Backend (Django) + Frontend (React) + Postgres corriendo. Login funcional
@@ -246,3 +274,7 @@ Logos en `Logos/` (se mueven a `frontend/public/brand/logiq/` en Fase 2).
 | 2026-06-02 | **Branding default**: logo de login = `logo-white.png`, logo de sidebar = `favicon-white.png`. | Definido por el usuario |
 | 2026-06-02 | **Página de marca del tenant se llama "Brand"** (antes "Configuración"); solo contiene el editor de marca. | Definido por el usuario |
 | 2026-06-02 | **Licensing 3-capas con exención de L9**: `Agency` es entidad propia con su licencia (opción 1, los L8 pertenecen a una agencia). Bloqueo: **L9 nunca**; **L8** según licencia de su agencia; **L0–L7** según licencia de su tenant. `max_users` se valida al crear usuario. | Definido por el usuario — modelo reseller/MSP escalable; el super-admin siempre puede entrar a arreglar la licencia |
+| 2026-06-03 | **Tipo de tenant** `system` / `agency` / `cliente`. El tenant `system` (LogiQ) no es un workspace elegible: se excluye del selector de login. | Definido por el usuario |
+| 2026-06-03 | **Seed por defecto**: tenant de sistema **LogiQ** + L9 **orlando** y **rogelio** (`logiqcrm`), vía migración de datos idempotente. | Definido por el usuario (tabla de seed) |
+| 2026-06-03 | **Estándar de pantalla de Login** = el de Terra de Flora (header `— MARCA` + pill de alcance, labels en mayúsculas, ojo en contraseña, recuérdame/olvidaste, soporte, Powered by anclado, hero con logo grande + alcance en color accent + profundidad). Selector con preselección de la 1ª opción y mostrando el grupo/tipo, no el slug. | Definido por el usuario (referencia visual TdF) |
+| 2026-06-03 | **PENDIENTE — reconciliar agencia**: `Tenant.type=agency` vs entidad `Agency`. Opción A (agencia = tenant tipo agency, deshacer Agency) vs B (mantener tabla Agency). Sin resolver. | Surgió al definir los tipos de tenant |

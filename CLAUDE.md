@@ -76,6 +76,26 @@ Cuando detecte que algo "habría que hacer eventualmente" (por ejemplo: crear se
 - **Multi-tenancy en modelos de dominio**: heredar de `apps.core.models.TenantScopedModel`
   y usar `MyModel.objects.for_request(request)` en las views (filtra por tenant).
 - **Permisos en views**: `RequireLevel(N)` o `HasPermission(code)` (factories en `apps.core.permissions`).
+- **Modo single/multi (`multitenant_enabled`)**: flag SystemConfig (default `false` =
+  single), expuesto en `/api/system-config/runtime/`, leído en el front por
+  `useRuntimeConfig()`. En **single** la auth resuelve `request.tenant` SIEMPRE al
+  **tenant fijo de sistema** (`get_default_tenant()`, slug `logiq`), sin importar el JWT —
+  el L9 opera dentro de él sin selector. El sidebar oculta selector + items
+  `requiresMultitenant` (Tenants, Accesos de agencia) y deja Configuración global.
+- **Tipo de tenant** (`Tenant.type`): `system` | `agency` | `cliente`. Los `system` NO son
+  workspaces elegibles (se excluyen del selector de login). En los selectores se muestra el
+  tipo (`TENANT_TYPE_LABEL`), no el slug.
+- **Config del sistema con muchas secciones**: usar **sub-navegación de pills** (un botón por
+  sección, solo se ve la activa) en vez de apilar y hacer scroll — como en `GeneralesTab`,
+  `LicenciaTab` y `BrandTab`. Mismo estilo de pills (accent-bg-soft + borde accent al activo).
+- **`managed` keys de SystemConfig**: las que tienen `managed=True` (ej. `multitenant_enabled`)
+  se editan en una UI dedicada y NO aparecen en el editor genérico "Generales".
+- **Pantalla de Login (estándar TdF)**: header `— MARCA` (color `--brand-hero-bg`) + alcance
+  en pill (`--brand-hero-accent`); labels en mayúsculas + asterisco rojo; inputs redondeados
+  claros; contraseña con toggle de ojo; fila Recuérdame + ¿Olvidaste tu contraseña?; pie
+  ¿Necesitas ayuda? Contacta a soporte + "Powered by" anclado abajo-izquierda; hero derecho
+  con logo grande, alcance en `--brand-hero-accent` y degradado de profundidad; backdrop de
+  marca cuando no hay fotos de carrusel. La página de marca del tenant se llama **"Brand"**.
 
 ## Deploy en Railway (lecciones aprendidas)
 
