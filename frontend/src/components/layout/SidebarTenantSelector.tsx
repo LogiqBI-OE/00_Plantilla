@@ -13,6 +13,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
+import { TENANT_TYPE_LABEL } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
 import { useTenant } from '@/lib/tenant';
 
@@ -134,7 +135,7 @@ export function SidebarTenantSelector(): React.ReactElement {
                     className="text-xs ml-1.5"
                     style={{ color: 'var(--sidebar-section-title)' }}
                   >
-                    /{t.slug}
+                    {TENANT_TYPE_LABEL[t.type]}
                   </span>
                 </span>
                 {current?.slug === t.slug && (

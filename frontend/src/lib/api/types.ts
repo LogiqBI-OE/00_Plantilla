@@ -5,10 +5,19 @@
  * custom de las views).
  */
 
+export type TenantType = 'system' | 'agency' | 'cliente';
+
+export const TENANT_TYPE_LABEL: Record<TenantType, string> = {
+  system: 'System Company',
+  agency: 'Agencia',
+  cliente: 'Cliente',
+};
+
 export interface Tenant {
   id: number;
   slug: string;
   name: string;
+  type: TenantType;
   is_active: boolean;
   created_at?: string;
   updated_at?: string;

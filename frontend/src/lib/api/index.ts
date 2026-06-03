@@ -29,4 +29,5 @@ export { brandApi, globalBrandApi } from './brand';
 export { auditApi } from './audit';
 export type { AuditLog, AuditFilters } from './audit';
 
+export { TENANT_TYPE_LABEL } from './types';
 export type * from './types';
