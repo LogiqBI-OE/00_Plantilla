@@ -64,19 +64,25 @@ def _resolve_user_by_identifier(identifier: str) -> User | None:
 
 
 def _tenants_for_user(user: User) -> list[Tenant]:
-    """Lista de tenants activos a los que el usuario puede acceder."""
+    """
+    Lista de tenants activos a los que el usuario puede acceder, para el
+    selector de login. Excluye el tenant de sistema (default): no es un
+    workspace elegible.
+    """
     if user.level == 9:
-        return list(Tenant.objects.filter(is_active=True))
-    if user.level == 8:
+        tenants = list(Tenant.objects.filter(is_active=True))
+    elif user.level == 8:
         accesses = (
             AgencyTenantAccess.objects
             .filter(user=user, tenant__is_active=True)
             .select_related('tenant')
         )
-        return [a.tenant for a in accesses]
-    if user.tenant and user.tenant.is_active:
-        return [user.tenant]
-    return []
+        tenants = [a.tenant for a in accesses]
+    elif user.tenant and user.tenant.is_active:
+        tenants = [user.tenant]
+    else:
+        tenants = []
+    return [t for t in tenants if t.type != Tenant.Type.SYSTEM]
 
 
 # --- Views -------------------------------------------------------------------

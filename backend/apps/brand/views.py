@@ -289,7 +289,11 @@ class BrandPublicView(APIView):
     authentication_classes = []
 
     def get(self, _request):
-        active_tenants = Tenant.objects.filter(is_active=True)
+        # Los tenants de sistema no son workspaces elegibles: no cuentan para
+        # mostrar el selector ni aparecen como opcion.
+        active_tenants = Tenant.objects.filter(is_active=True).exclude(
+            type=Tenant.Type.SYSTEM,
+        )
         count = active_tenants.count()
 
         if count == 1:

@@ -16,6 +16,11 @@ from apps.core.models import AbstractLicense
 class Tenant(models.Model):
     """Una organizacion/cliente. Aislamiento total entre tenants."""
 
+    class Type(models.TextChoices):
+        SYSTEM = 'system', _('System Company')
+        AGENCY = 'agency', _('Agencia')
+        CLIENTE = 'cliente', _('Cliente')
+
     slug = models.SlugField(
         max_length=64,
         unique=True,
@@ -24,6 +29,12 @@ class Tenant(models.Model):
     name = models.CharField(
         max_length=128,
         help_text=_('Nombre visible del tenant.'),
+    )
+    type = models.CharField(
+        max_length=16,
+        choices=Type.choices,
+        default=Type.CLIENTE,
+        help_text=_('Clasificacion del tenant: sistema, agencia o cliente.'),
     )
     is_active = models.BooleanField(
         default=True,
@@ -55,7 +66,11 @@ def get_default_tenant() -> 'Tenant':
     """
     tenant, _created = Tenant.objects.get_or_create(
         slug=DEFAULT_TENANT_SLUG,
-        defaults={'name': DEFAULT_TENANT_NAME, 'is_active': True},
+        defaults={
+            'name': DEFAULT_TENANT_NAME,
+            'is_active': True,
+            'type': Tenant.Type.SYSTEM,
+        },
     )
     return tenant
 

@@ -18,7 +18,7 @@ class TenantBriefSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tenant
-        fields = ['id', 'slug', 'name', 'is_active']
+        fields = ['id', 'slug', 'name', 'type', 'is_active']
         read_only_fields = fields
 
 
