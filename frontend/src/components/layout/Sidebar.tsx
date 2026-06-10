@@ -20,6 +20,8 @@ import {
   NAV_SECTION_PLATFORM,
   NAV_SECTION_TENANT_VIEW,
   filterSection,
+  navLang,
+  pickNav,
 } from './navConfig';
 import { SidebarItem } from './SidebarItem';
 import { SidebarTenantSelector } from './SidebarTenantSelector';
@@ -29,7 +31,7 @@ export function Sidebar(): React.ReactElement | null {
   const { user, tenant } = useAuth();
   const { brand } = useBrand();
   const { multitenantEnabled } = useRuntimeConfig();
-  const lang = i18n.language.startsWith('en') ? 'en' : 'es';
+  const lang = navLang(i18n.language);
 
   if (!user) return null;
 
@@ -95,7 +97,7 @@ export function Sidebar(): React.ReactElement | null {
             className="px-3 text-[10px] uppercase tracking-wider font-semibold"
             style={{ color: 'var(--sidebar-section-title)' }}
           >
-            {lang === 'es' ? tenantSection.title_es : tenantSection.title_en}
+            {pickNav(tenantSection.title_es, tenantSection.title_en, tenantSection.title_ko, lang)}
           </div>
 
           {multitenantEnabled && (
@@ -106,10 +108,12 @@ export function Sidebar(): React.ReactElement | null {
 
           <div className="space-y-0.5 pt-2">
             {tenantSection.items.map((item, idx) => {
-              const subHeader = lang === 'es' ? item.subHeader_es : item.subHeader_en;
+              const subHeader = pickNav(
+                item.subHeader_es ?? '', item.subHeader_en ?? '', item.subHeader_ko ?? '', lang,
+              );
               // En single mode no hay selector: los items NO se exigen tenant.
               const requiresTenant = multitenantEnabled && item.requiresTenant && !hasTenant;
-              const label = lang === 'es' ? item.label_es : item.label_en;
+              const label = pickNav(item.label_es, item.label_en, item.label_ko, lang);
               return (
                 <div key={item.key}>
                   {subHeader && (
@@ -145,14 +149,14 @@ export function Sidebar(): React.ReactElement | null {
               className="px-3 text-[10px] uppercase tracking-wider font-semibold"
               style={{ color: 'var(--sidebar-section-title)' }}
             >
-              {lang === 'es' ? platformSection.title_es : platformSection.title_en}
+              {pickNav(platformSection.title_es, platformSection.title_en, platformSection.title_ko, lang)}
             </div>
             <div className="space-y-0.5">
               {platformSection.items.map((item) => (
                 <SidebarItem
                   key={item.key}
                   item={item}
-                  label={lang === 'es' ? item.label_es : item.label_en}
+                  label={pickNav(item.label_es, item.label_en, item.label_ko, lang)}
                 />
               ))}
             </div>

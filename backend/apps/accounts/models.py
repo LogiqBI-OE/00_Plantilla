@@ -69,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     preferred_language = models.CharField(
         max_length=4,
-        choices=[('es', _('Espanol')), ('en', _('English'))],
+        choices=[('es', _('Espanol')), ('en', _('English')), ('ko', _('Korean'))],
         default='es',
     )
 

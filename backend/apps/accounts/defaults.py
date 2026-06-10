@@ -10,18 +10,18 @@ sistema reconoce. Cuando se agregue una feature nueva con su permiso,
 agregar el codigo aqui + definir defaults por nivel.
 """
 
-# Catalogo de permisos: codigo -> (label_es, label_en, description_es)
+# Catalogo de permisos: codigo -> (label_es, label_en, label_ko, description_es)
 PERMISSION_CATALOG = {
-    'view_users':       ('Ver usuarios',        'View users',        'Listar usuarios del tenant.'),
-    'manage_users':     ('Administrar usuarios','Manage users',      'Crear, editar, borrar usuarios del tenant.'),
-    'view_tenants':     ('Ver tenants',         'View tenants',      'Ver lista de tenants accesibles.'),
-    'manage_tenants':   ('Administrar tenants', 'Manage tenants',    'Crear, editar y desactivar tenants.'),
-    'view_brand':       ('Ver marca',           'View brand',        'Ver la configuracion de marca del tenant.'),
-    'manage_brand':     ('Administrar marca',   'Manage brand',      'Editar logos, paleta y carrusel del tenant.'),
-    'view_audit':       ('Ver auditoria',       'View audit',        'Consultar el log de auditoria.'),
-    'export_data':      ('Exportar datos',      'Export data',       'Exportar listados a CSV/Excel.'),
-    'view_system_config':   ('Ver config global',     'View global config',     'Ver Global Settings (L9).'),
-    'manage_system_config': ('Administrar config global','Manage global config','Editar Global Settings (L9).'),
+    'view_users':       ('Ver usuarios',        'View users',        '사용자 보기',       'Listar usuarios del tenant.'),
+    'manage_users':     ('Administrar usuarios','Manage users',      '사용자 관리',       'Crear, editar, borrar usuarios del tenant.'),
+    'view_tenants':     ('Ver tenants',         'View tenants',      '테넌트 보기',       'Ver lista de tenants accesibles.'),
+    'manage_tenants':   ('Administrar tenants', 'Manage tenants',    '테넌트 관리',       'Crear, editar y desactivar tenants.'),
+    'view_brand':       ('Ver marca',           'View brand',        '브랜드 보기',       'Ver la configuracion de marca del tenant.'),
+    'manage_brand':     ('Administrar marca',   'Manage brand',      '브랜드 관리',       'Editar logos, paleta y carrusel del tenant.'),
+    'view_audit':       ('Ver auditoria',       'View audit',        '감사 로그 보기',    'Consultar el log de auditoria.'),
+    'export_data':      ('Exportar datos',      'Export data',       '데이터 내보내기',   'Exportar listados a CSV/Excel.'),
+    'view_system_config':   ('Ver config global',     'View global config',     '전역 설정 보기',  'Ver Global Settings (L9).'),
+    'manage_system_config': ('Administrar config global','Manage global config','전역 설정 관리',  'Editar Global Settings (L9).'),
 }
 
 # Default labels y descripciones por nivel.

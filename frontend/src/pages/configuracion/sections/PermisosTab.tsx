@@ -1,5 +1,6 @@
 /** PermisosTab — matriz nivel x permiso (checkbox grid). L9 only. */
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Badge, SectionHeader, SkeletonTable } from '@/components/ui';
 import { levelsApi } from '@/lib/api';
@@ -23,6 +24,8 @@ function buildMatrix(data: LevelsResponse): Map<string, boolean> {
 }
 
 export function PermisosTab({ data, loading, onReload }: PermisosTabProps): React.ReactElement {
+  const { i18n } = useTranslation();
+  const lang = i18n.language.split('-')[0];
   const [matrix, setMatrix] = useState<Map<string, boolean>>(new Map());
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -112,7 +115,9 @@ export function PermisosTab({ data, loading, onReload }: PermisosTabProps): Reac
                   className="border-b border-border last:border-0 hover:bg-elevated/40 transition"
                 >
                   <td className="px-4 py-3 sticky left-0 bg-card">
-                    <div className="font-medium">{p.label_es}</div>
+                    <div className="font-medium">
+                      {lang === 'ko' ? p.label_ko : lang === 'en' ? p.label_en : p.label_es}
+                    </div>
                     <div className="text-[10px] opacity-60 font-mono">{p.key}</div>
                   </td>
                   {visibleLevels.map((lv) => (

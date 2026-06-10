@@ -1,7 +1,7 @@
 /**
  * Configuracion de react-i18next.
  *
- * Carga sincrona de los catalogos es/en para evitar parpadeo de las llaves
+ * Carga sincrona de los catalogos es/en/ko para evitar parpadeo de las llaves
  * en el primer render (anti-Suspense). LanguageDetector lee localStorage
  * primero, luego navigator. Cuando el usuario logueado tiene preferencia,
  * AuthProvider (commit 18) sobreescribe el idioma al recibir /me.
@@ -21,8 +21,9 @@ import { initReactI18next } from 'react-i18next';
 
 import en from './en.json';
 import es from './es.json';
+import ko from './ko.json';
 
-export const SUPPORTED_LANGUAGES = ['es', 'en'] as const;
+export const SUPPORTED_LANGUAGES = ['es', 'en', 'ko'] as const;
 export type Language = (typeof SUPPORTED_LANGUAGES)[number];
 
 void i18n
@@ -32,6 +33,7 @@ void i18n
     resources: {
       es: { translation: es },
       en: { translation: en },
+      ko: { translation: ko },
     },
     fallbackLng: 'es',
     supportedLngs: SUPPORTED_LANGUAGES,

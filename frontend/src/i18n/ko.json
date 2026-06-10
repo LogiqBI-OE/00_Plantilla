@@ -1,0 +1,81 @@
+{
+  "app": {
+    "name": "LogiQ",
+    "tagline": "스켈레톤 템플릿"
+  },
+  "common": {
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "편집",
+    "create": "생성",
+    "search": "검색",
+    "loading": "불러오는 중",
+    "empty": "데이터 없음",
+    "yes": "예",
+    "no": "아니요",
+    "actions": "작업",
+    "back": "뒤로",
+    "next": "다음",
+    "previous": "이전",
+    "close": "닫기",
+    "soon": "곧",
+    "coming_soon": "곧 제공 예정",
+    "select_tenant_first": "먼저 테넌트를 선택하세요"
+  },
+  "auth": {
+    "login": {
+      "title": "환영합니다",
+      "subtitle": "계속하려면 로그인하세요",
+      "email": "이메일",
+      "username": "사용자 이름",
+      "identifier": "이메일 또는 사용자 이름",
+      "identifier_placeholder": "you@company.com  또는  사용자 이름",
+      "password": "비밀번호",
+      "tenant_selector": "워크스페이스",
+      "submit": "{{alcance}} 입장",
+      "submit_generic": "로그인",
+      "forgot_password": "비밀번호를 잊으셨나요?",
+      "remember_me": "로그인 상태 유지",
+      "need_help": "도움이 필요하신가요?",
+      "contact_support": "지원팀에 문의하기",
+      "invalid_credentials": "잘못된 자격 증명",
+      "user_inactive": "사용자가 비활성 상태입니다"
+    },
+    "logout": "로그아웃",
+    "session_expired": "세션이 만료되었습니다. 다시 로그인하세요."
+  },
+  "theme": {
+    "toggle": "테마 전환",
+    "light": "라이트",
+    "dark": "다크"
+  },
+  "language": {
+    "label": "언어",
+    "es": "Español",
+    "en": "English",
+    "ko": "한국어"
+  },
+  "help": {
+    "label": "도움말"
+  },
+  "notifications": {
+    "label": "알림"
+  },
+  "errors": {
+    "generic": "문제가 발생했습니다. 다시 시도하세요.",
+    "network": "연결 오류입니다. 인터넷을 확인하세요.",
+    "unauthorized": "세션이 만료되었습니다. 다시 로그인하세요.",
+    "forbidden": "이 작업에 대한 권한이 없습니다.",
+    "not_found": "찾으시는 항목을 찾을 수 없습니다.",
+    "validation": "양식에 오류가 있습니다."
+  },
+  "scaffold": {
+    "status": "스캐폴드 상태",
+    "vite_react_ts": "Vite + React + 엄격한 TypeScript",
+    "tailwind_tokens": "CSS 변수 토큰을 사용한 Tailwind CSS v3",
+    "router_i18n": "react-router-dom + i18next 설치됨",
+    "providers_pending": "프로바이더, 레이아웃, 라우트: 대기 중",
+    "toggle_button": "라이트 / 다크 테마 전환"
+  }
+}

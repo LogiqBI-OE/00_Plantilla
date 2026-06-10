@@ -32,7 +32,7 @@ export interface User {
   last_name_materno: string;
   full_name: string;
   level: number;
-  preferred_language: 'es' | 'en';
+  preferred_language: 'es' | 'en' | 'ko';
   is_active: boolean;
   permissions: string[];
   tenant?: Tenant | null;
@@ -75,6 +75,7 @@ export interface PermissionCatalogEntry {
   key: string;
   label_es: string;
   label_en: string;
+  label_ko: string;
   description: string;
 }
 

@@ -48,7 +48,8 @@ def _serialize_levels_and_matrix() -> dict:
                 'key': code,
                 'label_es': labels[0],
                 'label_en': labels[1],
-                'description': labels[2],
+                'label_ko': labels[2],
+                'description': labels[3],
             }
             for code, labels in sorted(PERMISSION_CATALOG.items())
         ],

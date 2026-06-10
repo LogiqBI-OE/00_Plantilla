@@ -44,9 +44,37 @@ function FlagUS(): React.ReactElement {
   );
 }
 
+/** Bandera de Corea del Sur (Taegukgi: campo blanco + taegeuk rojo/azul). */
+function FlagKR(): React.ReactElement {
+  return (
+    <svg viewBox="0 0 21 14" width="20" height="14" className="rounded-[2px]" aria-hidden="true">
+      <rect width="21" height="14" fill="#ffffff" />
+      {/* Taegeuk: mitad superior roja, inferior azul */}
+      <path d="M10.5 3.5a3.5 3.5 0 0 1 0 7 1.75 1.75 0 0 1 0-3.5 1.75 1.75 0 0 0 0-3.5Z" fill="#c60c30" />
+      <path d="M10.5 3.5a3.5 3.5 0 0 0 0 7 1.75 1.75 0 0 0 0-3.5 1.75 1.75 0 0 1 0-3.5Z" fill="#003478" />
+      {/* Trigramas (simplificados) en las 4 esquinas */}
+      <g fill="#000000">
+        <rect x="2.5" y="3" width="3" height="0.7" />
+        <rect x="2.5" y="4.2" width="3" height="0.7" />
+        <rect x="2.5" y="5.4" width="3" height="0.7" />
+        <rect x="15.5" y="3" width="3" height="0.7" />
+        <rect x="15.5" y="4.2" width="3" height="0.7" />
+        <rect x="15.5" y="5.4" width="3" height="0.7" />
+        <rect x="2.5" y="7.9" width="3" height="0.7" />
+        <rect x="2.5" y="9.1" width="3" height="0.7" />
+        <rect x="2.5" y="10.3" width="3" height="0.7" />
+        <rect x="15.5" y="7.9" width="3" height="0.7" />
+        <rect x="15.5" y="9.1" width="3" height="0.7" />
+        <rect x="15.5" y="10.3" width="3" height="0.7" />
+      </g>
+    </svg>
+  );
+}
+
 const FLAGS: Record<Language, () => React.ReactElement> = {
   es: FlagMX,
   en: FlagUS,
+  ko: FlagKR,
 };
 
 export function LanguageToggle(): React.ReactElement {

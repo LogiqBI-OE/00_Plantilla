@@ -129,6 +129,7 @@ LANGUAGE_CODE = 'es'
 LANGUAGES = [
     ('es', 'Espanol'),
     ('en', 'English'),
+    ('ko', 'Korean'),
 ]
 LOCALE_PATHS = [BASE_DIR / 'locale']
 TIME_ZONE = 'America/Monterrey'

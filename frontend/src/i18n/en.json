@@ -53,7 +53,8 @@
   "language": {
     "label": "Language",
     "es": "Español",
-    "en": "English"
+    "en": "English",
+    "ko": "한국어"
   },
   "help": {
     "label": "Help"
