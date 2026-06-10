@@ -10,7 +10,9 @@
  *
  * Los CSS vars del scope sidebar NO cambian con el tema dark/light.
  */
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 import { useAuth } from '@/lib/auth';
 import { useBrand } from '@/lib/brand';
@@ -26,12 +28,26 @@ import {
 import { SidebarItem } from './SidebarItem';
 import { SidebarTenantSelector } from './SidebarTenantSelector';
 
-export function Sidebar(): React.ReactElement | null {
+interface SidebarProps {
+  /** En movil: si el drawer esta abierto. En md+ el sidebar es siempre visible. */
+  mobileOpen?: boolean;
+  /** Cierra el drawer (movil). */
+  onClose?: () => void;
+}
+
+export function Sidebar({ mobileOpen = false, onClose }: SidebarProps): React.ReactElement | null {
   const { i18n } = useTranslation();
   const { user, tenant } = useAuth();
   const { brand } = useBrand();
   const { multitenantEnabled } = useRuntimeConfig();
   const lang = navLang(i18n.language);
+  const location = useLocation();
+
+  // Cierra el drawer al navegar (solo afecta movil; en md+ onClose es no-op visual).
+  useEffect(() => {
+    onClose?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   if (!user) return null;
 
@@ -56,14 +72,25 @@ export function Sidebar(): React.ReactElement | null {
   const alcance = brand?.alcance ?? '';
 
   return (
-    <aside
-      className="w-60 shrink-0 flex flex-col h-screen sticky top-0"
-      style={{
-        background: 'var(--sidebar-bg)',
-        color: 'var(--sidebar-text)',
-        borderRight: '1px solid var(--sidebar-border)',
-      }}
-    >
+    <>
+      {/* Backdrop (solo movil, cuando el drawer esta abierto) */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        className={`fixed md:sticky top-0 left-0 z-50 md:z-auto h-screen w-60 shrink-0 flex flex-col transition-transform duration-200 md:translate-x-0 ${
+          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+        style={{
+          background: 'var(--sidebar-bg)',
+          color: 'var(--sidebar-text)',
+          borderRight: '1px solid var(--sidebar-border)',
+        }}
+      >
       {/* Header */}
       <div
         className="px-4 py-4 flex items-center gap-2.5 border-b"
@@ -175,6 +202,7 @@ export function Sidebar(): React.ReactElement | null {
         <div>v0.1.0</div>
         <div className="opacity-70">Powered by LogiQ BI</div>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }

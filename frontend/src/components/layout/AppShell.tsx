@@ -5,7 +5,7 @@
  * (AppLayout), NUNCA dentro de cada page. Asi Sidebar y Topbar no se
  * remontean entre navegaciones.
  */
-import type { ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
@@ -15,11 +15,13 @@ interface AppShellProps {
 }
 
 export function AppShell({ children }: AppShellProps): React.ReactElement {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <div className="min-h-screen flex bg-page">
-      <Sidebar />
+      <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       <div className="flex-1 flex flex-col min-w-0">
-        <Topbar />
+        <Topbar onMenuClick={() => setMobileOpen(true)} />
         <main className="flex-1 overflow-auto px-4 sm:px-6 py-4 sm:py-6">{children}</main>
       </div>
     </div>

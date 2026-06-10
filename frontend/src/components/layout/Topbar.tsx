@@ -6,19 +6,34 @@
  * los toggles globales (idioma + tema) y el menu del usuario. Todos los
  * botones de accion son circulares (estilo Terra de Flora).
  */
-import { Bell, HelpCircle } from 'lucide-react';
+import { Bell, HelpCircle, Menu } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { LanguageToggle, ThemeToggle, UserMenu } from '@/components/ui';
 import { usePageTitleValue } from '@/lib/pageTitle';
 
-export function Topbar(): React.ReactElement {
+interface TopbarProps {
+  /** Abre el drawer del sidebar (solo visible en movil). */
+  onMenuClick?: () => void;
+}
+
+export function Topbar({ onMenuClick }: TopbarProps): React.ReactElement {
   const { t } = useTranslation();
   const title = usePageTitleValue();
 
   return (
-    <header className="h-14 border-b border-border bg-card flex items-center justify-between px-6 sticky top-0 z-30">
-      <h1 className="text-base font-semibold truncate">{title}</h1>
+    <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30">
+      <div className="flex items-center gap-2 min-w-0">
+        <button
+          type="button"
+          onClick={onMenuClick}
+          aria-label="Menu"
+          className="md:hidden w-9 h-9 -ml-1 inline-flex items-center justify-center rounded-full hover:bg-elevated transition shrink-0"
+        >
+          <Menu size={20} strokeWidth={1.5} />
+        </button>
+        <h1 className="text-base font-semibold truncate">{title}</h1>
+      </div>
       <div className="flex items-center gap-1.5">
         <button
           type="button"
