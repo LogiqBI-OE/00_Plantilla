@@ -6,12 +6,14 @@
  * editor para que no diverjan.
  */
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { EmptyState, SectionHeader, SkeletonBox, TextField } from '@/components/ui';
 import { systemConfigApi } from '@/lib/api';
 import type { SystemConfigItem } from '@/lib/api';
 
 export function GeneralesTab(): React.ReactElement {
+  const { t } = useTranslation();
   const [items, setItems] = useState<SystemConfigItem[]>([]);
   const [edits, setEdits] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
@@ -48,7 +50,7 @@ export function GeneralesTab(): React.ReactElement {
   };
 
   if (loading) return <SkeletonBox height={300} />;
-  if (items.length === 0) return <EmptyState icon="⚙️" title="Sin configuracion" />;
+  if (items.length === 0) return <EmptyState title={t('generales.empty')} />;
 
   // Agrupar por section
   const sections = new Map<string, SystemConfigItem[]>();
@@ -75,8 +77,8 @@ export function GeneralesTab(): React.ReactElement {
   return (
     <div className="space-y-5">
       <SectionHeader
-        title="Parametros del sistema"
-        description={`${items.length} claves de configuracion runtime.`}
+        title={t('generales.section_title')}
+        description={t('generales.section_desc', { count: items.length })}
         dirty={dirty}
         saving={saving}
         onDiscard={() => setEdits({})}
@@ -127,7 +129,7 @@ export function GeneralesTab(): React.ReactElement {
                     checked={value === 'true'}
                     onChange={(e) => setValue(e.target.checked ? 'true' : 'false')}
                   />
-                  {value === 'true' ? 'Si' : 'No'}
+                  {value === 'true' ? t('common.yes') : t('common.no')}
                 </label>
               ) : item.input_type === 'select' ? (
                 <select

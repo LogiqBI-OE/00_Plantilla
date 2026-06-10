@@ -21,7 +21,54 @@
     "close": "Close",
     "soon": "SOON",
     "coming_soon": "Coming soon",
-    "select_tenant_first": "Select a tenant first"
+    "select_tenant_first": "Select a tenant first",
+    "save_changes": "Save changes",
+    "discard": "Discard",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "settings": {
+    "title": "Global settings",
+    "subtitle": "Level 9 only. Parameters that control system behavior.",
+    "tab_niveles": "Levels",
+    "tab_permisos": "Permissions",
+    "tab_generales": "General",
+    "tab_licencia": "Licenses & tenants"
+  },
+  "levels": {
+    "section_title": "Level descriptions",
+    "section_desc": "The level number is fixed. Edit the label, description, or mark a level as hidden.",
+    "col_level": "Level",
+    "col_label": "Label",
+    "col_description": "Description",
+    "col_hidden": "Hidden"
+  },
+  "permissions": {
+    "section_title": "Permission matrix by level",
+    "section_desc": "Define which permissions each level grants by default. Check or uncheck each cell.",
+    "col_permission": "Permission"
+  },
+  "generales": {
+    "section_title": "System parameters",
+    "section_desc": "{{count}} runtime config keys.",
+    "empty": "No configuration"
+  },
+  "licencia": {
+    "section_title": "Licenses & tenants",
+    "section_desc": "Control multi-tenant mode and the workspace license.",
+    "sub_tenant": "Tenant",
+    "sub_licencia": "License",
+    "multitenant_title": "Multi-tenant mode",
+    "multitenant_desc": "When enabled, tenant features are available: the tenant selector in the sidebar and the <b>Tenants</b> and <b>Agency access</b> pages. When off, the app runs as a single tenant and those features are hidden.",
+    "license_note": "Each tenant is a row with its license. Values are not persisted to the DB yet — they'll be connected in a later phase along with the License model.",
+    "col_tenant": "Tenant",
+    "col_status": "Status",
+    "col_type": "Type",
+    "col_valid_until": "Valid until",
+    "col_max_users": "Max. users",
+    "status_activa": "Active",
+    "status_suspendida": "Suspended",
+    "status_vencida": "Expired"
   },
   "auth": {
     "login": {

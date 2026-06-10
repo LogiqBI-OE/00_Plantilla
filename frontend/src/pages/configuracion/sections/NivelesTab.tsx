@@ -1,5 +1,6 @@
 /** NivelesTab — tabla con label/description/is_reserved editables (L9). */
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Badge, SectionHeader, SkeletonTable, TextField } from '@/components/ui';
 import { levelsApi } from '@/lib/api';
@@ -14,6 +15,7 @@ interface NivelesTabProps {
 type Draft = { label?: string; description?: string; is_reserved?: boolean };
 
 export function NivelesTab({ data, loading, onReload }: NivelesTabProps): React.ReactElement {
+  const { t } = useTranslation();
   const [edits, setEdits] = useState<Record<number, Draft>>({});
   const [saving, setSaving] = useState(false);
 
@@ -45,8 +47,8 @@ export function NivelesTab({ data, loading, onReload }: NivelesTabProps): React.
   return (
     <div className="space-y-5">
       <SectionHeader
-        title="Descripciones de niveles"
-        description="El numero de nivel es fijo. Edita el label, la descripcion o marca un nivel como oculto."
+        title={t('levels.section_title')}
+        description={t('levels.section_desc')}
         dirty={dirty}
         saving={saving}
         onDiscard={() => setEdits({})}
@@ -58,10 +60,10 @@ export function NivelesTab({ data, loading, onReload }: NivelesTabProps): React.
         <table className="w-full text-sm min-w-[640px]">
           <thead>
             <tr>
-              <th className={`text-left w-20 ${th}`}>Nivel</th>
-              <th className={`text-left w-64 ${th}`}>Label</th>
-              <th className={`text-left ${th}`}>Descripcion</th>
-              <th className={`text-right w-28 ${th}`}>Oculto</th>
+              <th className={`text-left w-20 ${th}`}>{t('levels.col_level')}</th>
+              <th className={`text-left w-64 ${th}`}>{t('levels.col_label')}</th>
+              <th className={`text-left ${th}`}>{t('levels.col_description')}</th>
+              <th className={`text-right w-28 ${th}`}>{t('levels.col_hidden')}</th>
             </tr>
           </thead>
           <tbody>

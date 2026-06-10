@@ -9,6 +9,7 @@
  * en el padre y se pasa por props (cambiar de tab no re-fetchea).
  */
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { BadgeCheck, Layers, ShieldCheck, SlidersHorizontal } from 'lucide-react';
 
@@ -24,7 +25,8 @@ import { LicenciaTab } from '@/pages/configuracion/sections/LicenciaTab';
 type TabKey = 'niveles' | 'permisos' | 'generales' | 'licencia';
 
 export default function GlobalSettingsPage(): React.ReactElement {
-  usePageTitle('Configuracion global');
+  const { t } = useTranslation();
+  usePageTitle(t('settings.title'));
 
   const [active, setActive] = useState<TabKey>('niveles');
   const [levelsData, setLevelsData] = useState<LevelsResponse | null>(null);
@@ -44,20 +46,18 @@ export default function GlobalSettingsPage(): React.ReactElement {
   }, [reloadLevels]);
 
   const tabs: TabItem[] = [
-    { key: 'niveles', label: 'Niveles', icon: Layers },
-    { key: 'permisos', label: 'Permisos', icon: ShieldCheck },
-    { key: 'generales', label: 'Generales', icon: SlidersHorizontal },
-    { key: 'licencia', label: 'Licencias y tenants', icon: BadgeCheck },
+    { key: 'niveles', label: t('settings.tab_niveles'), icon: Layers },
+    { key: 'permisos', label: t('settings.tab_permisos'), icon: ShieldCheck },
+    { key: 'generales', label: t('settings.tab_generales'), icon: SlidersHorizontal },
+    { key: 'licencia', label: t('settings.tab_licencia'), icon: BadgeCheck },
   ];
 
   return (
     <div className="space-y-5">
       {/* Header de pagina */}
       <div>
-        <h2 className="text-2xl font-bold">Configuracion global</h2>
-        <p className="text-sm opacity-60 mt-1">
-          Solo nivel 9. Parametros que controlan el comportamiento del sistema.
-        </p>
+        <h2 className="text-2xl font-bold">{t('settings.title')}</h2>
+        <p className="text-sm opacity-60 mt-1">{t('settings.subtitle')}</p>
       </div>
 
       {/* Canvas unico: tabs arriba + contenido del tab activo */}

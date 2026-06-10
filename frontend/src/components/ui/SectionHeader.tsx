@@ -1,11 +1,13 @@
 /**
  * SectionHeader — barra superior consistente de cada panel/tab.
  *
- * Izquierda: titulo + descripcion. Derecha: Descartar + Guardar cambios
- * (opcionales). Se usa en todas las pantallas de config para mantener el
- * mismo patron. Si no se pasan onSave/onDiscard, solo muestra el titulo.
+ * Izquierda: titulo + descripcion. Derecha: acciones custom (`actions`) y/o
+ * Descartar + Guardar cambios (opcionales). Se usa en todas las pantallas de
+ * config para mantener el mismo patron. Si no se pasan acciones, solo muestra
+ * el titulo.
  */
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from './Button';
 
@@ -17,6 +19,8 @@ interface SectionHeaderProps {
   onDiscard?: () => void;
   onSave?: () => void;
   saveLabel?: string;
+  /** Acciones custom a la derecha (ej. "+ Nuevo"). Se muestran antes de Descartar/Guardar. */
+  actions?: ReactNode;
 }
 
 export function SectionHeader({
@@ -26,9 +30,11 @@ export function SectionHeader({
   saving = false,
   onDiscard,
   onSave,
-  saveLabel = 'Guardar cambios',
+  saveLabel,
+  actions,
 }: SectionHeaderProps): React.ReactElement {
-  const hasActions = !!onSave || !!onDiscard;
+  const { t } = useTranslation();
+  const hasActions = !!onSave || !!onDiscard || !!actions;
   return (
     <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
       <div className="min-w-0">
@@ -37,14 +43,15 @@ export function SectionHeader({
       </div>
       {hasActions && (
         <div className="flex items-center gap-2 shrink-0">
+          {actions}
           {onDiscard && (
             <Button variant="secondary" onClick={onDiscard} disabled={!dirty}>
-              Descartar
+              {t('common.discard')}
             </Button>
           )}
           {onSave && (
             <Button onClick={onSave} disabled={!dirty} loading={saving}>
-              {saveLabel}
+              {saveLabel ?? t('common.save_changes')}
             </Button>
           )}
         </div>

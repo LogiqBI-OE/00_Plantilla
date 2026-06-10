@@ -12,6 +12,7 @@
  * modelo License en una fase posterior).
  */
 import { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { SectionHeader } from '@/components/ui';
 import { systemConfigApi } from '@/lib/api';
@@ -24,12 +25,13 @@ const CELL_CONTROL =
 
 type SubTab = 'tenant' | 'licencia';
 
-const SUB_TABS: Array<{ key: SubTab; label: string }> = [
-  { key: 'tenant', label: 'Tenant' },
-  { key: 'licencia', label: 'Licencia' },
+const SUB_TABS: Array<{ key: SubTab; i18nKey: string }> = [
+  { key: 'tenant', i18nKey: 'licencia.sub_tenant' },
+  { key: 'licencia', i18nKey: 'licencia.sub_licencia' },
 ];
 
 export function LicenciaTab(): React.ReactElement {
+  const { t } = useTranslation();
   const { multitenantEnabled, reload } = useRuntimeConfig();
   const { tenant } = useAuth();
   const [active, setActive] = useState<SubTab>('tenant');
@@ -53,8 +55,8 @@ export function LicenciaTab(): React.ReactElement {
   return (
     <div className="space-y-5">
       <SectionHeader
-        title="Licencias y tenants"
-        description="Controla el modo multi-tenant y la licencia del workspace."
+        title={t('licencia.section_title')}
+        description={t('licencia.section_desc')}
       />
 
       {/* Sub-navegacion (sin scroll: solo la seccion activa) */}
@@ -73,7 +75,7 @@ export function LicenciaTab(): React.ReactElement {
                 borderColor: isActive ? 'var(--accent)' : 'var(--border)',
               }}
             >
-              {st.label}
+              {t(st.i18nKey)}
             </button>
           );
         })}
@@ -83,12 +85,9 @@ export function LicenciaTab(): React.ReactElement {
       {active === 'tenant' && (
         <div className="rounded-xl border border-border p-4 flex items-start justify-between gap-4">
           <div className="space-y-1">
-            <p className="text-sm font-medium">Modo multi-tenant</p>
+            <p className="text-sm font-medium">{t('licencia.multitenant_title')}</p>
             <p className="text-xs opacity-60 max-w-md">
-              Si esta activo, se habilitan las funciones de tenant: selector de
-              tenant en el sidebar y las paginas <strong>Tenants</strong> y{' '}
-              <strong>Accesos de agencia</strong>. Apagado, la app opera como un
-              solo tenant y esas funciones se ocultan.
+              <Trans i18nKey="licencia.multitenant_desc" components={{ b: <strong /> }} />
             </p>
           </div>
           <button
@@ -113,22 +112,18 @@ export function LicenciaTab(): React.ReactElement {
       {/* Licencia: una fila por tenant (UI-only por ahora) */}
       {active === 'licencia' && (
         <div className="space-y-3">
-          <p className="text-xs opacity-60">
-            Cada tenant es una fila con su licencia. Los valores aun no se
-            persisten en BD — se conectan en una fase posterior junto con el
-            modelo License.
-          </p>
+          <p className="text-xs opacity-60">{t('licencia.license_note')}</p>
 
           <div className="rounded-xl border border-border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm min-w-[680px]">
                 <thead>
                   <tr className="bg-table-header border-b border-border text-left">
-                    <th className="px-3 py-2.5 font-semibold">Tenant</th>
-                    <th className="px-3 py-2.5 font-semibold">Estatus</th>
-                    <th className="px-3 py-2.5 font-semibold">Tipo</th>
-                    <th className="px-3 py-2.5 font-semibold">Vigente hasta</th>
-                    <th className="px-3 py-2.5 font-semibold">Max. usuarios</th>
+                    <th className="px-3 py-2.5 font-semibold">{t('licencia.col_tenant')}</th>
+                    <th className="px-3 py-2.5 font-semibold">{t('licencia.col_status')}</th>
+                    <th className="px-3 py-2.5 font-semibold">{t('licencia.col_type')}</th>
+                    <th className="px-3 py-2.5 font-semibold">{t('licencia.col_valid_until')}</th>
+                    <th className="px-3 py-2.5 font-semibold">{t('licencia.col_max_users')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -140,9 +135,9 @@ export function LicenciaTab(): React.ReactElement {
                         onChange={(e) => setStatus(e.target.value)}
                         className={CELL_CONTROL}
                       >
-                        <option value="activa">Activa</option>
-                        <option value="suspendida">Suspendida</option>
-                        <option value="vencida">Vencida</option>
+                        <option value="activa">{t('licencia.status_activa')}</option>
+                        <option value="suspendida">{t('licencia.status_suspendida')}</option>
+                        <option value="vencida">{t('licencia.status_vencida')}</option>
                       </select>
                     </td>
                     <td className="px-3 py-2">

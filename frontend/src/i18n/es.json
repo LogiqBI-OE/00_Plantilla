@@ -21,7 +21,54 @@
     "close": "Cerrar",
     "soon": "PRONTO",
     "coming_soon": "Próximamente",
-    "select_tenant_first": "Selecciona un tenant primero"
+    "select_tenant_first": "Selecciona un tenant primero",
+    "save_changes": "Guardar cambios",
+    "discard": "Descartar",
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "settings": {
+    "title": "Configuración global",
+    "subtitle": "Solo nivel 9. Parámetros que controlan el comportamiento del sistema.",
+    "tab_niveles": "Niveles",
+    "tab_permisos": "Permisos",
+    "tab_generales": "Generales",
+    "tab_licencia": "Licencias y tenants"
+  },
+  "levels": {
+    "section_title": "Descripciones de niveles",
+    "section_desc": "El número de nivel es fijo. Edita el label, la descripción o marca un nivel como oculto.",
+    "col_level": "Nivel",
+    "col_label": "Label",
+    "col_description": "Descripción",
+    "col_hidden": "Oculto"
+  },
+  "permissions": {
+    "section_title": "Matriz de permisos por nivel",
+    "section_desc": "Define qué permisos trae cada nivel por default. Marca o desmarca cada celda.",
+    "col_permission": "Permiso"
+  },
+  "generales": {
+    "section_title": "Parámetros del sistema",
+    "section_desc": "{{count}} claves de configuración runtime.",
+    "empty": "Sin configuración"
+  },
+  "licencia": {
+    "section_title": "Licencias y tenants",
+    "section_desc": "Controla el modo multi-tenant y la licencia del workspace.",
+    "sub_tenant": "Tenant",
+    "sub_licencia": "Licencia",
+    "multitenant_title": "Modo multi-tenant",
+    "multitenant_desc": "Si está activo, se habilitan las funciones de tenant: selector de tenant en el sidebar y las páginas <b>Tenants</b> y <b>Accesos de agencia</b>. Apagado, la app opera como un solo tenant y esas funciones se ocultan.",
+    "license_note": "Cada tenant es una fila con su licencia. Los valores aún no se persisten en BD — se conectan en una fase posterior junto con el modelo License.",
+    "col_tenant": "Tenant",
+    "col_status": "Estatus",
+    "col_type": "Tipo",
+    "col_valid_until": "Vigente hasta",
+    "col_max_users": "Máx. usuarios",
+    "status_activa": "Activa",
+    "status_suspendida": "Suspendida",
+    "status_vencida": "Vencida"
   },
   "auth": {
     "login": {

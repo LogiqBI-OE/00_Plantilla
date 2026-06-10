@@ -24,7 +24,7 @@ function buildMatrix(data: LevelsResponse): Map<string, boolean> {
 }
 
 export function PermisosTab({ data, loading, onReload }: PermisosTabProps): React.ReactElement {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lang = i18n.language.split('-')[0];
   const [matrix, setMatrix] = useState<Map<string, boolean>>(new Map());
   const [dirty, setDirty] = useState(false);
@@ -83,8 +83,8 @@ export function PermisosTab({ data, loading, onReload }: PermisosTabProps): Reac
   return (
     <div className="space-y-5">
       <SectionHeader
-        title="Matriz de permisos por nivel"
-        description="Define que permisos trae cada nivel por default. Marca o desmarca cada celda."
+        title={t('permissions.section_title')}
+        description={t('permissions.section_desc')}
         dirty={dirty}
         saving={saving}
         onDiscard={handleDiscard}
@@ -99,7 +99,7 @@ export function PermisosTab({ data, loading, onReload }: PermisosTabProps): Reac
                 <th
                   className={`text-left sticky left-0 px-4 py-3 text-[11px] uppercase tracking-wider font-semibold opacity-80 ${thBand}`}
                 >
-                  Permiso
+                  {t('permissions.col_permission')}
                 </th>
                 {visibleLevels.map((lv) => (
                   <th key={lv.level} className={`px-2 py-3 text-center ${thBand}`}>

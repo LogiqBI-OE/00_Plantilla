@@ -21,7 +21,54 @@
     "close": "닫기",
     "soon": "곧",
     "coming_soon": "곧 제공 예정",
-    "select_tenant_first": "먼저 테넌트를 선택하세요"
+    "select_tenant_first": "먼저 테넌트를 선택하세요",
+    "save_changes": "변경사항 저장",
+    "discard": "취소",
+    "active": "활성",
+    "inactive": "비활성"
+  },
+  "settings": {
+    "title": "전역 설정",
+    "subtitle": "레벨 9 전용. 시스템 동작을 제어하는 매개변수입니다.",
+    "tab_niveles": "레벨",
+    "tab_permisos": "권한",
+    "tab_generales": "일반",
+    "tab_licencia": "라이선스 및 테넌트"
+  },
+  "levels": {
+    "section_title": "레벨 설명",
+    "section_desc": "레벨 번호는 고정입니다. 라벨, 설명을 편집하거나 레벨을 숨김으로 표시하세요.",
+    "col_level": "레벨",
+    "col_label": "라벨",
+    "col_description": "설명",
+    "col_hidden": "숨김"
+  },
+  "permissions": {
+    "section_title": "레벨별 권한 매트릭스",
+    "section_desc": "각 레벨이 기본으로 부여하는 권한을 정의합니다. 각 셀을 선택하거나 해제하세요.",
+    "col_permission": "권한"
+  },
+  "generales": {
+    "section_title": "시스템 매개변수",
+    "section_desc": "{{count}}개의 런타임 설정 키.",
+    "empty": "설정 없음"
+  },
+  "licencia": {
+    "section_title": "라이선스 및 테넌트",
+    "section_desc": "멀티테넌트 모드와 워크스페이스 라이선스를 제어합니다.",
+    "sub_tenant": "테넌트",
+    "sub_licencia": "라이선스",
+    "multitenant_title": "멀티테넌트 모드",
+    "multitenant_desc": "활성화하면 테넌트 기능이 제공됩니다: 사이드바의 테넌트 선택기와 <b>테넌트</b> 및 <b>대행사 접근</b> 페이지. 끄면 앱이 단일 테넌트로 작동하고 해당 기능이 숨겨집니다.",
+    "license_note": "각 테넌트는 라이선스가 있는 행입니다. 값은 아직 DB에 저장되지 않으며 이후 단계에서 License 모델과 함께 연결됩니다.",
+    "col_tenant": "테넌트",
+    "col_status": "상태",
+    "col_type": "유형",
+    "col_valid_until": "유효 기간",
+    "col_max_users": "최대 사용자",
+    "status_activa": "활성",
+    "status_suspendida": "정지됨",
+    "status_vencida": "만료됨"
   },
   "auth": {
     "login": {
