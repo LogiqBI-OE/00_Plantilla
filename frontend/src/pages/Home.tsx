@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Card } from '@/components/ui';
 import { useAuth } from '@/lib/auth';
@@ -12,10 +12,13 @@ export default function Home(): React.ReactElement {
   return (
     <div className="max-w-3xl space-y-4">
       <Card>
-        <h2 className="font-semibold mb-2">Bienvenido</h2>
+        <h2 className="font-semibold mb-2">{t('home.welcome')}</h2>
         <p className="text-sm opacity-70">
-          Hola {user?.first_name}. Estas en{' '}
-          <span className="font-medium">{tenant?.name ?? 'modo platform'}</span>.
+          <Trans
+            i18nKey="home.greeting"
+            values={{ name: user?.first_name ?? '', scope: tenant?.name ?? t('home.platform_mode') }}
+            components={{ s: <span className="font-medium" /> }}
+          />
         </p>
       </Card>
     </div>

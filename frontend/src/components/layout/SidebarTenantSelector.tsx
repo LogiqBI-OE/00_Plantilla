@@ -11,13 +11,14 @@
  * Para L0-L7 muestra el tenant actual como label estatico (no pueden cambiar).
  */
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
 
-import { TENANT_TYPE_LABEL } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
 import { useTenant } from '@/lib/tenant';
 
 export function SidebarTenantSelector(): React.ReactElement {
+  const { t } = useTranslation();
   const { user, switchTenant } = useAuth();
   const { available, current } = useTenant();
   const [open, setOpen] = useState(false);
@@ -55,7 +56,7 @@ export function SidebarTenantSelector(): React.ReactElement {
     }
   };
 
-  const label = current?.name ?? '— Sin tenant —';
+  const label = current?.name ?? t('tenant_selector.no_tenant');
 
   // L0-L7: solo muestra label estatico sin dropdown.
   if (!canSwitch) {
@@ -106,7 +107,7 @@ export function SidebarTenantSelector(): React.ReactElement {
               style={{ color: 'var(--sidebar-text)' }}
               role="menuitem"
             >
-              <span className="italic opacity-70">— Sin tenant —</span>
+              <span className="italic opacity-70">{t('tenant_selector.no_tenant')}</span>
               {!current && (
                 <span style={{ color: 'var(--sidebar-active-text)' }}>●</span>
               )}
@@ -117,28 +118,28 @@ export function SidebarTenantSelector(): React.ReactElement {
               className="px-3 py-2 text-xs italic"
               style={{ color: 'var(--sidebar-section-title)' }}
             >
-              Sin tenants disponibles
+              {t('tenant_selector.none_available')}
             </div>
           ) : (
-            available.map((t) => (
+            available.map((tn) => (
               <button
-                key={t.slug}
+                key={tn.slug}
                 type="button"
-                onClick={() => void handleSelect(t.slug)}
+                onClick={() => void handleSelect(tn.slug)}
                 className="w-full text-left px-3 py-2 text-sm hover:bg-white/5 transition flex items-center justify-between"
                 style={{ color: 'var(--sidebar-text)' }}
                 role="menuitem"
               >
                 <span className="truncate">
-                  <span>{t.name}</span>
+                  <span>{tn.name}</span>
                   <span
                     className="text-xs ml-1.5"
                     style={{ color: 'var(--sidebar-section-title)' }}
                   >
-                    {TENANT_TYPE_LABEL[t.type]}
+                    {t(`tenant_type.${tn.type}`)}
                   </span>
                 </span>
-                {current?.slug === t.slug && (
+                {current?.slug === tn.slug && (
                   <span style={{ color: 'var(--sidebar-active-text)' }}>●</span>
                 )}
               </button>

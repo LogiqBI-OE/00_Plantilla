@@ -29,7 +29,59 @@
     "name": "Nombre",
     "slug": "Slug",
     "type": "Tipo",
-    "status": "Estado"
+    "status": "Estado",
+    "email": "Correo",
+    "level": "Nivel",
+    "menu": "Menú"
+  },
+  "tenant_type": {
+    "system": "System Company",
+    "agency": "Agencia",
+    "cliente": "Cliente"
+  },
+  "home": {
+    "welcome": "Bienvenido",
+    "greeting": "Hola {{name}}. Estás en <s>{{scope}}</s>.",
+    "platform_mode": "modo platform"
+  },
+  "usuarios": {
+    "title": "Usuarios",
+    "count": "{{count}} usuarios",
+    "new": "Nuevo usuario",
+    "empty_desc": "No hay usuarios en este tenant.",
+    "edit": "Editar: {{name}}",
+    "username_label": "Usuario (opcional)",
+    "password_hint": "Mínimo 8 caracteres.",
+    "first_name": "Nombre",
+    "last_paterno": "Apellido paterno",
+    "last_materno": "Apellido materno",
+    "level_max": "Máximo: tu propio nivel (L{{max}}).",
+    "reset_password": "Resetear contraseña",
+    "reset_done": "Contraseña reseteada a: {{password}}"
+  },
+  "auditoria": {
+    "title": "Auditoría",
+    "filter_placeholder": "Filtrar por acción (ej. user.)",
+    "count": "{{count}} eventos",
+    "empty": "Sin eventos",
+    "col_when": "Cuándo",
+    "col_who": "Quién",
+    "col_action": "Acción",
+    "col_target": "Target"
+  },
+  "brand_page": {
+    "title": "Brand",
+    "subtitle": "Marca del tenant: nombre, colores, logos y carrusel."
+  },
+  "tenant_selector": {
+    "no_tenant": "— Sin tenant —",
+    "none_available": "Sin tenants disponibles"
+  },
+  "user_menu": {
+    "level": "Nivel",
+    "tenant": "Tenant",
+    "permissions": "Permisos",
+    "platform": "platform"
   },
   "tenants": {
     "title": "Tenants",

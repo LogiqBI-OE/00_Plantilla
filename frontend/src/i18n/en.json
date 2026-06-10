@@ -29,7 +29,59 @@
     "name": "Name",
     "slug": "Slug",
     "type": "Type",
-    "status": "Status"
+    "status": "Status",
+    "email": "Email",
+    "level": "Level",
+    "menu": "Menu"
+  },
+  "tenant_type": {
+    "system": "System company",
+    "agency": "Agency",
+    "cliente": "Client"
+  },
+  "home": {
+    "welcome": "Welcome",
+    "greeting": "Hi {{name}}. You're in <s>{{scope}}</s>.",
+    "platform_mode": "platform mode"
+  },
+  "usuarios": {
+    "title": "Users",
+    "count": "{{count}} users",
+    "new": "New user",
+    "empty_desc": "There are no users in this tenant.",
+    "edit": "Edit: {{name}}",
+    "username_label": "Username (optional)",
+    "password_hint": "Minimum 8 characters.",
+    "first_name": "First name",
+    "last_paterno": "Paternal last name",
+    "last_materno": "Maternal last name",
+    "level_max": "Maximum: your own level (L{{max}}).",
+    "reset_password": "Reset password",
+    "reset_done": "Password reset to: {{password}}"
+  },
+  "auditoria": {
+    "title": "Audit",
+    "filter_placeholder": "Filter by action (e.g. user.)",
+    "count": "{{count}} events",
+    "empty": "No events",
+    "col_when": "When",
+    "col_who": "Who",
+    "col_action": "Action",
+    "col_target": "Target"
+  },
+  "brand_page": {
+    "title": "Brand",
+    "subtitle": "Tenant brand: name, colors, logos, and carousel."
+  },
+  "tenant_selector": {
+    "no_tenant": "— No tenant —",
+    "none_available": "No tenants available"
+  },
+  "user_menu": {
+    "level": "Level",
+    "tenant": "Tenant",
+    "permissions": "Permissions",
+    "platform": "platform"
   },
   "tenants": {
     "title": "Tenants",

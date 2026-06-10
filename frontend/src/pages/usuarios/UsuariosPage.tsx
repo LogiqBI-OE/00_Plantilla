@@ -7,6 +7,7 @@
  */
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Pencil, TriangleAlert, Users } from 'lucide-react';
 
 import {
   Avatar,
@@ -26,7 +27,7 @@ import { UsuarioFormDrawer } from './sections/UsuarioFormDrawer';
 export default function UsuariosPage(): React.ReactElement {
   const { t } = useTranslation();
   const { user: me } = useAuth();
-  usePageTitle('Usuarios');
+  usePageTitle(t('usuarios.title'));
 
   const [data, setData] = useState<Paginated<User> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -61,33 +62,37 @@ export default function UsuariosPage(): React.ReactElement {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm opacity-60">
-            {loading ? '—' : `${data?.count ?? 0} ${t('common.loading') === 'Cargando' ? 'usuarios' : 'users'}`}
+            {loading ? '—' : t('usuarios.count', { count: data?.count ?? 0 })}
           </p>
         </div>
         {canCreate && (
-          <Button onClick={() => setCreating(true)}>+ {t('common.create')}</Button>
+          <Button onClick={() => setCreating(true)}>+ {t('usuarios.new')}</Button>
         )}
       </div>
 
       {loading ? (
         <SkeletonTable rows={6} cols={5} />
       ) : error ? (
-        <EmptyState icon="⚠️" title={t('errors.generic')} description={error} />
+        <EmptyState
+          icon={<TriangleAlert strokeWidth={1.5} size={36} />}
+          title={t('errors.generic')}
+          description={error}
+        />
       ) : users.length === 0 ? (
         <EmptyState
-          icon="👥"
+          icon={<Users strokeWidth={1.5} size={36} />}
           title={t('common.empty')}
-          description="No hay usuarios en este tenant."
+          description={t('usuarios.empty_desc')}
         />
       ) : (
         <div className="bg-card border border-border rounded-2xl overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-elevated text-xs uppercase tracking-wider opacity-70">
               <tr>
-                <th className="text-left px-4 py-2.5 font-medium">Nombre</th>
-                <th className="text-left px-4 py-2.5 font-medium">Email</th>
-                <th className="text-left px-4 py-2.5 font-medium">Nivel</th>
-                <th className="text-left px-4 py-2.5 font-medium">Estado</th>
+                <th className="text-left px-4 py-2.5 font-medium">{t('common.name')}</th>
+                <th className="text-left px-4 py-2.5 font-medium">{t('common.email')}</th>
+                <th className="text-left px-4 py-2.5 font-medium">{t('common.level')}</th>
+                <th className="text-left px-4 py-2.5 font-medium">{t('common.status')}</th>
                 <th className="text-right px-4 py-2.5 font-medium">{t('common.actions')}</th>
               </tr>
             </thead>
@@ -108,9 +113,9 @@ export default function UsuariosPage(): React.ReactElement {
                     </td>
                     <td className="px-4 py-2.5">
                       {u.is_active ? (
-                        <Badge tone="success">Activo</Badge>
+                        <Badge tone="success">{t('common.active')}</Badge>
                       ) : (
-                        <Badge tone="danger">Inactivo</Badge>
+                        <Badge tone="danger">{t('common.inactive')}</Badge>
                       )}
                     </td>
                     <td className="px-4 py-2.5">
@@ -122,7 +127,7 @@ export default function UsuariosPage(): React.ReactElement {
                           onClick={() => setEditing(u)}
                           title={t('common.edit')}
                         >
-                          ✏️
+                          <Pencil size={14} strokeWidth={1.5} />
                         </IconButton>
                       </div>
                     </td>

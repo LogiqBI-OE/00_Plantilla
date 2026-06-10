@@ -74,15 +74,15 @@ export function UserMenu(): React.ReactElement | null {
           </div>
           <div className="px-4 py-2 border-b border-border text-xs space-y-0.5">
             <div>
-              <span className="opacity-50">Nivel:</span> L{user.level}
+              <span className="opacity-50">{t('user_menu.level')}:</span> L{user.level}
               {roleLabel ? ` · ${roleLabel}` : ''}
             </div>
             <div>
-              <span className="opacity-50">Tenant:</span>{' '}
-              {tenant ? tenant.name : <span className="italic opacity-60">platform</span>}
+              <span className="opacity-50">{t('user_menu.tenant')}:</span>{' '}
+              {tenant ? tenant.name : <span className="italic opacity-60">{t('user_menu.platform')}</span>}
             </div>
             <div>
-              <span className="opacity-50">Permisos:</span> {user.permissions.length}
+              <span className="opacity-50">{t('user_menu.permissions')}:</span> {user.permissions.length}
             </div>
           </div>
           <button

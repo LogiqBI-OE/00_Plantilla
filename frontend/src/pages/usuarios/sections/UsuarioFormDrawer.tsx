@@ -82,7 +82,7 @@ export function UsuarioFormDrawer({
     setError(null);
     try {
       const res = await usersApi.resetPassword(user.id);
-      alert(`Contrasena reseteada a: ${res.standard_password}`);
+      alert(t('usuarios.reset_done', { password: res.standard_password }));
     } catch (err) {
       setError(err instanceof ApiError ? err.toUserMessage() : t('errors.generic'));
     } finally {
@@ -94,7 +94,7 @@ export function UsuarioFormDrawer({
     <Drawer
       open
       onClose={onClose}
-      title={mode === 'create' ? `Nuevo usuario` : `Editar: ${user?.full_name}`}
+      title={mode === 'create' ? t('usuarios.new') : t('usuarios.edit', { name: user?.full_name ?? '' })}
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>
@@ -116,7 +116,7 @@ export function UsuarioFormDrawer({
           required
         />
         <TextField
-          label="Username (opcional)"
+          label={t('usuarios.username_label')}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -127,30 +127,30 @@ export function UsuarioFormDrawer({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            hint="Minimo 8 caracteres."
+            hint={t('usuarios.password_hint')}
           />
         )}
         <div className="grid grid-cols-2 gap-3">
           <TextField
-            label="Nombre"
+            label={t('usuarios.first_name')}
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             required
           />
           <TextField
-            label="Apellido paterno"
+            label={t('usuarios.last_paterno')}
             value={lastPaterno}
             onChange={(e) => setLastPaterno(e.target.value)}
             required
           />
         </div>
         <TextField
-          label="Apellido materno"
+          label={t('usuarios.last_materno')}
           value={lastMaterno}
           onChange={(e) => setLastMaterno(e.target.value)}
         />
         <div className="space-y-1">
-          <label className="text-xs font-medium opacity-80">Nivel</label>
+          <label className="text-xs font-medium opacity-80">{t('common.level')}</label>
           <select
             value={level}
             onChange={(e) => setLevel(parseInt(e.target.value, 10))}
@@ -162,7 +162,7 @@ export function UsuarioFormDrawer({
               </option>
             ))}
           </select>
-          <p className="text-xs opacity-60">Maximo: tu propio nivel (L{maxLevel}).</p>
+          <p className="text-xs opacity-60">{t('usuarios.level_max', { max: maxLevel })}</p>
         </div>
         {mode === 'edit' && (
           <label className="flex items-center gap-2 text-sm">
@@ -171,7 +171,7 @@ export function UsuarioFormDrawer({
               checked={isActive}
               onChange={(e) => setIsActive(e.target.checked)}
             />
-            Activo
+            {t('common.active')}
           </label>
         )}
 
@@ -184,7 +184,7 @@ export function UsuarioFormDrawer({
               loading={resetting}
               onClick={handleReset}
             >
-              Resetear contrasena
+              {t('usuarios.reset_password')}
             </Button>
           </div>
         )}

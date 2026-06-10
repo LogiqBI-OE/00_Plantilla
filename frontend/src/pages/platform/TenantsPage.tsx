@@ -14,7 +14,7 @@ import {
   SkeletonTable,
   TextField,
 } from '@/components/ui';
-import { ApiError, tenantsApi, TENANT_TYPE_LABEL } from '@/lib/api';
+import { ApiError, tenantsApi } from '@/lib/api';
 import type { Paginated, Tenant } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
 import { usePageTitle } from '@/lib/pageTitle';
@@ -101,7 +101,7 @@ export default function TenantsPage(): React.ReactElement {
                       >
                         <td className="px-4 py-3 font-medium">{tn.name}</td>
                         <td className="px-4 py-3 opacity-80 font-mono text-xs">{tn.slug}</td>
-                        <td className="px-4 py-3 opacity-80">{TENANT_TYPE_LABEL[tn.type]}</td>
+                        <td className="px-4 py-3 opacity-80">{t(`tenant_type.${tn.type}`)}</td>
                         <td className="px-4 py-3">
                           {tn.is_active ? (
                             <Badge tone="success">{t('common.active')}</Badge>

@@ -29,7 +29,59 @@
     "name": "이름",
     "slug": "슬러그",
     "type": "유형",
-    "status": "상태"
+    "status": "상태",
+    "email": "이메일",
+    "level": "레벨",
+    "menu": "메뉴"
+  },
+  "tenant_type": {
+    "system": "시스템 회사",
+    "agency": "대행사",
+    "cliente": "클라이언트"
+  },
+  "home": {
+    "welcome": "환영합니다",
+    "greeting": "{{name}}님 안녕하세요. 현재 <s>{{scope}}</s>에 있습니다.",
+    "platform_mode": "플랫폼 모드"
+  },
+  "usuarios": {
+    "title": "사용자",
+    "count": "{{count}}명의 사용자",
+    "new": "새 사용자",
+    "empty_desc": "이 테넌트에 사용자가 없습니다.",
+    "edit": "편집: {{name}}",
+    "username_label": "사용자 이름 (선택)",
+    "password_hint": "최소 8자.",
+    "first_name": "이름",
+    "last_paterno": "성(부)",
+    "last_materno": "성(모)",
+    "level_max": "최대: 본인 레벨 (L{{max}}).",
+    "reset_password": "비밀번호 재설정",
+    "reset_done": "비밀번호가 재설정되었습니다: {{password}}"
+  },
+  "auditoria": {
+    "title": "감사 로그",
+    "filter_placeholder": "작업으로 필터 (예: user.)",
+    "count": "{{count}}개 이벤트",
+    "empty": "이벤트 없음",
+    "col_when": "시간",
+    "col_who": "사용자",
+    "col_action": "작업",
+    "col_target": "대상"
+  },
+  "brand_page": {
+    "title": "브랜드",
+    "subtitle": "테넌트 브랜드: 이름, 색상, 로고 및 캐러셀."
+  },
+  "tenant_selector": {
+    "no_tenant": "— 테넌트 없음 —",
+    "none_available": "사용 가능한 테넌트 없음"
+  },
+  "user_menu": {
+    "level": "레벨",
+    "tenant": "테넌트",
+    "permissions": "권한",
+    "platform": "플랫폼"
   },
   "tenants": {
     "title": "테넌트",

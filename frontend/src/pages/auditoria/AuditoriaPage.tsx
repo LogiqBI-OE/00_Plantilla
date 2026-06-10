@@ -1,5 +1,7 @@
 /** AuditoriaPage — log de eventos con filtros. */
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ClipboardList } from 'lucide-react';
 
 import {
   Badge,
@@ -13,7 +15,8 @@ import type { AuditLog, Paginated } from '@/lib/api';
 import { usePageTitle } from '@/lib/pageTitle';
 
 export default function AuditoriaPage(): React.ReactElement {
-  usePageTitle('Auditoria');
+  const { t } = useTranslation();
+  usePageTitle(t('auditoria.title'));
 
   const [data, setData] = useState<Paginated<AuditLog> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,30 +45,30 @@ export default function AuditoriaPage(): React.ReactElement {
     <div className="space-y-4 max-w-5xl">
       <div className="flex items-center gap-3">
         <TextField
-          placeholder="Filtrar por accion (ej. user.)"
+          placeholder={t('auditoria.filter_placeholder')}
           value={actionFilter}
           onChange={(e) => setActionFilter(e.target.value)}
           size="sm"
           className="max-w-xs"
         />
         <p className="text-sm opacity-60">
-          {loading ? '—' : `${data?.count ?? 0} eventos`}
+          {loading ? '—' : t('auditoria.count', { count: data?.count ?? 0 })}
         </p>
       </div>
 
       {loading ? (
         <SkeletonTable rows={8} cols={4} />
       ) : logs.length === 0 ? (
-        <EmptyState icon="📋" title="Sin eventos" />
+        <EmptyState icon={<ClipboardList strokeWidth={1.5} size={36} />} title={t('auditoria.empty')} />
       ) : (
         <Card padding="none">
           <table className="w-full text-sm">
             <thead className="bg-elevated text-xs uppercase tracking-wider opacity-70">
               <tr>
-                <th className="text-left px-4 py-2.5 font-medium">Cuando</th>
-                <th className="text-left px-4 py-2.5 font-medium">Quien</th>
-                <th className="text-left px-4 py-2.5 font-medium">Accion</th>
-                <th className="text-left px-4 py-2.5 font-medium">Target</th>
+                <th className="text-left px-4 py-2.5 font-medium">{t('auditoria.col_when')}</th>
+                <th className="text-left px-4 py-2.5 font-medium">{t('auditoria.col_who')}</th>
+                <th className="text-left px-4 py-2.5 font-medium">{t('auditoria.col_action')}</th>
+                <th className="text-left px-4 py-2.5 font-medium">{t('auditoria.col_target')}</th>
               </tr>
             </thead>
             <tbody>

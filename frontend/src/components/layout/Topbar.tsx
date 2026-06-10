@@ -27,7 +27,7 @@ export function Topbar({ onMenuClick }: TopbarProps): React.ReactElement {
         <button
           type="button"
           onClick={onMenuClick}
-          aria-label="Menu"
+          aria-label={t('common.menu')}
           className="md:hidden w-9 h-9 -ml-1 inline-flex items-center justify-center rounded-full hover:bg-elevated transition shrink-0"
         >
           <Menu size={20} strokeWidth={1.5} />
