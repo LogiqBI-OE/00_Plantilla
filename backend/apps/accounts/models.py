@@ -14,8 +14,6 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models import AbstractLicense
-
 from .managers import UserManager
 
 
@@ -61,12 +59,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('Tenant al que pertenece. NULL para L8 (agencia) y L9 (global).'),
     )
     agency = models.ForeignKey(
-        'accounts.Agency',
+        'tenants.Tenant',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='operators',
-        help_text=_('Agencia a la que pertenece. Solo aplica a L8.'),
+        help_text=_('Agencia (Tenant type=agency) a la que pertenece. Solo aplica a L8.'),
     )
 
     preferred_language = models.CharField(
@@ -236,48 +234,3 @@ class AgencyTenantAccess(models.Model):
 
     def __str__(self) -> str:
         return f'{self.user.email} -> {self.tenant.slug}'
-
-
-class Agency(models.Model):
-    """
-    Agencia: organizacion que gestiona varios tenants (modelo reseller/MSP).
-
-    Los usuarios L8 pertenecen a una agencia (`User.agency`) y operan los
-    tenants que la agencia tiene asignados. Tiene su propia licencia, que
-    controla el acceso de sus L8 (independiente de la licencia de cada tenant).
-    """
-
-    slug = models.SlugField(
-        max_length=64,
-        unique=True,
-        help_text=_('Identificador URL-friendly de la agencia.'),
-    )
-    name = models.CharField(max_length=128, help_text=_('Nombre visible.'))
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['name']
-        verbose_name = _('Agencia')
-        verbose_name_plural = _('Agencias')
-
-    def __str__(self) -> str:
-        return self.name
-
-
-class AgencyLicense(AbstractLicense):
-    """Licencia de una agencia (1:1). Controla a sus usuarios L8."""
-
-    agency = models.OneToOneField(
-        Agency,
-        on_delete=models.CASCADE,
-        related_name='license',
-    )
-
-    class Meta:
-        verbose_name = _('Licencia de agencia')
-        verbose_name_plural = _('Licencias de agencia')
-
-    def __str__(self) -> str:
-        return f'AgencyLicense({self.agency.slug}: {self.status})'

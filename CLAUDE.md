@@ -85,6 +85,10 @@ Cuando detecte que algo "habría que hacer eventualmente" (por ejemplo: crear se
 - **Tipo de tenant** (`Tenant.type`): `system` | `agency` | `cliente`. Los `system` NO son
   workspaces elegibles (se excluyen del selector de login). En los selectores se muestra el
   tipo (`TENANT_TYPE_LABEL`), no el slug.
+- **Agencia = Tenant `type=agency`** (no hay tabla `Agency` aparte). Un L8 pertenece a una
+  agencia vía `User.agency` (FK a `Tenant`, debe ser `type=agency`). La licencia es **única**:
+  `TenantLicense` para todos los tenants (cliente y agencia); no existe `AgencyLicense`. Los
+  tenants que una agencia gestiona se asignan vía `AgencyTenantAccess` (hoy User L8 ↔ Tenant).
 - **Config del sistema con muchas secciones**: usar **sub-navegación de pills** (un botón por
   sección, solo se ve la activa) en vez de apilar y hacer scroll — como en `GeneralesTab`,
   `LicenciaTab` y `BrandTab`. Mismo estilo de pills (accent-bg-soft + borde accent al activo).
