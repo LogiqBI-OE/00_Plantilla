@@ -1,14 +1,17 @@
 /**
- * LanguageToggle — boton que cicla idiomas.
+ * LanguageToggle — desplegable de idiomas.
  *
- * Muestra la bandera del idioma actual (no del proximo). Click cicla
- * al siguiente idioma soportado.
+ * Boton con la bandera + codigo de pais del idioma actual; al abrir muestra
+ * la lista de idiomas soportados (bandera + codigo + nombre nativo) para
+ * elegir uno.
  *
  * Las banderas son SVG inline (no emojis): los emojis de bandera no se
  * renderizan en Windows (muestran el codigo de region, ej. "US"). Si
  * agregas un idioma nuevo a SUPPORTED_LANGUAGES, agrega su bandera al
- * mapa FLAGS abajo.
+ * mapa FLAGS y su codigo de pais al mapa CODES abajo.
  */
+import { ChevronDown } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SUPPORTED_LANGUAGES, type Language } from '@/i18n';
@@ -77,25 +80,78 @@ const FLAGS: Record<Language, () => React.ReactElement> = {
   ko: FlagKR,
 };
 
+/** Codigo de pais (ISO) mostrado junto a la bandera. */
+const CODES: Record<Language, string> = {
+  es: 'MX',
+  en: 'US',
+  ko: 'KR',
+};
+
 export function LanguageToggle(): React.ReactElement {
   const { i18n, t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
 
   const current = (i18n.language.split('-')[0] ?? 'es') as Language;
-  const idx = SUPPORTED_LANGUAGES.indexOf(current);
-  const next = SUPPORTED_LANGUAGES[(idx + 1) % SUPPORTED_LANGUAGES.length] ?? 'es';
-
   const Flag = FLAGS[current];
 
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, [open]);
+
+  const choose = (lang: Language) => {
+    void i18n.changeLanguage(lang);
+    setOpen(false);
+  };
+
   return (
-    <button
-      type="button"
-      onClick={() => void i18n.changeLanguage(next)}
-      title={t('language.label')}
-      aria-label={t('language.label')}
-      className="w-9 h-9 inline-flex items-center justify-center rounded-full hover:bg-elevated transition"
-    >
-      <Flag />
-      <span className="sr-only">{t(`language.${current}`)}</span>
-    </button>
+    <div ref={wrapRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        title={t('language.label')}
+        aria-label={t('language.label')}
+        className="inline-flex items-center gap-1.5 pl-1.5 pr-2 h-9 rounded-full hover:bg-elevated transition"
+      >
+        <Flag />
+        <span className="text-xs font-medium">{CODES[current]}</span>
+        <ChevronDown size={14} strokeWidth={1.5} className="opacity-50" />
+      </button>
+
+      {open && (
+        <div
+          className="absolute right-0 mt-1 w-44 bg-card border border-border rounded-xl shadow-lg z-50 overflow-hidden py-1"
+          role="menu"
+        >
+          {SUPPORTED_LANGUAGES.map((lang) => {
+            const ItemFlag = FLAGS[lang];
+            const active = lang === current;
+            return (
+              <button
+                key={lang}
+                type="button"
+                onClick={() => choose(lang)}
+                role="menuitem"
+                className={[
+                  'w-full flex items-center gap-2.5 px-3 py-2 text-sm text-left transition',
+                  active ? 'bg-elevated/60 font-medium' : 'hover:bg-elevated/40',
+                ].join(' ')}
+              >
+                <ItemFlag />
+                <span className="text-xs font-semibold opacity-70 w-6">{CODES[lang]}</span>
+                <span className="flex-1">{t(`language.${lang}`)}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }
