@@ -1,5 +1,6 @@
 /** AgencyAccessPage — L9 asigna agencias (Tenant type=agency) a tenants cliente. */
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Building2, KeyRound, X } from 'lucide-react';
 
 import {
@@ -18,7 +19,8 @@ interface TenantWithAccess {
 }
 
 export default function AgencyAccessPage(): React.ReactElement {
-  usePageTitle('Accesos de agencia');
+  const { t } = useTranslation();
+  usePageTitle(t('agency.title'));
 
   const [rows, setRows] = useState<TenantWithAccess[]>([]);
   const [agencies, setAgencies] = useState<Tenant[]>([]);
@@ -51,7 +53,7 @@ export default function AgencyAccessPage(): React.ReactElement {
     await reload();
   };
   const handleRevoke = async (tenantId: number, agencyId: number) => {
-    if (!confirm('Revocar acceso?')) return;
+    if (!confirm(t('agency.revoke_confirm'))) return;
     await tenantsApi.revokeAgency(tenantId, agencyId);
     await reload();
   };
@@ -65,8 +67,8 @@ export default function AgencyAccessPage(): React.ReactElement {
       return (
         <EmptyState
           icon={<KeyRound strokeWidth={1.5} size={36} />}
-          title="Sin tenants cliente"
-          description="Crea primero tenants de tipo cliente."
+          title={t('agency.no_clients_title')}
+          description={t('agency.no_clients_desc')}
         />
       );
     }
@@ -74,8 +76,8 @@ export default function AgencyAccessPage(): React.ReactElement {
       return (
         <EmptyState
           icon={<KeyRound strokeWidth={1.5} size={36} />}
-          title="Sin agencias"
-          description="Crea primero un tenant de tipo agencia desde la consola Platform."
+          title={t('agency.no_agencies_title')}
+          description={t('agency.no_agencies_desc')}
         />
       );
     }
@@ -85,8 +87,8 @@ export default function AgencyAccessPage(): React.ReactElement {
           <table className="w-full text-sm min-w-[640px]">
             <thead>
               <tr>
-                <th className={`text-left w-64 ${th}`}>Tenant cliente</th>
-                <th className={`text-left ${th}`}>Agencias con acceso</th>
+                <th className={`text-left w-64 ${th}`}>{t('agency.col_client')}</th>
+                <th className={`text-left ${th}`}>{t('agency.col_agencies')}</th>
               </tr>
             </thead>
             <tbody>
@@ -105,7 +107,7 @@ export default function AgencyAccessPage(): React.ReactElement {
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap items-center gap-1.5">
                         {accesses.length === 0 && (
-                          <span className="text-xs opacity-50">Sin agencias asignadas</span>
+                          <span className="text-xs opacity-50">{t('agency.none_assigned')}</span>
                         )}
                         {accesses.map((a) => (
                           <span
@@ -116,7 +118,7 @@ export default function AgencyAccessPage(): React.ReactElement {
                             {a.agency_name}
                             <button
                               type="button"
-                              title="Revocar"
+                              title={t('agency.revoke')}
                               onClick={() => void handleRevoke(tenant.id, a.agency)}
                               className="opacity-50 hover:opacity-100 transition"
                             >
@@ -136,7 +138,7 @@ export default function AgencyAccessPage(): React.ReactElement {
                               }
                             }}
                           >
-                            <option value="">+ Asignar agencia…</option>
+                            <option value="">{t('agency.assign')}</option>
                             {available.map((a) => (
                               <option key={a.id} value={a.id}>
                                 {a.name} (/{a.slug})
@@ -160,18 +162,16 @@ export default function AgencyAccessPage(): React.ReactElement {
     <div className="space-y-5">
       {/* Header de pagina */}
       <div>
-        <h2 className="text-2xl font-bold">Accesos de agencia</h2>
-        <p className="text-sm opacity-60 mt-1">
-          Asigna agencias a los tenants cliente que pueden gestionar. Solo nivel 9.
-        </p>
+        <h2 className="text-2xl font-bold">{t('agency.title')}</h2>
+        <p className="text-sm opacity-60 mt-1">{t('agency.subtitle')}</p>
       </div>
 
       {/* Canvas unico */}
       <Card>
         <div className="space-y-5">
           <SectionHeader
-            title="Asignacion de agencias"
-            description="Una agencia gestiona los tenants cliente que tenga asignados; todos sus usuarios L8 heredan el acceso."
+            title={t('agency.section_title')}
+            description={t('agency.section_desc')}
           />
           {body}
         </div>

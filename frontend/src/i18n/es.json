@@ -25,7 +25,38 @@
     "save_changes": "Guardar cambios",
     "discard": "Descartar",
     "active": "Activo",
-    "inactive": "Inactivo"
+    "inactive": "Inactivo",
+    "name": "Nombre",
+    "slug": "Slug",
+    "type": "Tipo",
+    "status": "Estado"
+  },
+  "tenants": {
+    "title": "Tenants",
+    "subtitle": "Organizaciones de la plataforma. Solo nivel 9 puede crear o editar.",
+    "count": "{{count}} tenants",
+    "section_desc": "Cada tenant es un espacio de trabajo aislado (cliente, agencia o sistema).",
+    "new": "Nuevo tenant",
+    "empty_title": "Sin tenants",
+    "empty_desc": "Crea el primer tenant para comenzar.",
+    "edit": "Editar: {{name}}",
+    "slug_hint": "URL-friendly: a-z, 0-9, guiones."
+  },
+  "agency": {
+    "title": "Accesos de agencia",
+    "subtitle": "Asigna agencias a los tenants cliente que pueden gestionar. Solo nivel 9.",
+    "section_title": "Asignación de agencias",
+    "section_desc": "Una agencia gestiona los tenants cliente que tenga asignados; todos sus usuarios L8 heredan el acceso.",
+    "no_clients_title": "Sin tenants cliente",
+    "no_clients_desc": "Crea primero tenants de tipo cliente.",
+    "no_agencies_title": "Sin agencias",
+    "no_agencies_desc": "Crea primero un tenant de tipo agencia desde la consola Platform.",
+    "col_client": "Tenant cliente",
+    "col_agencies": "Agencias con acceso",
+    "none_assigned": "Sin agencias asignadas",
+    "assign": "+ Asignar agencia…",
+    "revoke_confirm": "¿Revocar acceso?",
+    "revoke": "Revocar"
   },
   "settings": {
     "title": "Configuración global",

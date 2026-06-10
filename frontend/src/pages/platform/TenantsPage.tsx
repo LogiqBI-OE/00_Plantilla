@@ -1,5 +1,6 @@
 /** TenantsPage — lista + crear/editar tenants (L9 desde platform). */
 import { type FormEvent, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Building2, Pencil, Plus } from 'lucide-react';
 
 import {
@@ -19,8 +20,9 @@ import { useAuth } from '@/lib/auth';
 import { usePageTitle } from '@/lib/pageTitle';
 
 export default function TenantsPage(): React.ReactElement {
+  const { t } = useTranslation();
   const { user } = useAuth();
-  usePageTitle('Tenants');
+  usePageTitle(t('tenants.title'));
 
   const [data, setData] = useState<Paginated<Tenant> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -50,23 +52,21 @@ export default function TenantsPage(): React.ReactElement {
     <div className="space-y-5">
       {/* Header de pagina */}
       <div>
-        <h2 className="text-2xl font-bold">Tenants</h2>
-        <p className="text-sm opacity-60 mt-1">
-          Organizaciones de la plataforma. Solo nivel 9 puede crear o editar.
-        </p>
+        <h2 className="text-2xl font-bold">{t('tenants.title')}</h2>
+        <p className="text-sm opacity-60 mt-1">{t('tenants.subtitle')}</p>
       </div>
 
       {/* Canvas unico */}
       <Card>
         <div className="space-y-5">
           <SectionHeader
-            title={loading ? 'Tenants' : `${data?.count ?? 0} tenants`}
-            description="Cada tenant es un espacio de trabajo aislado (cliente, agencia o sistema)."
+            title={loading ? t('tenants.title') : t('tenants.count', { count: data?.count ?? 0 })}
+            description={t('tenants.section_desc')}
             actions={
               isL9 ? (
                 <Button onClick={() => setCreating(true)}>
                   <Plus size={16} strokeWidth={1.5} className="-ml-0.5" />
-                  Nuevo tenant
+                  {t('tenants.new')}
                 </Button>
               ) : undefined
             }
@@ -77,8 +77,8 @@ export default function TenantsPage(): React.ReactElement {
           ) : tenants.length === 0 ? (
             <EmptyState
               icon={<Building2 strokeWidth={1.5} size={36} />}
-              title="Sin tenants"
-              description="Crea el primer tenant para comenzar."
+              title={t('tenants.empty_title')}
+              description={t('tenants.empty_desc')}
             />
           ) : (
             <div className="rounded-xl border border-border overflow-hidden">
@@ -86,11 +86,11 @@ export default function TenantsPage(): React.ReactElement {
                 <table className="w-full text-sm min-w-[640px]">
                   <thead>
                     <tr>
-                      <th className={`text-left ${th}`}>Nombre</th>
-                      <th className={`text-left ${th}`}>Slug</th>
-                      <th className={`text-left ${th}`}>Tipo</th>
-                      <th className={`text-left ${th}`}>Estado</th>
-                      <th className={`text-right w-24 ${th}`}>Acciones</th>
+                      <th className={`text-left ${th}`}>{t('common.name')}</th>
+                      <th className={`text-left ${th}`}>{t('common.slug')}</th>
+                      <th className={`text-left ${th}`}>{t('common.type')}</th>
+                      <th className={`text-left ${th}`}>{t('common.status')}</th>
+                      <th className={`text-right w-24 ${th}`}>{t('common.actions')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -104,14 +104,14 @@ export default function TenantsPage(): React.ReactElement {
                         <td className="px-4 py-3 opacity-80">{TENANT_TYPE_LABEL[tn.type]}</td>
                         <td className="px-4 py-3">
                           {tn.is_active ? (
-                            <Badge tone="success">Activo</Badge>
+                            <Badge tone="success">{t('common.active')}</Badge>
                           ) : (
-                            <Badge tone="danger">Inactivo</Badge>
+                            <Badge tone="danger">{t('common.inactive')}</Badge>
                           )}
                         </td>
                         <td className="px-4 py-3 text-right">
                           {isL9 && (
-                            <IconButton size="sm" onClick={() => setEditing(tn)} title="Editar">
+                            <IconButton size="sm" onClick={() => setEditing(tn)} title={t('common.edit')}>
                               <Pencil size={14} strokeWidth={1.5} />
                             </IconButton>
                           )}
@@ -151,6 +151,7 @@ interface TenantFormDrawerProps {
 }
 
 function TenantFormDrawer({ tenant, onClose, onSaved }: TenantFormDrawerProps): React.ReactElement {
+  const { t } = useTranslation();
   const [name, setName] = useState(tenant?.name ?? '');
   const [slug, setSlug] = useState(tenant?.slug ?? '');
   const [isActive, setIsActive] = useState(tenant?.is_active ?? true);
@@ -169,7 +170,7 @@ function TenantFormDrawer({ tenant, onClose, onSaved }: TenantFormDrawerProps): 
       }
       onSaved();
     } catch (err) {
-      setError(err instanceof ApiError ? err.toUserMessage() : 'Error');
+      setError(err instanceof ApiError ? err.toUserMessage() : t('errors.generic'));
     } finally {
       setSaving(false);
     }
@@ -179,26 +180,26 @@ function TenantFormDrawer({ tenant, onClose, onSaved }: TenantFormDrawerProps): 
     <Drawer
       open
       onClose={onClose}
-      title={tenant ? `Editar: ${tenant.name}` : 'Nuevo tenant'}
+      title={tenant ? t('tenants.edit', { name: tenant.name }) : t('tenants.new')}
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>
-            Cancelar
+            {t('common.cancel')}
           </Button>
           <Button onClick={handleSubmit} loading={saving}>
-            Guardar
+            {t('common.save')}
           </Button>
         </>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-3">
-        <TextField label="Nombre" value={name} onChange={(e) => setName(e.target.value)} required />
+        <TextField label={t('common.name')} value={name} onChange={(e) => setName(e.target.value)} required />
         <TextField
-          label="Slug"
+          label={t('common.slug')}
           value={slug}
           onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, ''))}
           required
-          hint="URL-friendly: a-z, 0-9, guiones."
+          hint={t('tenants.slug_hint')}
         />
         <label className="flex items-center gap-2 text-sm">
           <input
@@ -206,7 +207,7 @@ function TenantFormDrawer({ tenant, onClose, onSaved }: TenantFormDrawerProps): 
             checked={isActive}
             onChange={(e) => setIsActive(e.target.checked)}
           />
-          Activo
+          {t('common.active')}
         </label>
         {error && <div className="px-3 py-2 rounded-lg bg-danger/15 text-danger text-xs">{error}</div>}
       </form>

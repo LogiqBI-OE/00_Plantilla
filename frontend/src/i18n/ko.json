@@ -25,7 +25,38 @@
     "save_changes": "변경사항 저장",
     "discard": "취소",
     "active": "활성",
-    "inactive": "비활성"
+    "inactive": "비활성",
+    "name": "이름",
+    "slug": "슬러그",
+    "type": "유형",
+    "status": "상태"
+  },
+  "tenants": {
+    "title": "테넌트",
+    "subtitle": "플랫폼 조직. 레벨 9만 생성하거나 편집할 수 있습니다.",
+    "count": "{{count}}개 테넌트",
+    "section_desc": "각 테넌트는 격리된 워크스페이스입니다 (클라이언트, 대행사 또는 시스템).",
+    "new": "새 테넌트",
+    "empty_title": "테넌트 없음",
+    "empty_desc": "시작하려면 첫 번째 테넌트를 만드세요.",
+    "edit": "편집: {{name}}",
+    "slug_hint": "URL 친화적: a-z, 0-9, 하이픈."
+  },
+  "agency": {
+    "title": "대행사 접근",
+    "subtitle": "대행사가 관리할 수 있는 클라이언트 테넌트를 할당합니다. 레벨 9 전용.",
+    "section_title": "대행사 할당",
+    "section_desc": "대행사는 할당된 클라이언트 테넌트를 관리하며, 모든 L8 사용자가 접근 권한을 상속받습니다.",
+    "no_clients_title": "클라이언트 테넌트 없음",
+    "no_clients_desc": "먼저 클라이언트 유형의 테넌트를 만드세요.",
+    "no_agencies_title": "대행사 없음",
+    "no_agencies_desc": "먼저 플랫폼 콘솔에서 대행사 유형의 테넌트를 만드세요.",
+    "col_client": "클라이언트 테넌트",
+    "col_agencies": "접근 권한이 있는 대행사",
+    "none_assigned": "할당된 대행사 없음",
+    "assign": "+ 대행사 할당…",
+    "revoke_confirm": "접근 권한을 취소하시겠습니까?",
+    "revoke": "취소"
   },
   "settings": {
     "title": "전역 설정",

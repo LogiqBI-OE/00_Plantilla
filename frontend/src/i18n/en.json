@@ -25,7 +25,38 @@
     "save_changes": "Save changes",
     "discard": "Discard",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "name": "Name",
+    "slug": "Slug",
+    "type": "Type",
+    "status": "Status"
+  },
+  "tenants": {
+    "title": "Tenants",
+    "subtitle": "Platform organizations. Only level 9 can create or edit.",
+    "count": "{{count}} tenants",
+    "section_desc": "Each tenant is an isolated workspace (client, agency, or system).",
+    "new": "New tenant",
+    "empty_title": "No tenants",
+    "empty_desc": "Create the first tenant to get started.",
+    "edit": "Edit: {{name}}",
+    "slug_hint": "URL-friendly: a-z, 0-9, hyphens."
+  },
+  "agency": {
+    "title": "Agency access",
+    "subtitle": "Assign agencies to the client tenants they can manage. Level 9 only.",
+    "section_title": "Agency assignment",
+    "section_desc": "An agency manages the client tenants assigned to it; all its L8 users inherit the access.",
+    "no_clients_title": "No client tenants",
+    "no_clients_desc": "Create client-type tenants first.",
+    "no_agencies_title": "No agencies",
+    "no_agencies_desc": "Create an agency-type tenant first from the Platform console.",
+    "col_client": "Client tenant",
+    "col_agencies": "Agencies with access",
+    "none_assigned": "No agencies assigned",
+    "assign": "+ Assign agency…",
+    "revoke_confirm": "Revoke access?",
+    "revoke": "Revoke"
   },
   "settings": {
     "title": "Global settings",
