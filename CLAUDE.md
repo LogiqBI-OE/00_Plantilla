@@ -46,6 +46,26 @@ Cuando detecte que algo "habría que hacer eventualmente" (por ejemplo: crear se
 - **Banderas**: SVG inline, **nunca emoji** (los emoji de bandera no
   renderizan en Windows — muestran el código de región, ej. "US"). Ver
   `LanguageToggle.tsx`.
+- **i18n (regla dura)**: **todo** texto de UI pasa por `t('clave')` con catálogos
+  `es/en/ko.json`. Nunca hardcodear strings en componentes. Texto con formato
+  (negritas inline, etc.) usa `<Trans>`. Idiomas soportados: `es` (default), `en`,
+  `ko` — registrados en `SUPPORTED_LANGUAGES` (`i18n/index.ts`). Al agregar un idioma:
+  nuevo `<lng>.json` + entrada en `SUPPORTED_LANGUAGES`/`resources` + bandera en `FLAGS`
+  y código de país en `CODES` (`LanguageToggle.tsx`) + choice en `User.preferred_language`
+  y `LANGUAGES` (backend). **No** se traducen: labels de niveles (DB, editables por L9) ni
+  los `info` tooltips técnicos de la paleta (referencian CSS-vars).
+- **Navegación i18n**: los `NavItem`/`NavSection` de `navConfig.tsx` llevan
+  `label_<lng>`/`title_<lng>`; el consumidor usa los helpers `navLang(i18n.language)` +
+  `pickNav(es, en, ko, lang)`. Tipos de tenant: `t('tenant_type.<type>')` (no el viejo
+  `TENANT_TYPE_LABEL`).
+- **LanguageToggle**: es un **dropdown** (bandera + código de país MX/US/KR + nombre nativo),
+  no un botón que cicla. Mismo patrón de dropdown que `UserMenu` (click-fuera para cerrar).
+- **Responsive**: el `Sidebar` es un **drawer off-canvas en móvil** (`fixed`, `-translate-x-full`,
+  abre con hamburguesa del `Topbar` + backdrop, cierra al navegar) y `md:sticky` siempre visible
+  en desktop. El estado (`mobileOpen`) vive en `AppShell`. Tablas con `overflow-x-auto`.
+- **Estándar de pantalla de lista**: header de página (`h2` + `p`) → `Card` canvas → `SectionHeader`
+  (título/descripción izquierda, acciones derecha vía slot `actions`, ej. "+ Nuevo") → tabla
+  estándar. Mismo patrón que `GlobalSettingsPage`. Ver `TenantsPage`/`AgencyAccessPage`.
 - **Settings (IA)**: la config del **sistema** (Niveles, Permisos,
   Generales/SystemConfig, Licencia) vive en **"Configuración global"**
   (`GlobalSettingsPage`, L9 plataforma) como tabs dentro de **un solo `Card`**

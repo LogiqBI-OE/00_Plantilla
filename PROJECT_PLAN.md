@@ -4,7 +4,42 @@
 
 ---
 
-## 0. Dónde retomar (memoria de sesión — actualizado 2026-06-09, sesión 5)
+## 0. Dónde retomar (memoria de sesión — actualizado 2026-06-10, sesión 6)
+
+**Sesión 2026-06-10 #6 — i18n trilingüe (es/en/ko), UI responsive y restyle de pantallas:**
+
+- **Coreano (`ko`) como 3er idioma** — 4 capas: catálogo react-i18next (`ko.json`), navegación
+  (`navConfig` con `label_ko` + helpers `navLang`/`pickNav`), catálogo de permisos (`label_ko`,
+  servido en vivo, sin re-seed), backend (`User.preferred_language` choice + `LANGUAGES`,
+  migración `accounts.0007`). Bandera Taegukgi SVG. **Pusheado** (`e9f3118`).
+- **LanguageToggle desplegable** — dropdown con bandera + código de país (MX/US/KR) + nombre
+  nativo (antes era botón que ciclaba). **Sin pushear** (`e5de220`).
+- **Restyle Tenants + Accesos de agencia** al estándar de Configuración global (header de
+  página + Card canvas + `SectionHeader` + tabla estándar). `SectionHeader` ganó un slot
+  `actions` reusable (ej. "+ Nuevo tenant"). Tenants ganó columna **Tipo**. Iba en el commit
+  de i18n Fase 1 (`682e043`). **Sin pushear**.
+- **Sidebar responsive** — en móvil es un drawer off-canvas (hamburguesa en Topbar + backdrop +
+  cierra al navegar); en `md+` sigue sticky. **Sin pushear** (`dd3d459`).
+- **PASE COMPLETO DE i18n (en curso)** — migrar TODO el texto hardcodeado a `t()` (es/en/ko).
+  La app estaba construida con español hardcodeado en casi todas las páginas; solo login/sidebar
+  pasaban por `t()`. Fases:
+  - ✅ **Fase 1 (settings)** — GlobalSettings + 4 tabs + `SectionHeader`. Commit `682e043`.
+  - ✅ **Fase 2 (plataforma)** — Tenants + Accesos de agencia. Commit `58d300c`.
+  - ✅ **Fase 3 (operación)** — Usuarios, Auditoría, Home, ConfiguracionPage, SidebarTenantSelector,
+    UserMenu, Topbar. `tenant_type` ahora traducido. Commit `d59105b`.
+  - 🚧 **Fase 4 (Brand) — EN CURSO, SIN COMMITEAR**. Hecho: catálogos `brand.*`, `BrandTab`,
+    `BrandNameSub`, `LogosSub` (parcial). **Falta**: terminar `LogosSub`, `CarruselSub`,
+    `PaletaSub` (labels de color vía keys; los `info` tooltips técnicos de CSS-vars se dejan en
+    español por ahora), `LoginPreview`. Luego `tsc -b` + commit.
+- **PENDIENTE pedido por el usuario (diferido)**: **botón Guardar en el tab Licencia** — hoy es
+  UI-only; hacerlo real = implementar el **Paso 4** de licensing (endpoint TenantLicense + front).
+  El usuario eligió terminar i18n primero.
+- **Sin pushear**: 5 commits (`e5de220`, `682e043`, `58d300c`, `dd3d459`, `d59105b`) + Fase 4.
+  El push dispara deploy en Railway (migración `0007` es solo cambio de choices, riesgo nulo).
+
+---
+
+### Estado previo (sesión 2026-06-09 #5)
 
 **Sesión 2026-06-09 #5 — Reconciliación de agencia (Opción A) + acceso por-agencia (2-A):**
 - **Paso 1 — agencia = Tenant `type=agency`** (Opción A). Se **eliminaron** los modelos `Agency`
@@ -297,3 +332,7 @@ Logos en `Logos/` (se mueven a `frontend/public/brand/logiq/` en Fase 2).
 | 2026-06-09 | **Reconciliación de agencia = Opción A**: una agencia **ES** un `Tenant` con `type=agency`. Se eliminaron los modelos `Agency` y `AgencyLicense` (migración `accounts.0005`); `User.agency` pasa a FK de `tenants.Tenant`; la licencia se unifica en `TenantLicense` para todos los tenants. | Elegido por el usuario — una sola entidad/jerarquía, menos código que mantener |
 | 2026-06-09 | **Acceso de agencia por-agencia (Opción 2-A)**: `AgencyTenantAccess` pasa de `(user L8, tenant)` a `(agency, tenant)`. Se asignan tenants a la agencia una vez y todos sus L8 los heredan (migración `accounts.0006`). | Elegido por el usuario — coherente con modelo reseller/MSP; elimina redundancia con `User.agency` |
 | 2026-06-09 | **Tercer idioma: coreano (`ko`)** en las 4 capas: catálogo react-i18next (`ko.json`), navegación (`navConfig` con `label_ko` + helpers `navLang`/`pickNav`), catálogo de permisos (`label_ko`, servido en vivo — sin re-seed), backend (`User.preferred_language` choice + `LANGUAGES`, migración `accounts.0007`). Bandera Taegukgi SVG en el toggle. | Pedido por el usuario — la plantilla soporta i18n N-idiomas, no solo es/en |
+| 2026-06-10 | **LanguageToggle = dropdown** (bandera + código de país MX/US/KR + nombre nativo), no botón que cicla. | Pedido por el usuario |
+| 2026-06-10 | **Estándar de pantalla de lista** = header de página + Card canvas + `SectionHeader` (con slot `actions`) + tabla estándar. Aplicado a Tenants y Accesos de agencia. | Pedido por el usuario (igualar a Configuración global) |
+| 2026-06-10 | **Sidebar responsive**: drawer off-canvas en móvil (hamburguesa + backdrop), sticky en `md+`. | Pedido por el usuario (no era responsivo a celular) |
+| 2026-06-10 | **Pase completo de i18n**: TODO el texto de UI pasa por `t()` con catálogos es/en/ko. La app tenía español hardcodeado en casi todas las páginas. Se migra por fases (settings → plataforma → operación → brand). Los labels de niveles (DB, editables) y los `info` tooltips técnicos de la paleta (CSS-vars) NO se traducen. | Pedido por el usuario — el toggle no cambiaba nada porque el texto no pasaba por `t()` |
