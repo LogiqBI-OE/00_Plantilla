@@ -6,7 +6,7 @@ Define el sistema de autenticacion y autorizacion:
 - `Level`: catalogo editable de niveles (label, description, is_reserved)
 - `PermissionMatrix`: matriz global nivel x permiso
 - `UserPermissionOverride`: override por-usuario (gana sobre la matriz)
-- `AgencyTenantAccess`: a que tenants accede un usuario L8 (agencia)
+- `AgencyTenantAccess`: a que tenants cliente accede una agencia (Tenant type=agency)
 
 Ver SKELETON_GUIDE.md secciones "Multi-tenancy y niveles" y "Modelo de datos".
 """
@@ -23,7 +23,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     Niveles:
         - L9 global: tenant=None, acceso a todos los tenants
-        - L8 agencia: tenant=None, acceso a un subconjunto (AgencyTenantAccess)
+        - L8 agencia: tenant=None, acceso a los tenants de su agencia (AgencyTenantAccess)
         - L0-L7 single-tenant: tenant=<FK>, solo accede a ese tenant
 
     Permisos efectivos:
@@ -199,22 +199,24 @@ class UserPermissionOverride(models.Model):
 
 class AgencyTenantAccess(models.Model):
     """
-    Asigna a un usuario L8 (agencia) acceso a un subconjunto de tenants.
+    Asigna a una agencia (Tenant type=agency) acceso a un tenant cliente.
 
-    Solo L9 puede crear/borrar estas filas (controla quien administra que tenants).
-    Si user.level != 8 la fila no tiene efecto (validacion en serializer).
+    Todos los usuarios L8 de la agencia (`User.agency`) heredan este acceso.
+    Solo L9 puede crear/borrar estas filas (controla que tenants gestiona
+    cada agencia).
     """
 
-    user = models.ForeignKey(
-        User,
-        related_name='agency_access',
+    agency = models.ForeignKey(
+        'tenants.Tenant',
+        related_name='managed_access',
         on_delete=models.CASCADE,
-        help_text=_('Usuario L8 al que se le otorga acceso.'),
+        help_text=_('Agencia (Tenant type=agency) a la que se le otorga acceso.'),
     )
     tenant = models.ForeignKey(
         'tenants.Tenant',
         on_delete=models.CASCADE,
-        related_name='agency_users',
+        related_name='agency_access',
+        help_text=_('Tenant cliente que la agencia podra gestionar.'),
     )
     granted_by = models.ForeignKey(
         User,
@@ -227,10 +229,10 @@ class AgencyTenantAccess(models.Model):
     granted_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = [('user', 'tenant')]
-        ordering = ['user', 'tenant']
+        unique_together = [('agency', 'tenant')]
+        ordering = ['agency', 'tenant']
         verbose_name = _('Acceso de agencia a tenant')
         verbose_name_plural = _('Accesos de agencia a tenants')
 
     def __str__(self) -> str:
-        return f'{self.user.email} -> {self.tenant.slug}'
+        return f'{self.agency.slug} -> {self.tenant.slug}'

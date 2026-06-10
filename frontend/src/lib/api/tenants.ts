@@ -4,9 +4,9 @@ import type { Paginated, Tenant } from './types';
 
 export interface AgencyTenantAccess {
   id: number;
-  user: number;
-  user_email: string;
-  user_full_name: string;
+  agency: number;
+  agency_slug: string;
+  agency_name: string;
   granted_by: number | null;
   granted_by_email: string | null;
   granted_at: string;
@@ -23,8 +23,8 @@ export const tenantsApi = {
 
   agencyAccess: (id: number) =>
     api.get<AgencyTenantAccess[]>(`/api/tenants/${id}/agency-access/`),
-  grantAgency: (id: number, user_id: number) =>
-    api.post<AgencyTenantAccess>(`/api/tenants/${id}/grant-agency/`, { user_id }),
-  revokeAgency: (id: number, user_id: number) =>
-    api.post<void>(`/api/tenants/${id}/revoke-agency/`, { user_id }),
+  grantAgency: (id: number, agency_id: number) =>
+    api.post<AgencyTenantAccess>(`/api/tenants/${id}/grant-agency/`, { agency_id }),
+  revokeAgency: (id: number, agency_id: number) =>
+    api.post<void>(`/api/tenants/${id}/revoke-agency/`, { agency_id }),
 };

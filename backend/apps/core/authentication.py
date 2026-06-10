@@ -74,8 +74,8 @@ class TenantJWTAuthentication(JWTAuthentication):
             return  # L9 accede a cualquier tenant activo.
 
         if user.level == 8:
-            has_access = AgencyTenantAccess.objects.filter(
-                user=user, tenant=tenant
+            has_access = bool(user.agency_id) and AgencyTenantAccess.objects.filter(
+                agency_id=user.agency_id, tenant=tenant
             ).exists()
             if not has_access:
                 raise AuthenticationFailed('Perdiste acceso a este tenant.')

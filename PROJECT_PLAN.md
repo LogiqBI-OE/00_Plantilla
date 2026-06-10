@@ -6,26 +6,36 @@
 
 ## 0. Dónde retomar (memoria de sesión — actualizado 2026-06-09, sesión 5)
 
-**Sesión 2026-06-09 #5 — Reconciliación de agencia (Opción A) RESUELTA:**
-- **Decisión: agencia = Tenant `type=agency`** (se eligió Opción A). Se **eliminaron** los
-  modelos `Agency` y `AgencyLicense`. `User.agency` ahora es FK a **`tenants.Tenant`**
-  (debe ser `type=agency`). La licencia queda **unificada en `TenantLicense`** para todos
-  los tenants (cliente y agencia). Migración `accounts.0005`. Verificado: `manage.py check`
-  OK, migrate OK en SQLite local, seed L9 (orlando/rogelio) intacto, `User.agency → Tenant`.
-- **Pendiente local de esta sesión**: build `tsc -b` (no debería cambiar — el front no tocaba
-  la entidad `Agency`) y **push**.
+**Sesión 2026-06-09 #5 — Reconciliación de agencia (Opción A) + acceso por-agencia (2-A):**
+- **Paso 1 — agencia = Tenant `type=agency`** (Opción A). Se **eliminaron** los modelos `Agency`
+  y `AgencyLicense`. `User.agency` ahora es FK a **`tenants.Tenant`** (debe ser `type=agency`).
+  Licencia **unificada en `TenantLicense`** para todos los tenants. Migración `accounts.0005`.
+- **Paso 2 — acceso por-agencia (Opción 2-A)**. `AgencyTenantAccess` pasa de `(user L8, tenant)`
+  a `(agency, tenant)`; todos los L8 de la agencia heredan el acceso. Migración `accounts.0006`.
+  Backend (model, views, serializer, auth) + frontend (`AgencyAccessPage`, `tenantsApi`) listos.
+- **Verificado**: `manage.py check` OK · migrate OK (SQLite local) · `tsc -b` OK · smoke
+  end-to-end por shell (grant → L8 ve el cliente · enforce concede al gestionado y bloquea al
+  ajeno · L8 sin agencia no ve nada) · seed L9 (orlando/rogelio) intacto.
+- **Pendiente local de esta sesión**: **push** (2 commits sin pushear) → dispara migración en
+  prod (Postgres) que dropea tablas `Agency`/`AgencyLicense` y reestructura `AgencyTenantAccess`
+  (sin datos reales, seguro).
 
 > **Nota**: el estado previo decía "falta pushear lo posterior a `7d019d5`" — eso ya estaba
 > pusheado (`510ef32`, `6bceaa7`, `aa73c19` en `origin/main`). Esa nota era stale.
 
-**Próximos pasos de licensing (siguen pendientes — implican otra decisión):**
-- **Paso 2** — refactor `AgencyTenantAccess`: hoy es **User L8 ↔ Tenant** (acceso por-usuario).
-  Decisión a tomar: ¿pasarlo a **Tenant(agency) ↔ Tenant(cliente)** (acceso por-agencia,
-  compartido por todos los L8 de la agencia) o dejarlo por-usuario? **No decidido.**
-- **Paso 3** — **enforcement** en login/auth. Regla: **L9 nunca se bloquea**; **L8** según la
-  licencia (`TenantLicense`) de **su agencia-tenant** (`User.agency`); **L0–L7** según la de
-  **su tenant**. `max_users` se valida al **crear** usuario (no expulsa existentes).
-- **Paso 4** — conectar la tabla de Licencia (UI) a `TenantLicense` real (todos los tenants).
+**Próximos pasos de licensing:**
+- **Paso 2 ✅ HECHO (2026-06-09)** — `AgencyTenantAccess` refactorizado a **acceso por agencia**:
+  de `(user L8, tenant)` a `(agency, tenant)` donde `agency` es un `Tenant type=agency`. Todos
+  los L8 de la agencia heredan el acceso. Migración `accounts.0006`. Tocó: modelo, views/acciones
+  `grant-agency`/`revoke-agency` (ahora `agency_id`), serializer, `_tenants_for_user`,
+  `_enforce_access` y `LoginView`/`SwitchTenant`; frontend `AgencyAccessPage` (asigna agencias a
+  tenants cliente) + `tenantsApi`. Verificado end-to-end por shell + `tsc -b`.
+- **Paso 3** (pendiente) — **enforcement de licencia** en login/auth. Regla: **L9 nunca se
+  bloquea**; **L8** según la licencia (`TenantLicense`) de **su agencia-tenant** (`User.agency`);
+  **L0–L7** según la de **su tenant**. `max_users` se valida al **crear** usuario (no expulsa
+  existentes).
+- **Paso 4** (pendiente) — conectar la tabla de Licencia (UI) a `TenantLicense` real (todos los
+  tenants).
 
 **Estado de Login (de la sesión 4, ya pusheado):**
 - **Tipo de tenant** `Tenant.type` = `system` | `agency` | `cliente`; el selector de login
@@ -285,3 +295,4 @@ Logos en `Logos/` (se mueven a `frontend/public/brand/logiq/` en Fase 2).
 | 2026-06-03 | **Estándar de pantalla de Login** = el de Terra de Flora (header `— MARCA` + pill de alcance, labels en mayúsculas, ojo en contraseña, recuérdame/olvidaste, soporte, Powered by anclado, hero con logo grande + alcance en color accent + profundidad). Selector con preselección de la 1ª opción y mostrando el grupo/tipo, no el slug. | Definido por el usuario (referencia visual TdF) |
 | 2026-06-03 | ~~PENDIENTE — reconciliar agencia~~ → **resuelto 2026-06-09** (ver fila siguiente). | Surgió al definir los tipos de tenant |
 | 2026-06-09 | **Reconciliación de agencia = Opción A**: una agencia **ES** un `Tenant` con `type=agency`. Se eliminaron los modelos `Agency` y `AgencyLicense` (migración `accounts.0005`); `User.agency` pasa a FK de `tenants.Tenant`; la licencia se unifica en `TenantLicense` para todos los tenants. | Elegido por el usuario — una sola entidad/jerarquía, menos código que mantener |
+| 2026-06-09 | **Acceso de agencia por-agencia (Opción 2-A)**: `AgencyTenantAccess` pasa de `(user L8, tenant)` a `(agency, tenant)`. Se asignan tenants a la agencia una vez y todos sus L8 los heredan (migración `accounts.0006`). | Elegido por el usuario — coherente con modelo reseller/MSP; elimina redundancia con `User.agency` |

@@ -1,16 +1,16 @@
-/** AgencyAccessPage — L9 asigna usuarios L8 a tenants. */
+/** AgencyAccessPage — L9 asigna agencias (Tenant type=agency) a tenants cliente. */
 import { useCallback, useEffect, useState } from 'react';
+import { Building2, KeyRound, X } from 'lucide-react';
 
 import {
-  Avatar,
   Badge,
   Card,
   EmptyState,
   IconButton,
   SkeletonBox,
 } from '@/components/ui';
-import { tenantsApi, usersApi } from '@/lib/api';
-import type { AgencyTenantAccess, Tenant, User } from '@/lib/api';
+import { tenantsApi } from '@/lib/api';
+import type { AgencyTenantAccess, Tenant } from '@/lib/api';
 import { usePageTitle } from '@/lib/pageTitle';
 
 interface TenantWithAccess {
@@ -22,18 +22,18 @@ export default function AgencyAccessPage(): React.ReactElement {
   usePageTitle('Accesos de agencia');
 
   const [rows, setRows] = useState<TenantWithAccess[]>([]);
-  const [l8Users, setL8Users] = useState<User[]>([]);
+  const [agencies, setAgencies] = useState<Tenant[]>([]);
   const [loading, setLoading] = useState(true);
 
   const reload = useCallback(async () => {
     setLoading(true);
     try {
       const tenantsRes = await tenantsApi.list();
-      const usersRes = await usersApi.list();
-      const l8 = usersRes.results.filter((u) => u.level === 8);
-      setL8Users(l8);
+      const agencyTenants = tenantsRes.results.filter((t) => t.type === 'agency');
+      const clientTenants = tenantsRes.results.filter((t) => t.type === 'cliente');
+      setAgencies(agencyTenants);
       const data: TenantWithAccess[] = [];
-      for (const t of tenantsRes.results) {
+      for (const t of clientTenants) {
         const accesses = await tenantsApi.agencyAccess(t.id);
         data.push({ tenant: t, accesses });
       }
@@ -47,13 +47,13 @@ export default function AgencyAccessPage(): React.ReactElement {
     void reload();
   }, [reload]);
 
-  const handleGrant = async (tenantId: number, userId: number) => {
-    await tenantsApi.grantAgency(tenantId, userId);
+  const handleGrant = async (tenantId: number, agencyId: number) => {
+    await tenantsApi.grantAgency(tenantId, agencyId);
     await reload();
   };
-  const handleRevoke = async (tenantId: number, userId: number) => {
+  const handleRevoke = async (tenantId: number, agencyId: number) => {
     if (!confirm('Revocar acceso?')) return;
-    await tenantsApi.revokeAgency(tenantId, userId);
+    await tenantsApi.revokeAgency(tenantId, agencyId);
     await reload();
   };
 
@@ -62,15 +62,21 @@ export default function AgencyAccessPage(): React.ReactElement {
   }
 
   if (rows.length === 0) {
-    return <EmptyState icon="🔑" title="Sin tenants" description="Crea tenants primero." />;
-  }
-
-  if (l8Users.length === 0) {
     return (
       <EmptyState
-        icon="🔑"
-        title="Sin usuarios L8"
-        description="Crea primero usuarios de nivel 8 desde la consola Platform."
+        icon={<KeyRound strokeWidth={1.5} size={36} />}
+        title="Sin tenants cliente"
+        description="Crea primero tenants de tipo cliente."
+      />
+    );
+  }
+
+  if (agencies.length === 0) {
+    return (
+      <EmptyState
+        icon={<KeyRound strokeWidth={1.5} size={36} />}
+        title="Sin agencias"
+        description="Crea primero un tenant de tipo agencia desde la consola Platform."
       />
     );
   }
@@ -78,8 +84,8 @@ export default function AgencyAccessPage(): React.ReactElement {
   return (
     <div className="space-y-4 max-w-5xl">
       {rows.map(({ tenant, accesses }) => {
-        const assignedIds = new Set(accesses.map((a) => a.user));
-        const available = l8Users.filter((u) => !assignedIds.has(u.id));
+        const assignedIds = new Set(accesses.map((a) => a.agency));
+        const available = agencies.filter((a) => !assignedIds.has(a.id));
         return (
           <Card key={tenant.id} className="space-y-3">
             <div className="flex items-center justify-between">
@@ -93,23 +99,21 @@ export default function AgencyAccessPage(): React.ReactElement {
             </div>
 
             {accesses.length === 0 ? (
-              <p className="text-xs opacity-60">Sin L8 asignados.</p>
+              <p className="text-xs opacity-60">Sin agencias asignadas.</p>
             ) : (
               <div className="space-y-1.5">
-                {accesses.map((a) => {
-                  const user = l8Users.find((u) => u.id === a.user);
-                  return (
-                    <div key={a.id} className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
-                        <Avatar name={user?.full_name ?? a.user_email} size="sm" />
-                        <span>{user?.full_name ?? a.user_email}</span>
-                      </div>
-                      <IconButton size="sm" onClick={() => void handleRevoke(tenant.id, a.user)}>
-                        ✕
-                      </IconButton>
+                {accesses.map((a) => (
+                  <div key={a.id} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                      <Building2 strokeWidth={1.5} size={16} className="opacity-60" />
+                      <span>{a.agency_name}</span>
+                      <span className="text-xs opacity-50 font-mono">/{a.agency_slug}</span>
                     </div>
-                  );
-                })}
+                    <IconButton size="sm" onClick={() => void handleRevoke(tenant.id, a.agency)}>
+                      <X strokeWidth={1.5} size={14} />
+                    </IconButton>
+                  </div>
+                ))}
               </div>
             )}
 
@@ -126,10 +130,10 @@ export default function AgencyAccessPage(): React.ReactElement {
                     }
                   }}
                 >
-                  <option value="">+ Asignar L8…</option>
-                  {available.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {u.full_name} ({u.email})
+                  <option value="">+ Asignar agencia…</option>
+                  {available.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name} (/{a.slug})
                     </option>
                   ))}
                 </select>

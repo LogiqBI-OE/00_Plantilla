@@ -1,7 +1,7 @@
 """Serializers de la app `tenants`."""
 from rest_framework import serializers
 
-from apps.accounts.models import AgencyTenantAccess, User
+from apps.accounts.models import AgencyTenantAccess
 
 from .models import Tenant
 
@@ -25,10 +25,10 @@ class TenantSerializer(serializers.ModelSerializer):
 
 
 class AgencyTenantAccessSerializer(serializers.ModelSerializer):
-    """Membership L8 -> tenant."""
+    """Membership agencia -> tenant cliente."""
 
-    user_email = serializers.CharField(source='user.email', read_only=True)
-    user_full_name = serializers.CharField(source='user.full_name', read_only=True)
+    agency_slug = serializers.CharField(source='agency.slug', read_only=True)
+    agency_name = serializers.CharField(source='agency.name', read_only=True)
     granted_by_email = serializers.CharField(
         source='granted_by.email', read_only=True, default=None,
     )
@@ -36,7 +36,7 @@ class AgencyTenantAccessSerializer(serializers.ModelSerializer):
     class Meta:
         model = AgencyTenantAccess
         fields = [
-            'id', 'user', 'user_email', 'user_full_name',
+            'id', 'agency', 'agency_slug', 'agency_name',
             'granted_by', 'granted_by_email', 'granted_at',
         ]
         read_only_fields = ['id', 'granted_by', 'granted_at']

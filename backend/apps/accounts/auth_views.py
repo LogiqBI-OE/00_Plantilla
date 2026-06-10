@@ -72,9 +72,11 @@ def _tenants_for_user(user: User) -> list[Tenant]:
     if user.level == 9:
         tenants = list(Tenant.objects.filter(is_active=True))
     elif user.level == 8:
+        if not user.agency_id:
+            return []
         accesses = (
             AgencyTenantAccess.objects
-            .filter(user=user, tenant__is_active=True)
+            .filter(agency_id=user.agency_id, tenant__is_active=True)
             .select_related('tenant')
         )
         tenants = [a.tenant for a in accesses]
@@ -161,7 +163,9 @@ class LoginView(APIView):
             tenant = Tenant.objects.filter(slug=tenant_slug, is_active=True).first()
             if not tenant:
                 raise ValidationError({'tenant_slug': 'Tenant no encontrado o inactivo.'})
-            has_access = AgencyTenantAccess.objects.filter(user=user, tenant=tenant).exists()
+            has_access = bool(user.agency_id) and AgencyTenantAccess.objects.filter(
+                agency_id=user.agency_id, tenant=tenant
+            ).exists()
             if not has_access:
                 raise AuthenticationFailed('No tienes acceso a este tenant.')
             return tenant
@@ -231,8 +235,8 @@ class SwitchTenantView(APIView):
             raise NotFound('Tenant no encontrado o inactivo.')
 
         if request.user.level == 8:
-            has_access = AgencyTenantAccess.objects.filter(
-                user=request.user, tenant=tenant
+            has_access = bool(request.user.agency_id) and AgencyTenantAccess.objects.filter(
+                agency_id=request.user.agency_id, tenant=tenant
             ).exists()
             if not has_access:
                 raise PermissionDenied('No tienes acceso a este tenant.')
