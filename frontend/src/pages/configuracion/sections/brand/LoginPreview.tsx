@@ -4,6 +4,8 @@
  * Usa las mismas CSS vars que la pantalla real -> al editar paleta, se ve
  * el cambio aqui sin recargar.
  */
+import { useTranslation } from 'react-i18next';
+
 import { Card } from '@/components/ui';
 import type { BrandSettings } from '@/lib/api';
 
@@ -12,11 +14,12 @@ interface Props {
 }
 
 export function LoginPreview({ brand }: Props): React.ReactElement {
+  const { t } = useTranslation();
   const foto = brand.carrusel_fotos[0];
 
   return (
     <Card padding="sm" className="space-y-2">
-      <p className="text-xs font-medium opacity-70">Vista previa del Login</p>
+      <p className="text-xs font-medium opacity-70">{t('brand.preview_title')}</p>
       <div className="relative rounded-xl overflow-hidden border border-border aspect-[3/4]">
         {/* Fondo: primera foto del carrusel o gris */}
         <div
@@ -48,13 +51,13 @@ export function LoginPreview({ brand }: Props): React.ReactElement {
               >
                 {brand.marca} · {brand.alcance}
               </div>
-              <div className="font-bold text-[10px]">Bienvenido</div>
+              <div className="font-bold text-[10px]">{t('auth.login.title')}</div>
               <div className="space-y-1 mt-1">
                 <div className="h-2 bg-slate-200 rounded" />
                 <div className="h-2 bg-slate-200 rounded" />
               </div>
               <div className="h-3 mt-1.5 rounded text-[6px] text-white text-center leading-3" style={{ background: '#0a1428' }}>
-                Entrar al {brand.alcance}
+                {t('auth.login.submit', { alcance: brand.alcance })}
               </div>
             </div>
 

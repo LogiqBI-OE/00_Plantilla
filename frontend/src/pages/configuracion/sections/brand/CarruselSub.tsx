@@ -1,5 +1,7 @@
 /** CarruselSub — intervalo + grid de fotos del carrusel del Login. */
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { X } from 'lucide-react';
 
 import { Button, Card } from '@/components/ui';
 import { brandApi } from '@/lib/api';
@@ -23,6 +25,7 @@ interface Props {
 }
 
 export function CarruselSub({ brand, onSaved }: Props): React.ReactElement {
+  const { t } = useTranslation();
   const [segundos, setSegundos] = useState(brand.carrusel_segundos);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +40,7 @@ export function CarruselSub({ brand, onSaved }: Props): React.ReactElement {
   const handleAdd = async (file: File) => {
     setError(null);
     if (file.size > MAX_BYTES) {
-      setError(`Maximo ${MAX_BYTES / 1024} KB por foto.`);
+      setError(t('brand.max_kb_photo', { kb: MAX_BYTES / 1024 }));
       return;
     }
     setUploading(true);
@@ -59,7 +62,7 @@ export function CarruselSub({ brand, onSaved }: Props): React.ReactElement {
     <Card className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="space-y-1">
-          <label className="text-xs font-medium opacity-80">Segundos por foto</label>
+          <label className="text-xs font-medium opacity-80">{t('brand.seconds_label')}</label>
           <input
             type="number"
             min={1}
@@ -71,14 +74,14 @@ export function CarruselSub({ brand, onSaved }: Props): React.ReactElement {
           />
         </div>
         <Button onClick={handleSaveSeg} disabled={!segDirty}>
-          Guardar intervalo
+          {t('brand.save_interval')}
         </Button>
       </div>
 
       <div>
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium">
-            Fotos ({brand.carrusel_fotos.length}/{MAX_FOTOS})
+            {t('brand.photos', { count: brand.carrusel_fotos.length, max: MAX_FOTOS })}
           </span>
           {brand.carrusel_fotos.length < MAX_FOTOS && (
             <label>
@@ -93,14 +96,14 @@ export function CarruselSub({ brand, onSaved }: Props): React.ReactElement {
                 className="hidden"
               />
               <span className="inline-block px-3 py-1.5 rounded-lg bg-accent text-white text-sm cursor-pointer hover:opacity-90 transition">
-                {uploading ? 'Subiendo…' : '+ Agregar foto'}
+                {uploading ? t('brand.uploading') : t('brand.add_photo')}
               </span>
             </label>
           )}
         </div>
         {error && <p className="text-xs text-danger mb-2">{error}</p>}
         {brand.carrusel_fotos.length === 0 ? (
-          <div className="text-center py-8 opacity-50 text-sm">Sin fotos</div>
+          <div className="text-center py-8 opacity-50 text-sm">{t('brand.no_photos')}</div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {brand.carrusel_fotos.map((src, idx) => (
@@ -109,9 +112,9 @@ export function CarruselSub({ brand, onSaved }: Props): React.ReactElement {
                 <button
                   type="button"
                   onClick={() => void handleRemove(idx)}
-                  className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 text-white text-xs opacity-0 group-hover:opacity-100 transition"
+                  className="absolute top-1 right-1 w-6 h-6 inline-flex items-center justify-center rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition"
                 >
-                  ✕
+                  <X strokeWidth={1.5} size={13} />
                 </button>
               </div>
             ))}

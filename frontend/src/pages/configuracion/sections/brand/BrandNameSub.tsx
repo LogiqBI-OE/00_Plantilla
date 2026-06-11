@@ -1,5 +1,6 @@
 /** BrandNameSub — editar marca + alcance + preview inline. */
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button, Card, TextField } from '@/components/ui';
 import { brandApi } from '@/lib/api';
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export function BrandNameSub({ brand, onSaved }: Props): React.ReactElement {
+  const { t } = useTranslation();
   const [marca, setMarca] = useState(brand.marca);
   const [alcance, setAlcance] = useState(brand.alcance);
   const [saving, setSaving] = useState(false);
@@ -30,28 +32,28 @@ export function BrandNameSub({ brand, onSaved }: Props): React.ReactElement {
   return (
     <Card className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold">Identidad</h3>
+        <h3 className="font-semibold">{t('brand.identity')}</h3>
         <Button onClick={handleSave} loading={saving} disabled={!dirty}>
-          Guardar
+          {t('common.save')}
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <TextField
-          label="Marca"
+          label={t('brand.marca_label')}
           value={marca}
           onChange={(e) => setMarca(e.target.value)}
-          hint="Nombre que aparece en topbar, login y tab del browser."
+          hint={t('brand.marca_hint')}
         />
         <TextField
-          label="Alcance"
+          label={t('brand.alcance_label')}
           value={alcance}
           onChange={(e) => setAlcance(e.target.value)}
-          hint='Ej. "Workspace", "Admin", "Showroom".'
+          hint={t('brand.alcance_hint')}
         />
       </div>
 
       <div className="space-y-2 pt-3 border-t border-border">
-        <p className="text-xs opacity-60">Previsualizacion del chip del login:</p>
+        <p className="text-xs opacity-60">{t('brand.chip_preview')}</p>
         <div
           className="inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
           style={{

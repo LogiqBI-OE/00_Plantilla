@@ -8,6 +8,7 @@
  * Razon: Logos usa la paleta como fondo del preview, paleta primero.
  */
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { SkeletonBox } from '@/components/ui';
 import { brandApi } from '@/lib/api';
@@ -21,14 +22,15 @@ import { LoginPreview } from './brand/LoginPreview';
 
 type SubTab = 'name' | 'paleta' | 'logos' | 'carrusel';
 
-const SUB_TABS: Array<{ key: SubTab; label: string }> = [
-  { key: 'name', label: 'Brand Name' },
-  { key: 'paleta', label: 'Paleta de colores' },
-  { key: 'logos', label: 'Logos' },
-  { key: 'carrusel', label: 'Carrusel' },
+const SUB_TABS: Array<{ key: SubTab; i18nKey: string }> = [
+  { key: 'name', i18nKey: 'brand.tab_name' },
+  { key: 'paleta', i18nKey: 'brand.tab_paleta' },
+  { key: 'logos', i18nKey: 'brand.tab_logos' },
+  { key: 'carrusel', i18nKey: 'brand.tab_carrusel' },
 ];
 
 export function BrandTab(): React.ReactElement {
+  const { t } = useTranslation();
   const [active, setActive] = useState<SubTab>('name');
   const [brand, setBrand] = useState<BrandSettings | null>(null);
   const [loading, setLoading] = useState(true);
@@ -69,7 +71,7 @@ export function BrandTab(): React.ReactElement {
                   borderColor: isActive ? 'var(--accent)' : 'var(--border)',
                 }}
               >
-                {st.label}
+                {t(st.i18nKey)}
               </button>
             );
           })}

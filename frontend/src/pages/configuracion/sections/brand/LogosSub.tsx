@@ -1,5 +1,6 @@
 /** LogosSub — 2 slots (login + sidebar) con upload y preview. */
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button, Card } from '@/components/ui';
 import { brandApi } from '@/lib/api';
@@ -32,13 +33,14 @@ interface SlotProps {
 }
 
 function LogoSlot({ kind, title, description, currentUrl, filename, bgVar, onSaved }: SlotProps): React.ReactElement {
+  const { t } = useTranslation();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleFile = async (file: File): Promise<void> => {
     setError(null);
     if (file.size > MAX_BYTES) {
-      setError(`Maximo ${MAX_BYTES / 1024} KB.`);
+      setError(t('brand.max_kb', { kb: MAX_BYTES / 1024 }));
       return;
     }
     setUploading(true);
@@ -52,7 +54,7 @@ function LogoSlot({ kind, title, description, currentUrl, filename, bgVar, onSav
   };
 
   const handleRemove = async () => {
-    if (!confirm('Quitar logo?')) return;
+    if (!confirm(t('brand.remove_logo_confirm'))) return;
     setUploading(true);
     try {
       await brandApi.removeLogo(kind);
@@ -75,7 +77,7 @@ function LogoSlot({ kind, title, description, currentUrl, filename, bgVar, onSav
         {currentUrl ? (
           <img src={currentUrl} alt={title} className="max-h-[120px] max-w-full object-contain" />
         ) : (
-          <span className="text-xs opacity-50">Sin logo</span>
+          <span className="text-xs opacity-50">{t('brand.no_logo')}</span>
         )}
       </div>
       {filename && <p className="text-[10px] font-mono opacity-60">{filename}</p>}
@@ -93,12 +95,12 @@ function LogoSlot({ kind, title, description, currentUrl, filename, bgVar, onSav
             className="hidden"
           />
           <span className="inline-block w-full text-center px-3 py-1.5 rounded-lg bg-accent text-white text-sm font-medium cursor-pointer hover:opacity-90 transition">
-            {uploading ? 'Subiendo…' : currentUrl ? 'Reemplazar' : 'Subir'}
+            {uploading ? t('brand.uploading') : currentUrl ? t('brand.replace') : t('brand.upload')}
           </span>
         </label>
         {currentUrl && (
           <Button variant="secondary" size="md" onClick={handleRemove} loading={uploading}>
-            Quitar
+            {t('brand.remove')}
           </Button>
         )}
       </div>
@@ -107,12 +109,13 @@ function LogoSlot({ kind, title, description, currentUrl, filename, bgVar, onSav
 }
 
 export function LogosSub({ brand, onSaved }: Props): React.ReactElement {
+  const { t } = useTranslation();
   return (
     <Card className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <LogoSlot
         kind="login"
-        title="Logo de Login"
-        description="Se muestra en el panel derecho del Login (fondo navy)."
+        title={t('brand.login_logo_title')}
+        description={t('brand.login_logo_desc')}
         currentUrl={brand.logo_login}
         filename={brand.logo_login_filename}
         bgVar="var(--brand-hero-bg)"
@@ -120,8 +123,8 @@ export function LogosSub({ brand, onSaved }: Props): React.ReactElement {
       />
       <LogoSlot
         kind="sidebar"
-        title="Logo de Sidebar"
-        description="Se muestra en el header del sidebar (fondo oscuro)."
+        title={t('brand.sidebar_logo_title')}
+        description={t('brand.sidebar_logo_desc')}
         currentUrl={brand.logo_sidebar}
         filename={brand.logo_sidebar_filename}
         bgVar="var(--sidebar-bg)"
